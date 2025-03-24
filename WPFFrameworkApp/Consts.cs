@@ -43,7 +43,7 @@
         public const string EMPT_IMG = "DesktopImages/trashempty.png";
         public const string FULL_IMG = "DesktopImages/trashfull.png";
         public const string WRNG_IMG = "DesktopImages/warning1.png";
-        public const string QST_IMG = "DesktopImage/question2.png";
+        public const string QST_IMG = "DesktopImages/question2.png";
         public const string NOTE_IMG = "NoteImages/gennote.png";
         public const string NADD_IMG = "NoteImages/noteadd.png";
         public const string NMOVE_IMG = "NoteImages/move.png";

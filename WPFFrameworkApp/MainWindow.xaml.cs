@@ -117,6 +117,7 @@ namespace WPFFrameworkApp
                             {
                                 writer.WriteLine(input);
                                 Directory.CreateDirectory(Path.Combine(input, HiddenFolders.HAUD_FOL));
+                                Directory.CreateDirectory(Path.Combine(input, HiddenFolders.HTRSH_FOL));
                                 return input;
                             }
                         } catch(Exception e)
