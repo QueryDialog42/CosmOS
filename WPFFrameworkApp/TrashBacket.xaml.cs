@@ -26,34 +26,34 @@ namespace WPFFrameworkApp
             foreach (string trash in trashes)
             {
                 string trashname = Path.GetFileName(trash);
-                Button app = MainWindow.CreateButton(trashname);
-                TextBlock appname = MainWindow.CreateTextBlock(trashname);
-                Image image = MainWindow.CreateImage();
+                Button app = RoutineLogics.CreateButton(trashname);
+                TextBlock appname = RoutineLogics.CreateTextBlock(trashname);
+                Image image = RoutineLogics.CreateImage();
                 StackPanel stackpanel = new StackPanel() { Orientation = Orientation.Vertical };
 
                 if (trashname.EndsWith(SupportedFiles.TXT))
                 {
-                    MainWindow.Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.TXT_IMG);
                 }
                 else if (trashname.EndsWith(SupportedFiles.RTF))
                 {
-                    MainWindow.Appearence(image, stackpanel, app, appname, ImagePaths.RTF_IMG);
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.RTF_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.RTF_IMG);
                 }
                 else if (trashname.EndsWith(SupportedFiles.EXE))
                 {
-                    MainWindow.Appearence(image, stackpanel, app, appname, ImagePaths.EXE_IMG);
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.EXE_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.EXE_IMG);
                 }
                 else if (trashname.EndsWith(SupportedFiles.MP3))
                 {
-                    MainWindow.Appearence(image, stackpanel, app, appname, ImagePaths.MP3_IMG);
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.MP3_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.MP3_IMG);
                 }
                 else if (trashname.EndsWith(SupportedFiles.WAV))
                 {
-                    MainWindow.Appearence(image, stackpanel, app, appname, ImagePaths.WAV_IMG);
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.WAV_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.WAV_IMG);
                 }
                 trashPanel.Children.Add(app);
@@ -79,7 +79,7 @@ namespace WPFFrameworkApp
                 }
                 catch (Exception ex)
                 {
-                    MainWindow.ErrorMessage($"{Errors.DEL_ERR_MSG}{trashname}.\n" + ex.Message, Errors.DEL_ERR);
+                    RoutineLogics.ErrorMessage($"{Errors.DEL_ERR_MSG}{trashname}.\n" + ex.Message, Errors.DEL_ERR);
                 }
             };
         }

@@ -38,7 +38,7 @@ namespace WPFFrameworkApp
         private void SaveAsNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.RTFSaveAsNote_Wanted(windowForNote, currentDesktopForNote, this);
-            MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
         }
 
         private void CopyNote(object sender, RoutedEventArgs e)
@@ -49,13 +49,11 @@ namespace WPFFrameworkApp
         private void MoveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
-            MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
         }
 
         private void DeleteNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
-            MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
         }
 
         private void MakeBold(object sender, RoutedEventArgs e)

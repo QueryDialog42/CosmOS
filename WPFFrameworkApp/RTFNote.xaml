@@ -53,7 +53,7 @@
                 </MenuItem>
             </Menu>
             <ToolBar Grid.Row="1">
-                <Button Width="23" Height="23" Click="SaveNote">
+                <Button x:Name="saveButton" Width="23" Height="23" Click="SaveNote">
                     <Image Source="NoteImages/Save.png"/>
                 </Button>
                 <Separator />

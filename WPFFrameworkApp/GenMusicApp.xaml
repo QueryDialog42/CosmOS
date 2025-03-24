@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Background="#424242" Icon="/Images/Genmusic.png"
+        mc:Ignorable="d" Background="#424242" Icon="/DesktopImages/Genmusic.png"
         Title="GenMusicApp" Height="297" Width="444">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,29 +17,29 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="Black" Foreground="White">
-            <MenuItem Header="Audio" Background="Black">
-                <MenuItem Header="Add Audio" Background="Black" Click="AddAudio">
+        <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="#2b2b2b" Foreground="White">
+            <MenuItem Header="Audio" Background="#2b2b2b" Width="50">
+                <MenuItem Header="Add Audio" Background="#2b2b2b" Click="AddAudio" BorderThickness="0">
                     <MenuItem.Icon>
                         <Image Source="/MusicImages/soundadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Move Audio" Background="Black" Click="MoveAudio">
-                    <MenuItem.Icon>
-                        <Image Source="/NoteImages/move.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Copy Audio" Background="Black" Click="CopyAudio">
+                <MenuItem Header="Copy Audio" Background="#2b2b2b" Click="CopyAudio" BorderThickness="0">
                     <MenuItem.Icon>
                         <Image Source="/MusicImages/soundbutcopy.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Delete Audio" Background="Black" Click="DeleteAudio">
+                <MenuItem Header="Delete Audio" Background="#2b2b2b" Click="DeleteAudio" BorderThickness="0">
                     <MenuItem.Icon>
                         <Image Source="/MusicImages/sounddelete.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Reload GenMusic" Background="Black" Click="ReloadMusicApp_Wanted">
+                <MenuItem Header="Move Audio" Background="#2b2b2b" Click="MoveAudio" BorderThickness="0">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/move.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Reload GenMusic" Background="#2b2b2b" Click="ReloadMusicApp_Wanted" BorderThickness="0">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/refresh.png" />
                     </MenuItem.Icon>

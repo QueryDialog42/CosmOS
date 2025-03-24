@@ -33,8 +33,8 @@ namespace WPFFrameworkApp
                 Button button = new Button
                 {
                     Content = option,
-                    Width = 75,
-                    Margin = new Thickness(10, 0, 5, 0),
+                    Width = 50,
+                    Margin = new Thickness(5, 0, 5, 0),
                     Background = Brushes.Transparent
                 };
                 dialog.QueryMessage.Text = message;

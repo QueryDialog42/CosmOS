@@ -15,8 +15,8 @@ namespace WPFFrameworkApp
             string[] options = { "TXT", "RTF" };
             switch (QueryDialog.ShowQueryDialog("Choose Note Type", "NoteApp", options, ImagePaths.NADD_IMG, ImagePaths.NADD_IMG))
             {
-                case 0: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new TXTNote()); break;
-                case 1: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new RTFNote()); break;
+                case 0: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new TXTNote(), true); break;
+                case 1: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new RTFNote(), false); break;
             }
         }
 
@@ -33,62 +33,9 @@ namespace WPFFrameworkApp
             {
                 string file = fileDialog.FileName;
                 string folder = Path.GetDirectoryName(file);
-                if (file.EndsWith(SupportedFiles.TXT))
-                {
-                    TXTNote TXTnoteapp = new TXTNote
-                    {
-                        currentDesktopForNote = folder,
-                        windowForNote = windowForNote // something different needed
-                    };
-                    try
-                    {
-                        TXTnoteapp.note.Text = File.ReadAllText(fileDialog.FileName);
-                        TXTnoteapp.Title = Path.GetFileName(fileDialog.FileName);
-                    }
-                    catch (Exception ex)
-                    {
-                        MainWindow.ErrorMessage(Errors.READ_ERR_MSG + "the file.\n" + ex.Message, Errors.READ_ERR);
-                    }
-                }
-                else if (file.EndsWith(SupportedFiles.RTF))
-                {
-                    RTFNote RTFnoteapp = new RTFNote
-                    {
-                        currentDesktopForNote = folder,
-                        windowForNote = windowForNote
-                    };
-                    try
-                    {
-                        RTFnoteapp.Title = Path.GetFileName(fileDialog.FileName);   
-                        // Read the RTF file content
-                        string rtfContent = File.ReadAllText(fileDialog.FileName);
-
-                        // Create a TextRange to load the RTF content into the RichTextBox
-                        TextRange textRange = new TextRange(RTFnoteapp.RichNote.Document.ContentStart, RTFnoteapp.RichNote.Document.ContentEnd);
-
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            // Write the RTF content to the memory stream
-                            using (StreamWriter writer = new StreamWriter(memoryStream))
-                            {
-                                writer.Write(rtfContent);
-                                writer.Flush();
-                                memoryStream.Position = 0; // Reset the stream position
-
-                                // Load the RTF content into the RichTextBox
-                                textRange.Load(memoryStream, DataFormats.Rtf);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MainWindow.ErrorMessage($"{Errors.READ_ERR_MSG}{file}.\n" + ex.Message, Errors.READ_ERR);
-                    }
-                }
-                else
-                {
-                    MainWindow.ErrorMessage($"{file} is not supported for GencOS.\n.txt\nis supported for now.", Errors.UNSUPP_ERR);
-                }
+                if (file.EndsWith(SupportedFiles.TXT)) OpenTXTFile(windowForNote, folder, file);
+                else if (file.EndsWith(SupportedFiles.RTF)) OpenRTFFile(windowForNote, folder, file);
+                else RoutineLogics.ErrorMessage($"{file} is not supported for GencOS.\n.txt\nis supported for now.", Errors.UNSUPP_ERR);
             }
         }
         
@@ -104,7 +51,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                MainWindow.ErrorMessage($"{Errors.SAVE_ERR_MSG}{filename}\n" + ex.Message, Errors.SAVE_ERR);
+                RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{filename}\n" + ex.Message, Errors.SAVE_ERR);
             }
         }
 
@@ -124,12 +71,12 @@ namespace WPFFrameworkApp
                     using (StreamWriter writer = new StreamWriter(file))
                     {
                         writer.WriteLine(noteapp.note.Text);
-                        MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
+                        RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MainWindow.ErrorMessage($"{Errors.SAVE_ERR_MSG}{Path.GetFileName(file)}\n" + ex.Message, Errors.SAVE_ERR);
+                    RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{Path.GetFileName(file)}\n" + ex.Message, Errors.SAVE_ERR);
                 }
             }
         }
@@ -147,7 +94,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                MainWindow.ErrorMessage($"{Errors.SAVE_ERR_MSG}{filename}.\n" + ex.Message, Errors.SAVE_ERR);
+                RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{filename}.\n" + ex.Message, Errors.SAVE_ERR);
             }
         }
 
@@ -172,59 +119,23 @@ namespace WPFFrameworkApp
                 }
                 catch(Exception ex)
                 {
-                    MainWindow.ErrorMessage($"{Errors.SAVE_ERR_MSG}{Path.GetFileName(file)}.\n" + ex.Message, Errors.SAVE_ERR);
+                    RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{Path.GetFileName(file)}.\n" + ex.Message, Errors.SAVE_ERR);
                 }
             }
         }
 
         public static void CopyNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
-            string filename = noteapp.Title;
-            SaveFileDialog filedialog = new SaveFileDialog
-            {
-                InitialDirectory = currentDesktopForNote,
-                Filter = filter,
-                FileName = filename,
-                Title = "Copy Note"
-            };
-            if (filedialog.ShowDialog() == true)
-            {
-                try
-                {
-                    File.Copy(Path.Combine(currentDesktopForNote, filename), filedialog.FileName);
-                    MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
-                    noteapp.Close();
-                }
-                catch (Exception ex)
-                {
-                    MainWindow.ErrorMessage($"{Errors.COPY_ERR_MSG}{filename}.\n" + ex.Message, Errors.COPY_ERR);
-                }
-            }
+            RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            noteapp.Close();
         }
 
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
-            string filename = noteapp.Title;
-            SaveFileDialog filedialog = new SaveFileDialog
-            {
-                InitialDirectory = currentDesktopForNote,
-                Filter = filter,
-                FileName = filename,
-                Title = "Move Note"
-            };
-            if (filedialog.ShowDialog() == true)
-            {
-                try
-                {
-                    File.Move(Path.Combine(currentDesktopForNote, filename), filedialog.FileName);
-                    MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
-                    noteapp.Close();
-                }
-                catch (Exception ex)
-                {
-                    MainWindow.ErrorMessage($"{Errors.MOVE_ERR_MSG}{filename}.\n" + ex.Message, Errors.MOVE_ERR);
-                }
-            }
+            RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            noteapp.Close();
         }
 
         public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
@@ -232,20 +143,13 @@ namespace WPFFrameworkApp
             string filename = noteapp.Title;
             if (MessageBox.Show($"Are you sure you want to delete {filename}?", "Delete Note", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                try
-                {
-                    File.Move(Path.Combine(currentDesktopForNote, filename), Path.Combine(MainWindow.TrashPath, filename));
-                    MainWindow.ReloadDesktop(windowForNote, currentDesktopForNote);
-                    noteapp.Close();
-                }
-                catch (Exception ex)
-                {
-                    MainWindow.ErrorMessage($"{Errors.DEL_ERR_MSG}{filename}.\n" + ex.Message, Errors.DEL_ERR);
-                }
+                RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
+                RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                noteapp.Close();
             }
         }
 
-        public static void CreateNoteAppEnvironment(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
+        public static void CreateNoteAppEnvironment(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp, bool isButtonNull)
         {
             noteapp.currentDesktopForNote = currentDesktopForNote;
             noteapp.windowForNote = windowForNote;
@@ -253,6 +157,7 @@ namespace WPFFrameworkApp
             noteapp.copy.IsEnabled = false;
             noteapp.move.IsEnabled = false;
             noteapp.delete.IsEnabled = false;
+            if (isButtonNull == false) noteapp.saveButton.IsEnabled = false;
         }
 
         public static void FontChange_Wanted(RichTextBox RichNote, double value)
@@ -299,5 +204,62 @@ namespace WPFFrameworkApp
                 }
             }
         }
+        #region Subroutines
+
+        private static void OpenTXTFile(MainWindow windowForNote, string folder, string filepath)
+        {
+            TXTNote TXTnoteapp = new TXTNote
+            {
+                currentDesktopForNote = folder,
+                windowForNote = windowForNote // something different needed
+            };
+            try
+            {
+                TXTnoteapp.note.Text = File.ReadAllText(filepath);
+                TXTnoteapp.Title = Path.GetFileName(filepath);
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage(Errors.READ_ERR_MSG + $"{Path.GetFileName(filepath)}.\n" + ex.Message, Errors.READ_ERR);
+            }
+        }
+
+        private static void OpenRTFFile(MainWindow windowForNote, string folder, string filepath)
+        {
+            RTFNote RTFnoteapp = new RTFNote
+            {
+                currentDesktopForNote = folder,
+                windowForNote = windowForNote
+            };
+            try
+            {
+                RTFnoteapp.Title = Path.GetFileName(filepath);
+                // Read the RTF file content
+                string rtfContent = File.ReadAllText(filepath);
+
+                // Create a TextRange to load the RTF content into the RichTextBox
+                TextRange textRange = new TextRange(RTFnoteapp.RichNote.Document.ContentStart, RTFnoteapp.RichNote.Document.ContentEnd);
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    // Write the RTF content to the memory stream
+                    using (StreamWriter writer = new StreamWriter(memoryStream))
+                    {
+                        writer.Write(rtfContent);
+                        writer.Flush();
+                        memoryStream.Position = 0; // Reset the stream position
+
+                        // Load the RTF content into the RichTextBox
+                        textRange.Load(memoryStream, DataFormats.Rtf);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage($"{Errors.READ_ERR_MSG}{Path.GetFileName(filepath)}.\n" + ex.Message, Errors.READ_ERR);
+            }
+        }
+
+        #endregion
     }
 }

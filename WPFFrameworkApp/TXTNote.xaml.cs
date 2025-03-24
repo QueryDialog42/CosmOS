@@ -44,6 +44,7 @@ namespace WPFFrameworkApp
         private void MoveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
         }
         private void DeleteNote(object sender, RoutedEventArgs e)
         {

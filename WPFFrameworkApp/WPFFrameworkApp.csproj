@@ -105,6 +105,7 @@
     <Compile Include="QueryDialog.xaml.cs">
       <DependentUpon>QueryDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RoutineLogics.cs" />
     <Compile Include="RTFNote.xaml.cs">
       <DependentUpon>RTFNote.xaml</DependentUpon>
     </Compile>
