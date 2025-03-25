@@ -143,6 +143,11 @@ namespace WPFFrameworkApp
             }
         }
 
+        public static void AboutWindow()
+        {
+            // About page code will be in this function
+        }
+
         #region Subroutines
         private static void InitTextFile(MainWindow window, Image image, dynamic stackpanel, Button app, TextBlock appname, string desktopPath, string filename)
         {

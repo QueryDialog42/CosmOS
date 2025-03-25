@@ -45,20 +45,25 @@
                         <Image Source="DesktopImages/folderdelete2.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="About GencOS">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/paperplane2.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Setting" />
         </Menu>
         <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray"/>
         <WrapPanel x:Name="safari" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c">
-            <Button Height="60" Width="60" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" ToolTip="GenNoteApp 1.0.0" Click="NoteApp_Clicked">
+            <Button x:Name="NoteApp" Height="60" Width="60" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
                 <StackPanel HorizontalAlignment="Center">
                     <Image Source="NoteImages/gennote.png" RenderTransformOrigin="0.559,0.563" />
                 </StackPanel>
             </Button>
-            <Button Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
+            <Button x:Name="MusicApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
                 <Image Source="DesktopImages/Genmusic.png"/>
             </Button>
-            <Button Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
+            <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
                 <Image Source="/DesktopImages/Mail128x128.png"/>
             </Button>
         </WrapPanel>

@@ -20,6 +20,10 @@ namespace WPFFrameworkApp
             MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
             TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
             if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+
+            NoteApp.ToolTip = Versions.NOTE_VRS;
+            MusicApp.ToolTip = Versions.MUSIC_VRS;
+            MailApp.ToolTip = Versions.MAIL_VRS;
         }
         private void CheckConfig()
         {
