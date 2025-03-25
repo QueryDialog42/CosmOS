@@ -57,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="GenMailApp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GenMusicApp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -74,6 +78,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Consts.cs" />
+    <Compile Include="GenMailApp.xaml.cs">
+      <DependentUpon>GenMailApp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenMusicApp.xaml.cs">
       <DependentUpon>GenMusicApp.xaml</DependentUpon>
     </Compile>
@@ -239,6 +246,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="MusicImages\soundbutcopy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Mail128x128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

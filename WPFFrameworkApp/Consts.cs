@@ -15,6 +15,7 @@
         public const string REL_ERR = "Reload Error";
         public const string RUN_ERR = "EXE run Error";
         public const string IMP_ERR = "Import Error";
+        public const string PRMS_ERR = "Permission Error";
         public const string READ_ERR_MSG = "An error occured while reading ";
         public const string WRT_ERR_MSG = "An error occured while writing ";
         public const string OPEN_ERR_MSG = "An error occured while opening ";

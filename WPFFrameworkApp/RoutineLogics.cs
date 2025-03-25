@@ -125,13 +125,20 @@ namespace WPFFrameworkApp
             {
                 string filepath = copydialog.FileName;
                 string filename = Path.GetFileName(filepath); // filepath = the path where the file will go
-                try
+                if (filepath.Contains(HiddenFolders.HAUD_FOL) && filepath.Contains(HiddenFolders.HTRSH_FOL) == false)
                 {
-                    File.Copy(Path.Combine(currentDesktop, filename), filepath);
+                    try
+                    {
+                        File.Copy(Path.Combine(currentDesktop, filename), filepath);
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorMessage(Errors.COPY_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.COPY_ERR);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    ErrorMessage(Errors.COPY_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.COPY_ERR);
+                    ErrorMessage("You can not move or copy files into hidden folders manually", Errors.PRMS_ERR);
                 }
             }
         }
@@ -356,13 +363,20 @@ namespace WPFFrameworkApp
             {
                 string filepath = movedialog.FileName;
                 string filename = Path.GetFileName(filepath); // filepath = the path where the file will go
-                try
+                if (filepath.Contains(HiddenFolders.HAUD_FOL) == false && filepath.Contains(HiddenFolders.HTRSH_FOL) == false)
                 {
-                    File.Move(Path.Combine(currentDesktop, filename), filepath);
+                    try
+                    {
+                        File.Move(Path.Combine(currentDesktop, filename), filepath);
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.MOVE_ERR);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.MOVE_ERR);
+                    ErrorMessage("You can not move or copy files into hidden folders manually", Errors.PRMS_ERR);
                 }
             }
         }
@@ -392,7 +406,7 @@ namespace WPFFrameworkApp
                     }
                     catch (Exception ex)
                     {
-                        ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename}\n" + ex.Message, Errors.MOVE_ERR);
+                        ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.MOVE_ERR);
                     }
                 }
             }

@@ -36,6 +36,7 @@ namespace WPFFrameworkApp
                     ListBoxItem item = new ListBoxItem()
                     {
                         Content = filename,
+                        FontSize = 15
                     };
                     listbox.Items.Add(item); // supported audios
                 }

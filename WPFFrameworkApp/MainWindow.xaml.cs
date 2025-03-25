@@ -118,6 +118,8 @@ namespace WPFFrameworkApp
                                 writer.WriteLine(input);
                                 Directory.CreateDirectory(Path.Combine(input, HiddenFolders.HAUD_FOL));
                                 Directory.CreateDirectory(Path.Combine(input, HiddenFolders.HTRSH_FOL));
+                                _ = new DirectoryInfo(Path.Combine(input, HiddenFolders.HAUD_FOL)) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
+                                _ = new DirectoryInfo(Path.Combine(input, HiddenFolders.HTRSH_FOL)) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
                                 return input;
                             }
                         } catch(Exception e)
@@ -145,6 +147,11 @@ namespace WPFFrameworkApp
         private void NoteApp_Clicked(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.NewNote_Wanted(this, currentDesktop);
+        }
+
+        private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            new GenMailApp();
         }
 
         private void MusicAppStart(object sender, RoutedEventArgs e)

@@ -58,6 +58,9 @@
             <Button Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
                 <Image Source="DesktopImages/Genmusic.png"/>
             </Button>
+            <Button Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
+                <Image Source="/DesktopImages/Mail128x128.png"/>
+            </Button>
         </WrapPanel>
         <StackPanel x:Name="folderdesktop" Grid.Row="1" Grid.Column="2" Background="#9c9268" Orientation="Vertical" />
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
