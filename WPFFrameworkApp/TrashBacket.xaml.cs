@@ -89,6 +89,19 @@ namespace WPFFrameworkApp
             ReloadTrashBacket();
         }
 
+        private void RescueAll(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure to rescue all files from TrashBacket?", "Empty Trash", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+                IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(MainWindow.TrashPath);
+                foreach (string trash in trashes)
+                {
+                    File.Move(trash, Path.Combine(MainWindow.CDesktopPath, Path.GetFileName(trash)));
+                }
+                trashPanel.Children.Clear();
+            }
+        }
+
         private void EmptyTrash(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure to empty the TrashBacket?\nYou can not take back again.", "Empty Trash", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)

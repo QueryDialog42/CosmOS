@@ -12,13 +12,18 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" >
-            <MenuItem Header="Trash">
-                <MenuItem Header="Empty Trash" Click="EmptyTrash">
+            <MenuItem Header="_Trash">
+                <MenuItem Header="_Empty Trash" Click="EmptyTrash">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/trashempty.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Reload TrashBacket" Click="TrashBacketReload_Wanted">
+                <MenuItem Header="Rescue All" Click="RescueAll">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/rescueme.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Reload TrashBacket" Click="TrashBacketReload_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/refresh.png" />
                     </MenuItem.Icon>

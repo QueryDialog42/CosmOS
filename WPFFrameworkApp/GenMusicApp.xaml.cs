@@ -76,6 +76,7 @@ namespace WPFFrameworkApp
                 }
             } catch (NullReferenceException)
             {
+                // do nothing on null exception
                 stopButton.IsEnabled = true; // to be avoid stop button is disable forever
             }
         }

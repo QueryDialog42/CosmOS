@@ -17,35 +17,35 @@
             <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <MenuItem Header="New">
-                <MenuItem Header="Import File" Click="ImportFile_Wanted">
+            <MenuItem Header="_New">
+                <MenuItem Header="_Import File" Click="ImportFile_Wanted" >
                     <MenuItem.Icon >
                         <Image Source="DesktopImages/importfile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="New File" Click="NoteApp_Clicked" >
+                <MenuItem Header="New _File" Click="NoteApp_Clicked" >
                     <MenuItem.Icon>
                         <Image Source="NoteImages/noteadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="New Folder" Click="NewFolder">
+                <MenuItem Header="New F_older" Click="NewFolder">
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/newfolder.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Desktop">
-                <MenuItem Header="Reload Desktop" Click="ReloadDesktop_Wanted">
+            <MenuItem Header="_Desktop">
+                <MenuItem Header="_Reload Desktop" Click="ReloadDesktop_Wanted">
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Delete Current Folder" Click="DeleteFolder" >
+                <MenuItem Header="_Delete Current Folder" Click="DeleteFolder" >
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/folderdelete2.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="About GencOS">
+                <MenuItem Header="_About GencOS">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/paperplane2.png"/>
                     </MenuItem.Icon>
