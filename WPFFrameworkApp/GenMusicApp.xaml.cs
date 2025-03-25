@@ -149,6 +149,8 @@ namespace WPFFrameworkApp
                         ListBoxItem item = new ListBoxItem()
                         {
                             Content = filename,
+                            FontSize = 15,
+                            Foreground = Brushes.Green
                         };
                         listbox.Items.Add(item);
                     }
@@ -178,19 +180,6 @@ namespace WPFFrameworkApp
         }
 
         #region Subroutines
-
-        public bool IsWindowOpen()
-        {
-            foreach (Window window in Application.Current.Windows)
-            {
-                Console.WriteLine(window);
-                if (window is GenMusicApp)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         private void ReloadMusicApp_Wanted(object sender, RoutedEventArgs e)
         {

@@ -155,24 +155,25 @@ namespace WPFFrameworkApp
 
         private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
         {
-            new GenMailApp();
+            if (RoutineLogics.IsMailAppOpen() == false)
+            {
+                new GenMailApp();
+            }
+        }
+
+        private void OpenTrashBacket(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsTrashBacketOpen() == false)
+            {
+                new TrashBacket();
+            }
         }
 
         private void MusicAppStart(object sender, RoutedEventArgs e)
         {
-            if (IsWindowOpen() == false)
+            if (RoutineLogics.IsMusicAppOpen() == false)
             {
                new GenMusicApp();
-            }
-            else
-            {
-                foreach (Window window in Application.Current.Windows)
-                {
-                    if (window is GenMusicApp)
-                    {
-                        window.Activate();
-                    }
-                }
             }
         }
 
@@ -184,23 +185,6 @@ namespace WPFFrameworkApp
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {
             ImportFile(this, currentDesktop);
-        }
-
-        private void OpenTrashBacket(object sender, RoutedEventArgs e)
-        {
-            new TrashBacket();
-        }
-
-        private bool IsWindowOpen()
-        {
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window is GenMusicApp)
-                {
-                    return true; // GenMusic is open
-                }
-            }
-            return false; // GenMusic is close
         }
         #endregion
     }

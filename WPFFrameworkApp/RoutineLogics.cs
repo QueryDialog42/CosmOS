@@ -125,7 +125,7 @@ namespace WPFFrameworkApp
             {
                 string filepath = copydialog.FileName;
                 string filename = Path.GetFileName(filepath); // filepath = the path where the file will go
-                if (filepath.Contains(HiddenFolders.HAUD_FOL) && filepath.Contains(HiddenFolders.HTRSH_FOL) == false)
+                if (filepath.Contains(HiddenFolders.HAUD_FOL) == false && filepath.Contains(HiddenFolders.HTRSH_FOL) == false)
                 {
                     try
                     {
@@ -149,7 +149,14 @@ namespace WPFFrameworkApp
         }
 
         #region Subroutines
-        private static void InitTextFile(MainWindow window, Image image, dynamic stackpanel, Button app, TextBlock appname, string desktopPath, string filename)
+        private static void InitTextFile(
+            MainWindow window,
+            Image image,
+            StackPanel stackpanel,
+            Button app,
+            TextBlock appname,
+            string desktopPath,
+            string filename)
         {
             Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
 
@@ -174,7 +181,14 @@ namespace WPFFrameworkApp
             };
         }
 
-        private static void InitRTFFile(MainWindow window, Image image, dynamic stackpanel, Button app, TextBlock appname, string desktopPath, string filename)
+        private static void InitRTFFile(
+            MainWindow window,
+            Image image,
+            StackPanel stackpanel,
+            Button app,
+            TextBlock appname,
+            string desktopPath,
+            string filename)
         {
             Appearence(image, stackpanel, app, appname, ImagePaths.RTF_IMG);
 
@@ -211,7 +225,15 @@ namespace WPFFrameworkApp
                 }
             };
         }
-        private static void InitAudioFile(MainWindow window, Image image, dynamic stackpanel, Button app, TextBlock appname, string filepath, string filename, string fileimage)
+        private static void InitAudioFile(
+            MainWindow window,
+            Image image,
+            StackPanel stackpanel,
+            Button app,
+            TextBlock appname,
+            string filepath,
+            string filename,
+            string fileimage)
         {
             Appearence(image, stackpanel, app, appname, fileimage);
 
@@ -221,7 +243,7 @@ namespace WPFFrameworkApp
             {
                 GenMusicApp.mediaPlayer.Close();
                 GenMusicApp.currentAudio = filename;
-                GenMusicApp.mediaPlayer = new MediaPlayer();
+                GenMusicApp.isPaused = false;
                 new GenMusicApp();
                 try
                 {
@@ -235,7 +257,15 @@ namespace WPFFrameworkApp
             };
         }
 
-        private static void InitEXEFile(MainWindow window, Image image, dynamic stackpanel, Button app, TextBlock appname, string desktopPath, string filepath, string filename)
+        private static void InitEXEFile(
+            MainWindow window,
+            Image image,
+            StackPanel stackpanel,
+            Button app,
+            TextBlock appname,
+            string desktopPath,
+            string filepath,
+            string filename)
         {
             Appearence(image, stackpanel, app, appname, ImagePaths.EXE_IMG);
 
@@ -276,7 +306,14 @@ namespace WPFFrameworkApp
             };
         }
 
-        private static void InitFolder(MainWindow window, Image image, StackPanel stackpanel, Button app, TextBlock appname, string desktopPath, string filename)
+        private static void InitFolder(
+            MainWindow window,
+            Image image,
+            StackPanel stackpanel,
+            Button app,
+            TextBlock appname,
+            string desktopPath,
+            string filename)
         {
             Appearence(image, stackpanel, app, appname, ImagePaths.FOLDER_IMG);
 
@@ -307,7 +344,12 @@ namespace WPFFrameworkApp
             }
         }
 
-        public static void Appearence(Image image, dynamic stackpanel, Button app, TextBlock appname, string logo)
+        public static void Appearence(
+            Image image,
+            StackPanel stackpanel,
+            Button app,
+            TextBlock appname,
+            string logo)
         {
             BitmapImage bitmap = new BitmapImage(new Uri(logo, UriKind.RelativeOrAbsolute));
             bitmap.Freeze();
@@ -415,6 +457,45 @@ namespace WPFFrameworkApp
                     }
                 }
             }
+        }
+
+        public static bool IsMusicAppOpen()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is GenMusicApp)
+                {
+                    window.Activate(); // GenMusic is open
+                    return true;
+                }
+            }
+            return false; // GenMusic is close
+        }
+
+        public static bool IsTrashBacketOpen()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is TrashBacket)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool IsMailAppOpen()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is GenMailApp)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
     }
