@@ -5,6 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace WPFFrameworkApp
 {
@@ -13,9 +16,11 @@ namespace WPFFrameworkApp
     /// </summary>
     public partial class GenMusicApp : Window
     {
+        public static DispatcherTimer time = new DispatcherTimer();
         public static string currentAudio;
         public static bool isPaused = true;
         public static MediaPlayer mediaPlayer = new MediaPlayer();
+        public Dictionary<ListBoxItem, TextBlock> datacontent;
         public string musicfilter = $"WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}";
         public GenMusicApp()
         {
@@ -26,20 +31,15 @@ namespace WPFFrameworkApp
 
         private void ReloadMusicApp()
         {
+            datacontent = new Dictionary<ListBoxItem, TextBlock>(); // to restore item and its textblock
             listbox.Items.Clear();
-            IEnumerable<string> musiclist = Directory.EnumerateFileSystemEntries(MainWindow.MusicAppPath); //C_DESKTOP PATH should be entered!!
+            IEnumerable<string> musiclist = Directory.EnumerateFileSystemEntries(MainWindow.MusicAppPath); //C_DESKTOP PATH should be entered!
             foreach (string music in musiclist)
             {
                 string filename = Path.GetFileName(music);
-                if (filename.EndsWith(SupportedFiles.WAV) || filename.EndsWith(SupportedFiles.MP3))
-                {
-                    ListBoxItem item = new ListBoxItem()
-                    {
-                        Content = filename,
-                        FontSize = 15
-                    };
-                    listbox.Items.Add(item); // supported audios
-                }
+                SolidColorBrush defaultcolor = new SolidColorBrush(Colors.White);
+                if (filename.EndsWith(SupportedFiles.WAV)) CreateMusicItem(filename, ImagePaths.LWAV_IMG, defaultcolor);
+                else if (filename.EndsWith(SupportedFiles.MP3)) CreateMusicItem(filename, ImagePaths.LMP3_IMG, defaultcolor);
                 else
                 {
                     RoutineLogics.ErrorMessage($"{filename} is not supported for GenMusic, removing.\n.wav\n.mp3\n is supported for now.", Errors.UNSUPP_ERR);
@@ -60,25 +60,39 @@ namespace WPFFrameworkApp
             try
             {
                 ListBoxItem item = listbox.SelectedItem as ListBoxItem;
-                string itemname = item.Content as string;
+                if (item == null) throw new NullReferenceException(); // if no item is selected, do nothing
+                datacontent.TryGetValue(item, out TextBlock textblock);
+                string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
                 currentMusic.Content = itemname;
                 currentAudio = itemname;
                 try
                 {
                     mediaPlayer.Close();
                     mediaPlayer.Open(new Uri(Path.Combine(MainWindow.MusicAppPath, itemname), UriKind.Relative));
+                    mediaPlayer.MediaOpened += InitializeMediaController;
                     mediaPlayer.Play();
                     if (currentAudio != null) ShowCurrentMusic(); 
                     PaintSelectedMusic();
                 } catch(Exception ex)
                 {
-                    RoutineLogics.ErrorMessage($"{Errors.OPEN_ERR_MSG}{itemname ?? "null MediaPlayer"}" + ex.Message, Errors.OPEN_ERR);
+                    RoutineLogics.ErrorMessage($"{Errors.OPEN_ERR_MSG}{itemname ?? "null MediaPlayer"}\n" + ex.Message, Errors.OPEN_ERR);
                 }
             } catch (NullReferenceException)
             {
                 // do nothing on null exception
                 stopButton.IsEnabled = true; // to be avoid stop button is disable forever
             }
+        }
+
+        private void InitializeMediaController(object sender, EventArgs e)
+        {
+            // set the slider's range
+            slider.Minimum = 0;
+            slider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; // get the total seconds of media player
+
+            time.Interval = TimeSpan.FromSeconds(1);
+            time.Tick += UpdateSliderPosition;
+            time.Start();
         }
 
         private void ShowCurrentMusic()
@@ -88,6 +102,7 @@ namespace WPFFrameworkApp
             currentPanel.Visibility = Visibility.Visible;
             musicPanel1.Visibility = Visibility.Visible;
             musicPanel2.Visibility = Visibility.Visible;
+            slider.Visibility = Visibility.Visible;
             startButton.IsEnabled = false;
             isPaused = false;
         }
@@ -99,6 +114,7 @@ namespace WPFFrameworkApp
             stopButton.IsEnabled = true;
             restartButton.IsEnabled = true;
             isPaused = false;
+            time.Start();
         }
 
         private void StopMusic(object sender, RoutedEventArgs e)
@@ -108,6 +124,7 @@ namespace WPFFrameworkApp
             stopButton.IsEnabled = false;
             restartButton.IsEnabled = true;
             isPaused = true;
+            time.Stop();
         }
 
         private void RestartMusic(object sender, RoutedEventArgs e)
@@ -118,16 +135,20 @@ namespace WPFFrameworkApp
             stopButton.IsEnabled = true;
             restartButton.IsEnabled = true;
             isPaused = false;
+            slider.Value = 0;
+            time.Start();
         }
 
         private void MusicBack(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(-5)); // 5 second back
+            slider.Value = slider.Value - 5;
         }
 
         private void MusicFront(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(5)); // 5 second front
+            slider.Value = slider.Value + 5;
         }
 
         private void AddAudio(object sender, RoutedEventArgs e)
@@ -147,13 +168,8 @@ namespace WPFFrameworkApp
                     {
                         string filename = Path.GetFileName(file);
                         File.Move(file, Path.Combine(MainWindow.MusicAppPath, filename));
-                        ListBoxItem item = new ListBoxItem()
-                        {
-                            Content = filename,
-                            FontSize = 15,
-                            Foreground = Brushes.Green
-                        };
-                        listbox.Items.Add(item);
+                        if (filename.EndsWith(SupportedFiles.WAV)) CreateMusicItem(filename, ImagePaths.LWAV_IMG, new SolidColorBrush(Colors.Green));
+                        else if (filename.EndsWith(SupportedFiles.MP3)) CreateMusicItem(filename, ImagePaths.LMP3_IMG, new SolidColorBrush(Colors.Green));
                     }
                 }
                 catch (Exception ex)
@@ -193,15 +209,16 @@ namespace WPFFrameworkApp
             {
                 foreach (ListBoxItem item in listbox.Items)
                 {
-                    if ((string)item.Content == currentAudio)
+                    datacontent.TryGetValue(item, out TextBlock itemname);
+                    if (itemname.Text.Trim() == currentAudio)
                     {
                         item.Background = Brushes.Gray;
-                        item.Foreground = Brushes.Black;
+                        itemname.Foreground = new SolidColorBrush(Colors.Black);
                     }
                     else
                     {
                         item.Background = Brushes.Black;
-                        item.Foreground = Brushes.White;
+                        itemname.Foreground = new SolidColorBrush(Colors.White);
                     }
                 }
             }
@@ -210,6 +227,60 @@ namespace WPFFrameworkApp
             stopButton.IsEnabled = true;
             restartButton.IsEnabled = true;
         }
+
+        private void CreateMusicItem(string filename, string imagepath, SolidColorBrush textcolor)
+        {
+
+            BitmapImage bitmapImage = new BitmapImage(new Uri(imagepath, UriKind.RelativeOrAbsolute));
+            bitmapImage.Freeze(); // for higher performance
+
+            TextBlock textblock = new TextBlock
+            {
+                Text = "  " + filename, // spaces for left margin
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = textcolor
+            };
+
+            StackPanel itempanel = new StackPanel { Orientation = Orientation.Horizontal, Height = 25 };
+            itempanel.Children.Add(new Image { Source = bitmapImage });
+            itempanel.Children.Add(textblock);
+
+            ListBoxItem item = new ListBoxItem { Content = itempanel };
+            listbox.Items.Add(item); // supported audios
+            datacontent.Add(item, textblock);
+        }
+
+        private void UpdateSliderPosition(object sender, EventArgs e)
+        {
+            slider.Value = mediaPlayer.Position.TotalSeconds; // get the current second of media player
+        }
+
+        private void SliderPositionChanged(object sender, MouseButtonEventArgs e) // MouseButtonEventArgs = waits until mause events, then do action
+        {
+            mediaPlayer.Position = TimeSpan.FromSeconds(slider.Value);
+        }
+
+        /*
+        public static T GetChildOfType<T>(DependencyObject parent) where T : DependencyObject
+        {
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T typedChild)
+                {
+                    return typedChild;
+                }
+                var childOfChild = GetChildOfType<T>(child);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+            return null;
+        
+        }
+        */
         #endregion
     }
 }

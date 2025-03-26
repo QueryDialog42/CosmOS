@@ -16,6 +16,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="#2b2b2b" Foreground="White">
             <MenuItem Header="_Audio" Background="#2b2b2b" Width="50">
@@ -46,17 +47,18 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <ListBox x:Name="listbox" Grid.Row="1" Background="Black" BorderThickness="0" Foreground="White" Grid.RowSpan="3" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged"/>
+        <ListBox x:Name="listbox" Grid.Row="1" Background="Black" BorderThickness="0" Foreground="White" Grid.RowSpan="4" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged"/>
+        <Slider x:Name="slider" Grid.Row="2" Grid.ColumnSpan="2" Width="300"  HorizontalAlignment="Center" Visibility="Collapsed" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/> 
         <StackPanel x:Name="currentPanel" Grid.Row="1" Grid.Column="2" Visibility="Collapsed" Background="#3d2e26">
             <Image Source="DesktopImages/Genmusic.png" Width="120" VerticalAlignment="Top"/>
             <Label x:Name="currentMusic" Foreground="White" HorizontalAlignment="Center"/>
         </StackPanel>
-        <StackPanel x:Name="musicPanel1" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+        <StackPanel x:Name="musicPanel1" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
             <Button x:Name="startButton" Content="start" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="PlayMusic"/>
             <Button x:Name="stopButton" Content="stop" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="StopMusic"/>
             <Button x:Name="restartButton" Content="Restart" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" Click="RestartMusic"/>
         </StackPanel>
-        <StackPanel x:Name="musicPanel2" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+        <StackPanel x:Name="musicPanel2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
             <Button Content="Back" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="MusicBack"/>
             <Button Content="Front" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="MusicFront"/>
         </StackPanel>

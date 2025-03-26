@@ -41,6 +41,8 @@
         public const string RTF_IMG = "DesktopImages/rtffile.png";
         public const string MP3_IMG = "DesktopImages/sound128x128.png";
         public const string WAV_IMG = "DesktopImages/soundwav.png";
+        public const string LWAV_IMG = "DesktopImages/soundwav48x48.png";
+        public const string LMP3_IMG = "DesktopImages/soundmp348x48.png";
         public const string EMPT_IMG = "DesktopImages/trashempty.png";
         public const string FULL_IMG = "DesktopImages/trashfull.png";
         public const string WRNG_IMG = "DesktopImages/warning1.png";
@@ -75,8 +77,8 @@
     public struct Versions
     {
         public const string NOTE_VRS = "GenNote v1.3.4";
-        public const string MUSIC_VRS = "GenMusic v1.3.3";
+        public const string MUSIC_VRS = "GenMusic v1.3.6";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v1.4.8";
+        public const string GOS_VRS = "GencOS v1.5.0";
     }
 }
