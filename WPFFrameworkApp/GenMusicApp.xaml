@@ -14,7 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
@@ -48,7 +48,7 @@
             </MenuItem>
         </Menu>
         <ListBox x:Name="listbox" Grid.Row="1" Background="Black" BorderThickness="0" Foreground="White" Grid.RowSpan="4" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged"/>
-        <Slider x:Name="slider" Grid.Row="2" Grid.ColumnSpan="2" Width="300"  HorizontalAlignment="Center" Visibility="Collapsed" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/> 
+        <Slider x:Name="slider" Grid.Row="2" Grid.ColumnSpan="2" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/> 
         <StackPanel x:Name="currentPanel" Grid.Row="1" Grid.Column="2" Visibility="Collapsed" Background="#3d2e26">
             <Image Source="DesktopImages/Genmusic.png" Width="120" VerticalAlignment="Top"/>
             <Label x:Name="currentMusic" Foreground="White" HorizontalAlignment="Center"/>
