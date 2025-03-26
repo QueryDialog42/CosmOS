@@ -85,14 +85,8 @@ namespace WPFFrameworkApp
         }
 
         private void InitializeMediaController(object sender, EventArgs e)
-        {
-            // set the slider's range
-            slider.Minimum = 0;
-            slider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; // get the total seconds of media player
-
-            time.Interval = TimeSpan.FromSeconds(1);
-            time.Tick += UpdateSliderPosition;
-            time.Start();
+        {   
+            InitializeSliderLogics();
         }
 
         private void ShowCurrentMusic()
@@ -105,6 +99,8 @@ namespace WPFFrameworkApp
             slider.Visibility = Visibility.Visible;
             startButton.IsEnabled = false;
             isPaused = false;
+
+            InitializeSliderLogics();
         }
 
         private void PlayMusic(object sender, RoutedEventArgs e)
@@ -142,13 +138,13 @@ namespace WPFFrameworkApp
         private void MusicBack(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(-5)); // 5 second back
-            slider.Value = slider.Value - 5;
+            slider.Value = mediaPlayer.Position.TotalSeconds;
         }
 
         private void MusicFront(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(5)); // 5 second front
-            slider.Value = slider.Value + 5;
+            slider.Value = mediaPlayer.Position.TotalSeconds;
         }
 
         private void AddAudio(object sender, RoutedEventArgs e)
@@ -252,12 +248,26 @@ namespace WPFFrameworkApp
 
         private void UpdateSliderPosition(object sender, EventArgs e)
         {
-            slider.Value = mediaPlayer.Position.TotalSeconds; // get the current second of media player
+            slider.Value += 0.52; // 1 second front
         }
 
         private void SliderPositionChanged(object sender, MouseButtonEventArgs e) // MouseButtonEventArgs = waits until mause events, then do action
         {
             mediaPlayer.Position = TimeSpan.FromSeconds(slider.Value);
+        }
+
+        private void InitializeSliderLogics()
+        {
+            // set the slider's range
+            slider.Minimum = 0;
+            if (mediaPlayer.NaturalDuration.HasTimeSpan)
+            {
+                slider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; // get the total seconds of media player
+                slider.Value = mediaPlayer.Position.TotalSeconds; // get the current second of media player
+            }
+            time.Interval = TimeSpan.FromSeconds(1);
+            time.Tick += UpdateSliderPosition;
+            time.Start();
         }
 
         /*
