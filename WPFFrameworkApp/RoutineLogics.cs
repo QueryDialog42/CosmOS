@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace WPFFrameworkApp
 {
-    public static class RoutineLogics
+    public partial class RoutineLogics
     {
         public static void ReloadDesktop(MainWindow window, string desktopPath)
         {
@@ -25,17 +27,9 @@ namespace WPFFrameworkApp
                 foreach (string file in files)
                 {
                     string filename = Path.GetFileName(file);
-                    Button app = CreateButton(filename);
-                    TextBlock appname = CreateTextBlock(filename);
-                    Image image = CreateImage();
-                    StackPanel stackpanel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-
                     if (Directory.Exists(file))
                     {
-                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, image, stackpanel, app, appname, desktopPath, filename);
+                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, desktopPath, filename);
                         else
                         {
                             Grid.SetColumnSpan(window.safari, 1);
@@ -43,14 +37,14 @@ namespace WPFFrameworkApp
                             window.trashimage.Source = InitTrashBacket();
                         }
                     }
-                    else if (filename.EndsWith(SupportedFiles.TXT)) InitTextFile(window, image, stackpanel, app, appname, desktopPath, filename);
-                    else if (filename.EndsWith(SupportedFiles.RTF)) InitRTFFile(window, image, stackpanel, app, appname, desktopPath, filename);
-                    else if (filename.EndsWith(SupportedFiles.WAV)) InitAudioFile(window, image, stackpanel, app, appname, file, filename, ImagePaths.WAV_IMG);
-                    else if (filename.EndsWith(SupportedFiles.MP3)) InitAudioFile(window, image, stackpanel, app, appname, file, filename, ImagePaths.MP3_IMG);
-                    else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, image, stackpanel, app, appname, desktopPath, file, filename);
+                    else if (filename.EndsWith(SupportedFiles.TXT)) InitTextFile(window, desktopPath, filename);
+                    else if (filename.EndsWith(SupportedFiles.RTF)) InitRTFFile(window, desktopPath, filename);
+                    else if (filename.EndsWith(SupportedFiles.WAV)) InitAudioFile(window, file, ImagePaths.WAV_IMG);
+                    else if (filename.EndsWith(SupportedFiles.MP3)) InitAudioFile(window, file, ImagePaths.MP3_IMG);
+                    else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, desktopPath, file, filename);
                     else
                     {
-                        ErrorMessage($"{filename} is not supported for GencOS now.", Errors.UNSUPP_ERR);
+                        ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS);
                         File.Delete(file);
                     }
                 }
@@ -58,12 +52,17 @@ namespace WPFFrameworkApp
             }
             catch (Exception e)
             {
-                ErrorMessage(Errors.REL_ERR_MSG + "Main Window\n" + e.Message, Errors.REL_ERR);
+                ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, "Main Window\n", e.Message);
             }
         }
-        public static void ErrorMessage(string errmessage, string errtitle)
+        public static void ErrorMessage(string errtitle, params string[] errmessage)
         {
-            MessageBox.Show(errmessage, errtitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            StringBuilder stringbuilder = new StringBuilder();
+            foreach (string str in errmessage)
+            {
+                stringbuilder.Append(str);
+            }
+            MessageBox.Show(stringbuilder.ToString(), errtitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
         public static void MoveAnythingWithQuery(
             string title,
@@ -101,7 +100,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception e)
             {
-                ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename ?? "null File"}\n", Errors.MOVE_ERR);
+                ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null File", "\n", e.Message);
             }
         }
 
@@ -132,12 +131,12 @@ namespace WPFFrameworkApp
                     }
                     catch (Exception ex)
                     {
-                        ErrorMessage(Errors.COPY_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.COPY_ERR);
+                        ErrorMessage(Errors.COPY_ERR, Errors.COPY_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                     }
                 }
                 else
                 {
-                    ErrorMessage("You can not move or copy files into hidden folders manually", Errors.PRMS_ERR);
+                    ErrorMessage(Errors.PRMS_ERR, "You can not move or copy files into hidden folders manually");
                 }
             }
         }
@@ -148,15 +147,24 @@ namespace WPFFrameworkApp
         }
 
         #region Subroutines
+
+        private static void AppDraggingActive(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
         private static void InitTextFile(
             MainWindow window,
-            Image image,
-            StackPanel stackpanel,
-            Button app,
-            TextBlock appname,
             string desktopPath,
             string filename)
         {
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
             Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
 
             window.desktop.Children.Add(app);
@@ -171,24 +179,36 @@ namespace WPFFrameworkApp
                         currentDesktopForNote = desktopPath,
                         Title = filename
                     };
-                    noteapp.note.Text = File.ReadAllText(Path.Combine(desktopPath, filename));
+                    using (StreamReader reader = new StreamReader(Path.Combine(desktopPath, filename)))
+                    {
+                        StringBuilder stringbuilder = new StringBuilder();
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            stringbuilder.AppendLine(line);
+                        }
+                        noteapp.note.Text = stringbuilder.ToString();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    ErrorMessage(Errors.READ_ERR_MSG + "the file\n" + ex.Message, "TXT" + Errors.READ_ERR);
+                    ErrorMessage("TXT" + Errors.READ_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                 }
             };
         }
 
         private static void InitRTFFile(
             MainWindow window,
-            Image image,
-            StackPanel stackpanel,
-            Button app,
-            TextBlock appname,
             string desktopPath,
             string filename)
         {
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
             Appearence(image, stackpanel, app, appname, ImagePaths.RTF_IMG);
 
             window.desktop.Children.Add(app);
@@ -220,20 +240,23 @@ namespace WPFFrameworkApp
                 }
                 catch (Exception ex)
                 {
-                    ErrorMessage(Errors.READ_ERR_MSG + "the file\n" + ex.Message, "RTF" + Errors.OPEN_ERR);
+                    ErrorMessage("RTF" + Errors.OPEN_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                 }
             };
         }
         private static void InitAudioFile(
             MainWindow window,
-            Image image,
-            StackPanel stackpanel,
-            Button app,
-            TextBlock appname,
             string filepath,
-            string filename,
             string fileimage)
         {
+            string filename = Path.GetFileName(filepath);
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
             Appearence(image, stackpanel, app, appname, fileimage);
 
             window.desktop.Children.Add(app);
@@ -251,21 +274,24 @@ namespace WPFFrameworkApp
                 }
                 catch (Exception ex)
                 {
-                    ErrorMessage(Errors.READ_ERR_MSG + "the file\n" + ex.Message, "Audio" + Errors.OPEN_ERR);
+                    ErrorMessage("Audio" + Errors.OPEN_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                 }
             };
         }
 
         private static void InitEXEFile(
             MainWindow window,
-            Image image,
-            StackPanel stackpanel,
-            Button app,
-            TextBlock appname,
             string desktopPath,
             string filepath,
             string filename)
         {
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
             Appearence(image, stackpanel, app, appname, ImagePaths.EXE_IMG);
 
             window.desktop.Children.Add(app);
@@ -307,13 +333,16 @@ namespace WPFFrameworkApp
 
         private static void InitFolder(
             MainWindow window,
-            Image image,
-            StackPanel stackpanel,
-            Button app,
-            TextBlock appname,
             string desktopPath,
             string filename)
         {
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
             Appearence(image, stackpanel, app, appname, ImagePaths.FOLDER_IMG);
 
             window.folderdesktop.Children.Add(app);
@@ -338,7 +367,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                ErrorMessage($"{Errors.OPEN_ERR_MSG}{HiddenFolders.HTRSH_FOL}\n" + ex.Message, "Trashbacket" + Errors.OPEN_ERR);
+                ErrorMessage("Trashbacket" + Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, HiddenFolders.HTRSH_FOL, "\n", ex.Message);
                 return new BitmapImage(new Uri(ImagePaths.EMPT_IMG, UriKind.RelativeOrAbsolute));
             }
         }
@@ -368,7 +397,7 @@ namespace WPFFrameworkApp
                 Height = 80,
                 Background = Brushes.Transparent,
                 BorderBrush = Brushes.Transparent,
-                ToolTip = filename
+                ToolTip = filename,
             };
         }
 
@@ -417,12 +446,12 @@ namespace WPFFrameworkApp
                     }
                     catch (Exception ex)
                     {
-                        ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.MOVE_ERR);
+                        ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                     }
                 }
                 else
                 {
-                    ErrorMessage("You can not move or copy files into hidden folders manually", Errors.PRMS_ERR);
+                    ErrorMessage(Errors.PRMS_ERR, "You can not move or copy files into hidden folders manually");
                 }
             }
         }
@@ -452,7 +481,7 @@ namespace WPFFrameworkApp
                     }
                     catch (Exception ex)
                     {
-                        ErrorMessage(Errors.MOVE_ERR_MSG + $"{filename ?? "null File"}\n" + ex.Message, Errors.MOVE_ERR);
+                        ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                     }
                 }
             }

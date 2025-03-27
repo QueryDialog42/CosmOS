@@ -1,11 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace WPFFrameworkApp
 {
     /// <summary>
     /// NoteApp.xaml etkileşim mantığı
     /// </summary>
-    public partial class TXTNote : Window
+    public partial class TXTNote : Window, IDisposable
     {
         public string currentDesktopForNote;
         public MainWindow windowForNote;
@@ -44,11 +45,22 @@ namespace WPFFrameworkApp
         private void MoveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
         }
         private void DeleteNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
+        }
+
+        private void CollectGarbagesOnClose(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            currentDesktopForNote = null;
+            windowForNote = null;
+            filter = null;
         }
     }
 }

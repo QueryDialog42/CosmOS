@@ -14,14 +14,15 @@ namespace WPFFrameworkApp
     /// <summary>
     /// GenMusicApp.xaml etkileşim mantığı
     /// </summary>
-    public partial class GenMusicApp : Window
+    public partial class GenMusicApp : Window, IDisposable
     {
-        public static DispatcherTimer time = new DispatcherTimer();
         public static string currentAudio;
         public static bool isPaused = true;
-        public static MediaPlayer mediaPlayer = new MediaPlayer();
-        public Dictionary<ListBoxItem, TextBlock> datacontent;
+        public static MediaPlayer mediaPlayer;
+        public Dictionary<ListBoxItem, TextBlock> datacontent; // to store items' TextBlock in order to get filename
         public string musicfilter = $"WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}";
+        public DispatcherTimer time;
+        double totaltime;
         public GenMusicApp()
         {
             InitializeComponent();
@@ -42,14 +43,14 @@ namespace WPFFrameworkApp
                 else if (filename.EndsWith(SupportedFiles.MP3)) CreateMusicItem(filename, ImagePaths.LMP3_IMG, defaultcolor);
                 else
                 {
-                    RoutineLogics.ErrorMessage($"{filename} is not supported for GenMusic, removing.\n.wav\n.mp3\n is supported for now.", Errors.UNSUPP_ERR);
+                    RoutineLogics.ErrorMessage(Errors.UNSUPP_ERR, filename ?? "null File", " is not supported for ", Versions.GOS_VRS, ", removing.\n.wav\n.mp3\n is supported for now.");
                     File.Delete(music);
                 }
             }
             listbox.Items.Refresh();
             if (mediaPlayer != null && isPaused == false)
             {
-                currentMusic.Content = currentAudio;
+                currentMusic.Text = currentAudio;
                 ShowCurrentMusic();
                 PaintSelectedMusic();
             }
@@ -61,13 +62,15 @@ namespace WPFFrameworkApp
             {
                 ListBoxItem item = listbox.SelectedItem as ListBoxItem;
                 if (item == null) throw new NullReferenceException(); // if no item is selected, do nothing
-                datacontent.TryGetValue(item, out TextBlock textblock);
+                datacontent.TryGetValue(item, out TextBlock textblock); // get Textblock of seelcted item
                 string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
-                currentMusic.Content = itemname;
+                currentMusic.Text = itemname;
                 currentAudio = itemname;
                 try
                 {
-                    mediaPlayer.Close();
+                    if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
+                    else mediaPlayer.Close();
+
                     mediaPlayer.Open(new Uri(Path.Combine(MainWindow.MusicAppPath, itemname), UriKind.Relative));
                     mediaPlayer.MediaOpened += InitializeMediaController;
                     mediaPlayer.Play();
@@ -75,7 +78,7 @@ namespace WPFFrameworkApp
                     PaintSelectedMusic();
                 } catch(Exception ex)
                 {
-                    RoutineLogics.ErrorMessage($"{Errors.OPEN_ERR_MSG}{itemname ?? "null MediaPlayer"}\n" + ex.Message, Errors.OPEN_ERR);
+                    RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, itemname ?? "null MediaPlayer", "\n", ex.Message);
                 }
             } catch (NullReferenceException)
             {
@@ -96,8 +99,8 @@ namespace WPFFrameworkApp
             currentPanel.Visibility = Visibility.Visible;
             musicPanel1.Visibility = Visibility.Visible;
             musicPanel2.Visibility = Visibility.Visible;
-            slider.Visibility = Visibility.Visible;
-            startButton.IsEnabled = false;
+            musicSliderPanel.Visibility = Visibility.Visible;
+            SetDisableStyle(startButton);
             isPaused = false;
 
             InitializeSliderLogics();
@@ -105,46 +108,48 @@ namespace WPFFrameworkApp
 
         private void PlayMusic(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Play();
-            startButton.IsEnabled = false;
-            stopButton.IsEnabled = true;
-            restartButton.IsEnabled = true;
+            
+            SetDisableStyle(startButton);
+            SetEnableStyle(stopButton);
             isPaused = false;
+            mediaPlayer.Play();
             time.Start();
         }
 
         private void StopMusic(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Pause();
-            startButton.IsEnabled = true;
-            stopButton.IsEnabled = false;
-            restartButton.IsEnabled = true;
-            isPaused = true;
             time.Stop();
+            mediaPlayer.Pause();
+            isPaused = true;
+            SetEnableStyle(startButton);
+            SetDisableStyle(stopButton);
         }
 
         private void RestartMusic(object sender, RoutedEventArgs e)
         {
-            mediaPlayer.Stop();
-            mediaPlayer.Play();
-            startButton.IsEnabled = false;
-            stopButton.IsEnabled = true;
-            restartButton.IsEnabled = true;
+            SetDisableStyle(startButton);
+            SetEnableStyle(stopButton);
             isPaused = false;
             slider.Value = 0;
-            time.Start();
+            mediaPlayer.Stop();
+            mediaPlayer.Play();
+            if (time.IsEnabled == false) time.Start();
         }
 
         private void MusicBack(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(-5)); // 5 second back
             slider.Value = mediaPlayer.Position.TotalSeconds;
+            totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
+            remainedTime.Text = TimeFormat();
         }
 
         private void MusicFront(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(5)); // 5 second front
             slider.Value = mediaPlayer.Position.TotalSeconds;
+            totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
+            remainedTime.Text = TimeFormat();
         }
 
         private void AddAudio(object sender, RoutedEventArgs e)
@@ -158,19 +163,19 @@ namespace WPFFrameworkApp
             };
             if (dialog.ShowDialog() == true)
             {
-                try
+                foreach (string file in dialog.FileNames)
                 {
-                    foreach (string file in dialog.FileNames)
+                    string filename = Path.GetFileName(file);
+                    try
                     {
-                        string filename = Path.GetFileName(file);
                         File.Move(file, Path.Combine(MainWindow.MusicAppPath, filename));
                         if (filename.EndsWith(SupportedFiles.WAV)) CreateMusicItem(filename, ImagePaths.LWAV_IMG, new SolidColorBrush(Colors.Green));
                         else if (filename.EndsWith(SupportedFiles.MP3)) CreateMusicItem(filename, ImagePaths.LMP3_IMG, new SolidColorBrush(Colors.Green));
                     }
-                }
-                catch (Exception ex)
-                {
-                    RoutineLogics.ErrorMessage(Errors.ADD_ERR_MSG + "the file\n" + ex.Message, Errors.ADD_ERR);
+                    catch (Exception ex)
+                    {
+                        RoutineLogics.ErrorMessage(Errors.ADD_ERR, Errors.ADD_ERR_MSG, filename ?? "null File", "\n", ex.Message);
+                    }
                 }
             }
         }
@@ -190,6 +195,11 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.MoveAnythingWithQuery("Delete Audio", musicfilter, null, MainWindow.MusicAppPath, MainWindow.TrashPath, 3);
             ReloadMusicApp();
+        }
+
+        private void DeleteTimeOnClose(object sender, System.ComponentModel.CancelEventArgs e) // Closing in .xaml file
+        {
+            Dispose();
         }
 
         #region Subroutines
@@ -248,12 +258,21 @@ namespace WPFFrameworkApp
 
         private void UpdateSliderPosition(object sender, EventArgs e)
         {
-            slider.Value += 0.52; // 1 second front
+            slider.Value += 1.035; // 1 second front
+            totaltime -= 1.035;
+            remainedTime.Text = TimeFormat();
+            if (totaltime <= 0)
+            {
+                time.Stop();
+                isPaused = true;
+            }
         }
 
         private void SliderPositionChanged(object sender, MouseButtonEventArgs e) // MouseButtonEventArgs = waits until mause events, then do action
         {
             mediaPlayer.Position = TimeSpan.FromSeconds(slider.Value);
+            totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
+            remainedTime.Text = TimeFormat();
         }
 
         private void InitializeSliderLogics()
@@ -264,10 +283,62 @@ namespace WPFFrameworkApp
             {
                 slider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; // get the total seconds of media player
                 slider.Value = mediaPlayer.Position.TotalSeconds; // get the current second of media player
+                totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
+                remainedTime.Text = TimeFormat(); //minutes:seconds
             }
-            time.Interval = TimeSpan.FromSeconds(1);
-            time.Tick += UpdateSliderPosition;
-            time.Start();
+            if (time == null)
+            {
+                time = new DispatcherTimer();
+                time.Tick += UpdateSliderPosition;
+                time.Interval = TimeSpan.FromSeconds(1);
+                time.Start();
+            }
+            else if (time.IsEnabled == false)
+            {
+                time.Start();
+            }
+        }
+
+        private string TimeFormat()
+        {
+            int minutes = (int)(totaltime / 60);
+            int seconds = (int)(totaltime % 60);
+
+            return string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+
+        private void SetDisableStyle(Button button)
+        {
+            button.IsEnabled = false;
+            button.Foreground = Brushes.Gray;
+        }
+
+        private void SetEnableStyle(Button button)
+        {
+            button.IsEnabled = true;
+            button.Foreground = Brushes.White;
+        }
+
+        public void Dispose()
+        {
+            // When window closed, no longer this variables needed
+            if (time != null)
+            {
+                time.Stop();
+                time.Tick -= UpdateSliderPosition;
+                time = null;
+            }
+            
+            datacontent = null;
+            musicfilter = null;
+            totaltime = 0;
+
+            if (isPaused)
+            {
+                currentAudio = null;
+                if (mediaPlayer != null) mediaPlayer.Close();
+                mediaPlayer = null;
+            }
         }
 
         /*

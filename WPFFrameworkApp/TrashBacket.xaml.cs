@@ -79,7 +79,7 @@ namespace WPFFrameworkApp
                 }
                 catch (Exception ex)
                 {
-                    RoutineLogics.ErrorMessage($"{Errors.DEL_ERR_MSG}{trashname}.\n" + ex.Message, Errors.DEL_ERR);
+                    RoutineLogics.ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, trashname, "\n", ex.Message);
                 }
             };
         }

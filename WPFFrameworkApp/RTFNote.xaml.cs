@@ -2,13 +2,14 @@
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Forms;
+using System;
 
 namespace WPFFrameworkApp
 {
     /// <summary>
     /// RTFNote.xaml etkileşim mantığı
     /// </summary>
-    public partial class RTFNote : Window
+    public partial class RTFNote : Window, IDisposable
     {
         public string currentDesktopForNote;
         public MainWindow windowForNote;
@@ -38,7 +39,6 @@ namespace WPFFrameworkApp
         private void SaveAsNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.RTFSaveAsNote_Wanted(windowForNote, currentDesktopForNote, this);
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
         }
 
         private void CopyNote(object sender, RoutedEventArgs e)
@@ -120,6 +120,18 @@ namespace WPFFrameworkApp
                     textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(wpfcolor));
                 }
             }
+        }
+
+        private void CollectGarbagesOnClose(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            currentDesktopForNote = null;
+            windowForNote = null;
+            filter = null;
         }
     }
 }

@@ -46,9 +46,9 @@ namespace WPFFrameworkApp
                         else Environment.Exit(0);
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    RoutineLogics.ErrorMessage(Errors.READ_ERR_MSG + "the path from " + Configs.CPATH + "\n" + e.Message, Errors.READ_ERR);
+                    RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
                     Environment.Exit(0);
                 }
             }
@@ -74,12 +74,12 @@ namespace WPFFrameworkApp
                         Directory.CreateDirectory(folderpath);
                         RoutineLogics.ReloadDesktop(this, currentDesktop);
                     }
-                    else RoutineLogics.ErrorMessage($"{foldername} already exists.", Errors.CRT_ERR);
+                    else RoutineLogics.ErrorMessage(Errors.CRT_ERR, foldername, " already exists.");
                 }
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage(Errors.READ_ERR_MSG + "the folder.\n" + ex.Message, Errors.CRT_ERR);
+                RoutineLogics.ErrorMessage(Errors.CRT_ERR, Errors.READ_ERR_MSG, "the folder\n", ex.Message);
             }
         }
 
@@ -95,17 +95,17 @@ namespace WPFFrameworkApp
                 }
                 else
                 {
-                    RoutineLogics.ErrorMessage($"You cannot delete {Configs.CDESK} folder.", "Permission Error");
+                    RoutineLogics.ErrorMessage(Errors.PRMS_ERR, "You cannot delete ", Configs.CDESK, " folder.");
                 }
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage(Errors.DEL_ERR_MSG + "the folder.\n" + ex.Message, Errors.DEL_ERR);
+                RoutineLogics.ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, "the folder.\n", ex.Message);
             }
         }
         private string ConfigurePath(string ConfigFileText)
         {
-            string input = InputDialog.ShowInputDialog($"Please enter {Configs.CDESK} path", "Path Needed");
+            string input = InputDialog.ShowInputDialog("Path Needed", "Please enter ", Configs.CDESK, " path");
             //Resumes until valid path is entered
             while (true)
             {
@@ -119,16 +119,18 @@ namespace WPFFrameworkApp
                         {
                             using (StreamWriter writer = new StreamWriter(File.Create(ConfigFileText)))
                             {
-                                writer.WriteLine(input);
-                                Directory.CreateDirectory(Path.Combine(input, HiddenFolders.HAUD_FOL));
-                                Directory.CreateDirectory(Path.Combine(input, HiddenFolders.HTRSH_FOL));
-                                _ = new DirectoryInfo(Path.Combine(input, HiddenFolders.HAUD_FOL)) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
-                                _ = new DirectoryInfo(Path.Combine(input, HiddenFolders.HTRSH_FOL)) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
+                                writer.WriteLineAsync(input);
+                                string trashpath = Path.Combine(input, HiddenFolders.HTRSH_FOL);
+                                string musicpath = Path.Combine(input, HiddenFolders.HAUD_FOL);
+                                Directory.CreateDirectory(musicpath);
+                                Directory.CreateDirectory(trashpath);
+                                new DirectoryInfo(musicpath) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
+                                new DirectoryInfo(trashpath) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
                                 return input;
                             }
-                        } catch(Exception e)
+                        } catch(Exception ex)
                         {
-                            RoutineLogics.ErrorMessage(Errors.WRT_ERR_MSG + " the path to file.\n" + e.Message, Errors.WRT_ERR);
+                            RoutineLogics.ErrorMessage(Errors.WRT_ERR, Errors.WRT_ERR_MSG, "the path to file.\n", ex.Message);
                             Environment.Exit(0);
                         }
                     }

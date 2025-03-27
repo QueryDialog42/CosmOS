@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -35,7 +36,7 @@ namespace WPFFrameworkApp
                 string folder = Path.GetDirectoryName(file);
                 if (file.EndsWith(SupportedFiles.TXT)) OpenTXTFile(windowForNote, folder, file);
                 else if (file.EndsWith(SupportedFiles.RTF)) OpenRTFFile(windowForNote, folder, file);
-                else RoutineLogics.ErrorMessage($"{file} is not supported for GencOS.\n.txt\nis supported for now.", Errors.UNSUPP_ERR);
+                else RoutineLogics.ErrorMessage(Errors.UNSUPP_ERR, file, " is not supported for ", Versions.GOS_VRS, "\n.txt\n.rtf\nis supported for now.");
             }
         }
         
@@ -51,7 +52,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{filename}\n" + ex.Message, Errors.SAVE_ERR);
+                RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
             }
         }
 
@@ -76,7 +77,7 @@ namespace WPFFrameworkApp
                 }
                 catch (Exception ex)
                 {
-                    RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{Path.GetFileName(file)}\n" + ex.Message, Errors.SAVE_ERR);
+                    RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, Path.GetFileName(file), "\n", ex.Message);
                 }
             }
         }
@@ -94,7 +95,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{filename}.\n" + ex.Message, Errors.SAVE_ERR);
+                RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
             }
         }
 
@@ -116,10 +117,11 @@ namespace WPFFrameworkApp
                     {
                         textrange.Save(filestream, DataFormats.Rtf);
                     }
+                    RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
                 }
                 catch(Exception ex)
                 {
-                    RoutineLogics.ErrorMessage($"{Errors.SAVE_ERR_MSG}{Path.GetFileName(file)}.\n" + ex.Message, Errors.SAVE_ERR);
+                    RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, Path.GetFileName(file), "\n", ex.Message);
                 }
             }
         }
@@ -127,15 +129,17 @@ namespace WPFFrameworkApp
         public static void CopyNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
             noteapp.Close();
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            
         }
 
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
             noteapp.Close();
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            
         }
 
         public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
@@ -143,12 +147,15 @@ namespace WPFFrameworkApp
             string filename = noteapp.Title;
             if (MessageBox.Show($"Are you sure you want to delete {filename}?", "Delete Note", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
+                
                 RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
-                RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
                 noteapp.Close();
+                RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                
             }
         }
 
+        #region Subroutines
         public static void CreateNoteAppEnvironment(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp, bool isButtonNull)
         {
             noteapp.currentDesktopForNote = currentDesktopForNote;
@@ -204,7 +211,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        #region Subroutines
 
         private static void OpenTXTFile(MainWindow windowForNote, string folder, string filepath)
         {
@@ -215,12 +221,21 @@ namespace WPFFrameworkApp
             };
             try
             {
-                TXTnoteapp.note.Text = File.ReadAllText(filepath);
-                TXTnoteapp.Title = Path.GetFileName(filepath);
+                using (StreamReader reader = new StreamReader(filepath))
+                {
+                    StringBuilder stringbuilder = new StringBuilder();
+                    string line;
+                    while((line = reader.ReadLine()) != null)
+                    {
+                        stringbuilder.Append(line);
+                    }
+                    TXTnoteapp.note.Text = stringbuilder.ToString();
+                }
+                    TXTnoteapp.Title = Path.GetFileName(filepath);
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage(Errors.READ_ERR_MSG + $"{Path.GetFileName(filepath)}.\n" + ex.Message, Errors.READ_ERR);
+                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, Path.GetFileName(filepath), "\n", ex.Message);
             }
         }
 
@@ -256,10 +271,9 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage($"{Errors.READ_ERR_MSG}{Path.GetFileName(filepath)}.\n" + ex.Message, Errors.READ_ERR);
+                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, Path.GetFileName(filepath), "\n", ex.Message);
             }
         }
-
         #endregion
     }
 }

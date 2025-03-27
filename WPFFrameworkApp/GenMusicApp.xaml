@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
         mc:Ignorable="d" Background="#424242" Icon="/DesktopImages/Genmusic.png"
-        Title="GenMusicApp" Height="297" Width="444">
+        Title="GenMusicApp" Height="310" Width="444"
+        Closing="DeleteTimeOnClose">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -47,11 +48,14 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <ListBox x:Name="listbox" Grid.Row="1" Background="Black" BorderThickness="0" Foreground="White" Grid.RowSpan="4" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged"/>
-        <Slider x:Name="slider" Grid.Row="2" Grid.ColumnSpan="2" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/> 
-        <StackPanel x:Name="currentPanel" Grid.Row="1" Grid.Column="2" Visibility="Collapsed" Background="#3d2e26">
+        <ListBox x:Name="listbox" Grid.Row="1" Grid.Column="0" Background="Black" BorderThickness="0" Foreground="White" Grid.RowSpan="4" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged"/>
+        <StackPanel x:Name="currentPanel" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Background="#3d2e26">
             <Image Source="DesktopImages/Genmusic.png" Width="120" VerticalAlignment="Top"/>
-            <Label x:Name="currentMusic" Foreground="White" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="currentMusic" Foreground="White" FontWeight="Bold" Margin="0, 15, 0, 0"  HorizontalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel x:Name="musicSliderPanel" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Collapsed">
+            <Slider x:Name="slider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/>
+            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel1" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
             <Button x:Name="startButton" Content="start" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="PlayMusic"/>
@@ -59,8 +63,8 @@
             <Button x:Name="restartButton" Content="Restart" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" Click="RestartMusic"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-            <Button Content="Back" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="MusicBack"/>
-            <Button Content="Front" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="MusicFront"/>
+            <Button Content="5s Back" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="MusicBack"/>
+            <Button Content="5s Front" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="MusicFront"/>
         </StackPanel>
     </Grid>
 </Window>
