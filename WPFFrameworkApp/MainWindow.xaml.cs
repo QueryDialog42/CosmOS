@@ -103,6 +103,11 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, "the folder.\n", ex.Message);
             }
         }
+
+        private void AboutGencosPage_Wanted(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.ShowAboutWindow("About GencOS", ImagePaths.HLOGO_IMG, ImagePaths.LOGO_IMG, Versions.GOS_VRS, Messages.ABT_DFLT_MSG);
+        }
         private string ConfigurePath(string ConfigFileText)
         {
             string input = InputDialog.ShowInputDialog("Path Needed", "Please enter ", Configs.CDESK, " path");

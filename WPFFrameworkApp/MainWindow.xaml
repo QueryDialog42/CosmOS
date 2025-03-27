@@ -45,7 +45,7 @@
                         <Image Source="DesktopImages/folderdelete2.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_About GencOS">
+                <MenuItem Header="_About GencOS" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/paperplane2.png"/>
                     </MenuItem.Icon>

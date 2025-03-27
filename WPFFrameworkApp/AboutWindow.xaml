@@ -4,9 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d"
-        Title="AboutWindow" Height="450" Width="800">
+        mc:Ignorable="d" ResizeMode="NoResize"
+        Background="DarkGray"
+        SizeToContent="WidthAndHeight"
+        Title="AboutWindow" Height="180" Width="242">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Image x:Name="WhatAbout" Grid.Column="0" Margin="10" />
+        <TextBlock x:Name="Version" Grid.Column="1" Grid.Row="0" Margin="0, 0, 10, 0" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock x:Name="AboutMessage" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

@@ -141,9 +141,16 @@ namespace WPFFrameworkApp
             }
         }
 
-        public static void AboutWindow()
+        public static void ShowAboutWindow(string title, string image, string icon, string version, string message)
         {
-            // About page code will be in this function
+            AboutWindow aboutwindow = new AboutWindow
+            {
+                Title = title
+            };
+            aboutwindow.WhatAbout.Source = new BitmapImage(new Uri(image, UriKind.RelativeOrAbsolute)); ;
+            aboutwindow.Icon = new BitmapImage(new Uri(icon, UriKind.RelativeOrAbsolute));
+            aboutwindow.Version.Text = version;
+            aboutwindow.AboutMessage.Text = message;
         }
 
         #region Subroutines

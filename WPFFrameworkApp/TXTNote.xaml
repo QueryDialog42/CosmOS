@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
         mc:Ignorable="d" Icon="NoteImages/gennote.png"
-        Closing="CollectGarbagesOnClose"
         Title="NoteApp" Height="450" Width="298">
     <Grid>
         <Grid.RowDefinitions>
@@ -47,6 +46,11 @@
                 <MenuItem x:Name="delete" Header="_Delete" Click="DeleteNote">
                     <MenuItem.Icon>
                         <Image Source="NoteImages/notedelete.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="About GenNote" Click="AboutGennotePage_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/gennote.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

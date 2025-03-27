@@ -2,14 +2,14 @@
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Forms;
-using System;
+using System.ComponentModel;
 
 namespace WPFFrameworkApp
 {
     /// <summary>
     /// RTFNote.xaml etkileşim mantığı
     /// </summary>
-    public partial class RTFNote : Window, IDisposable
+    public partial class RTFNote : Window
     {
         public string currentDesktopForNote;
         public MainWindow windowForNote;
@@ -122,12 +122,22 @@ namespace WPFFrameworkApp
             }
         }
 
-        private void CollectGarbagesOnClose(object sender, System.ComponentModel.CancelEventArgs e)
+        private void RemoveStyles(object sender, RoutedEventArgs e)
         {
-            Dispose();
+            TextSelection selection = RichNote.Selection;
+            if (selection.IsEmpty == false)
+            {
+                TextRange textrange = new TextRange(selection.Start, selection.End);
+                textrange.ClearAllProperties();
+            }
         }
 
-        public void Dispose()
+        private void AboutGennotePage_Wanted(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
         {
             currentDesktopForNote = null;
             windowForNote = null;

@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
         mc:Ignorable="d" Icon="NoteImages/gennote.png"
-        Closing="CollectGarbagesOnClose"
         Title="NoteApp" Height="450" Width="298">
     <Grid>
         <Grid>
@@ -51,30 +50,38 @@
                             <Image Source="NoteImages/notedelete.png" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="About GenNote" Click="AboutGennotePage_Wanted">
+                        <MenuItem.Icon>
+                            <Image Source="/NoteImages/gennote.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
             <ToolBar Grid.Row="1">
-                <Button x:Name="saveButton" Width="23" Height="23" Click="SaveNote">
+                <Button x:Name="saveButton" Width="23" Height="23" Click="SaveNote" ToolTip="Save">
                     <Image Source="NoteImages/Save.png"/>
                 </Button>
                 <Separator />
-                <Button Width="23" Height="23" Click="MakeBold">
+                <Button Width="23" Height="23" Click="MakeBold" ToolTip="Make bold">
                     <Image Source="NoteImages/fontbold1.png" />
                 </Button>
-                <Button Width="23" Height="23" Click="MakeItalic">
+                <Button Width="23" Height="23" Click="MakeItalic" ToolTip="Make italic">
                     <Image Source="NoteImages/fontitalic1.png" />
                 </Button>
-                <Button Width="23" Height="23" Click="MakeUnderline">
+                <Button Width="23" Height="23" Click="MakeUnderline" ToolTip="Make underline">
                     <Image Source="NoteImages/fontunderline1.png" />
                 </Button>
-                <Button Width="23" Height="23" Click="FontDown">
+                <Button Width="23" Height="23" Click="FontDown" ToolTip="Reduce size">
                     <Image Source="NoteImages/fontdown.png" />
                 </Button>
-                <Button Width="23" Height="23" Click="FontUp">
+                <Button Width="23" Height="23" Click="FontUp" ToolTip="Increase size">
                     <Image Source="NoteImages/fontup.png" />
                 </Button>
-                <Button Width="21" Height="21" Click="ColorChange">
+                <Button Width="21" Height="21" Click="ColorChange" ToolTip="Change color">
                     <Image Source="NoteImages/colors.png" />
+                </Button>
+                <Button Width="21" Height="21" Click="RemoveStyles" ToolTip="Remove style">
+                    <Image Source="/NoteImages/clearstyle.png"/>
                 </Button>
             </ToolBar>
             <RichTextBox x:Name="RichNote" Grid.Row="2" AcceptsTab="True" >

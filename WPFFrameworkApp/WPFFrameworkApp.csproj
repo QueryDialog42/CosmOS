@@ -266,5 +266,14 @@
   <ItemGroup>
     <Resource Include="DesktopImages\soundmp348x48.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\paperplane128x128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\genmusic32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\clearstyle.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

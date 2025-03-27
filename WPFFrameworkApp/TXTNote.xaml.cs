@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Windows;
 
 namespace WPFFrameworkApp
@@ -6,7 +6,7 @@ namespace WPFFrameworkApp
     /// <summary>
     /// NoteApp.xaml etkileşim mantığı
     /// </summary>
-    public partial class TXTNote : Window, IDisposable
+    public partial class TXTNote : Window
     {
         public string currentDesktopForNote;
         public MainWindow windowForNote;
@@ -51,12 +51,12 @@ namespace WPFFrameworkApp
             NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
 
-        private void CollectGarbagesOnClose(object sender, System.ComponentModel.CancelEventArgs e)
+        private void AboutGennotePage_Wanted(object sender, RoutedEventArgs e)
         {
-            Dispose();
+            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
         }
 
-        public void Dispose()
+        protected override void OnClosing(CancelEventArgs e)
         {
             currentDesktopForNote = null;
             windowForNote = null;

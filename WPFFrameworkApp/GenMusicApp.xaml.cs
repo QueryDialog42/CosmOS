@@ -8,13 +8,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace WPFFrameworkApp
 {
     /// <summary>
     /// GenMusicApp.xaml etkileşim mantığı
     /// </summary>
-    public partial class GenMusicApp : Window, IDisposable
+    public partial class GenMusicApp : Window
     {
         public static string currentAudio;
         public static bool isPaused = true;
@@ -200,9 +201,34 @@ namespace WPFFrameworkApp
             ReloadMusicApp();
         }
 
-        private void DeleteTimeOnClose(object sender, System.ComponentModel.CancelEventArgs e) // Closing in .xaml file
+        private void AboutGenmusicPage_Wanted(object sender, RoutedEventArgs e)
         {
-            Dispose();
+            RoutineLogics.ShowAboutWindow("About GenMusic", ImagePaths.MSC_IMG, ImagePaths.LMSC_IMG, Versions.MUSIC_VRS, Messages.ABT_DFLT_MSG);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // When window closed, no longer this variables needed
+            if (time != null)
+            {
+                time.Stop();
+                time.Tick -= UpdateSliderPosition;
+                time = null;
+            }
+
+            datacontent = null;
+            musicfilter = null;
+            totaltime = 0;
+
+            if (isPaused)
+            {
+                currentAudio = null;
+                if (mediaPlayer != null)
+                {
+                    mediaPlayer.Close();
+                    mediaPlayer = null;
+                }
+            }
         }
 
         #region Subroutines
@@ -320,28 +346,6 @@ namespace WPFFrameworkApp
         {
             button.IsEnabled = true;
             button.Foreground = Brushes.White;
-        }
-
-        public void Dispose()
-        {
-            // When window closed, no longer this variables needed
-            if (time != null)
-            {
-                time.Stop();
-                time.Tick -= UpdateSliderPosition;
-                time = null;
-            }
-            
-            datacontent = null;
-            musicfilter = null;
-            totaltime = 0;
-
-            if (isPaused)
-            {
-                currentAudio = null;
-                if (mediaPlayer != null) mediaPlayer.Close();
-                mediaPlayer = null;
-            }
         }
 
         /*

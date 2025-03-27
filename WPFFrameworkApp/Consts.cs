@@ -36,6 +36,9 @@
         public const string FOLDER_IMG = "DesktopImages/folder2.png";
         public const string NEWFOL_IMG = "DesktopImages/newfolder.png";
         public const string LOGO_IMG = "DesktopImages/paperplane2.png";
+        public const string HLOGO_IMG = "DesktopImages/paperplane128x128.png";
+        public const string MSC_IMG = "DesktopImages/Genmusic.png";
+        public const string LMSC_IMG = "DesktopImages/genmusic32x32.png";
         public const string FRSH_IMG = "DesktopImages/refresh.png";
         public const string TXT_IMG = "DesktopImages/textfile.png";
         public const string RTF_IMG = "DesktopImages/rtffile.png";
@@ -76,9 +79,14 @@
 
     public struct Versions
     {
-        public const string NOTE_VRS = "GenNote v1.3.7";
-        public const string MUSIC_VRS = "GenMusic v1.4.7";
+        public const string NOTE_VRS = "GenNote v1.4.0";
+        public const string MUSIC_VRS = "GenMusic v1.4.3";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v1.6.3";
+        public const string GOS_VRS = "GencOS v1.6.7";
+    }
+
+    public struct Messages
+    {
+        public const string ABT_DFLT_MSG = "Made with C# 7.3 in Visual Studio\n2025 - No licence"; // about page's default message
     }
 }
