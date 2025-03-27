@@ -101,6 +101,7 @@ namespace WPFFrameworkApp
             musicPanel2.Visibility = Visibility.Visible;
             musicSliderPanel.Visibility = Visibility.Visible;
             SetDisableStyle(startButton);
+            SetEnableStyle(stopButton);
             isPaused = false;
 
             InitializeSliderLogics();
@@ -134,6 +135,8 @@ namespace WPFFrameworkApp
             mediaPlayer.Stop();
             mediaPlayer.Play();
             if (time.IsEnabled == false) time.Start();
+
+            InitializeSliderLogics();
         }
 
         private void MusicBack(object sender, RoutedEventArgs e)

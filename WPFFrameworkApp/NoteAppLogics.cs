@@ -248,24 +248,34 @@ namespace WPFFrameworkApp
             };
             try
             {
-                RTFnoteapp.Title = Path.GetFileName(filepath);
-                // Read the RTF file content
-                string rtfContent = File.ReadAllText(filepath);
-
-                // Create a TextRange to load the RTF content into the RichTextBox
-                TextRange textRange = new TextRange(RTFnoteapp.RichNote.Document.ContentStart, RTFnoteapp.RichNote.Document.ContentEnd);
-
-                using (MemoryStream memoryStream = new MemoryStream())
+                using (StreamReader reader = new StreamReader(filepath))
                 {
-                    // Write the RTF content to the memory stream
-                    using (StreamWriter writer = new StreamWriter(memoryStream))
+                    StringBuilder stringbuilder = new StringBuilder();
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        writer.Write(rtfContent);
-                        writer.Flush();
-                        memoryStream.Position = 0; // Reset the stream position
+                        stringbuilder.Append(line);
+                    }
 
-                        // Load the RTF content into the RichTextBox
-                        textRange.Load(memoryStream, DataFormats.Rtf);
+                    RTFnoteapp.Title = Path.GetFileName(filepath);
+                    // Read the RTF file content
+                    string rtfContent = File.ReadAllText(filepath);
+
+                    // Create a TextRange to load the RTF content into the RichTextBox
+                    TextRange textRange = new TextRange(RTFnoteapp.RichNote.Document.ContentStart, RTFnoteapp.RichNote.Document.ContentEnd);
+
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        // Write the RTF content to the memory stream
+                        using (StreamWriter writer = new StreamWriter(memoryStream))
+                        {
+                            writer.Write(rtfContent);
+                            writer.Flush();
+                            memoryStream.Position = 0; // Reset the stream position
+
+                            // Load the RTF content into the RichTextBox
+                            textRange.Load(memoryStream, DataFormats.Rtf);
+                        }
                     }
                 }
             }

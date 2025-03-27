@@ -30,7 +30,7 @@ namespace WPFFrameworkApp
                     if (Directory.Exists(file))
                     {
                         if (hiddenfolders.Contains(filename) == false) InitFolder(window, desktopPath, filename);
-                        else
+                        else // then it is trashbacket
                         {
                             Grid.SetColumnSpan(window.safari, 1);
                             window.trashApp.Visibility = Visibility.Visible;
@@ -223,18 +223,26 @@ namespace WPFFrameworkApp
                 };
                 try
                 {
-                    string rtfContent = File.ReadAllText(Path.Combine(desktopPath, filename));
-                    TextRange textRange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
-
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    using (StreamReader reader = new StreamReader(Path.Combine(desktopPath, filename)))
                     {
-                        using (StreamWriter writer = new StreamWriter(memoryStream))
+                        StringBuilder stringbuilder = new StringBuilder();
+                        string line;
+                        while((line = reader.ReadLine()) != null)
                         {
-                            writer.Write(rtfContent);
-                            writer.Flush();
-                            memoryStream.Position = 0; // Reset the stream position
+                            stringbuilder.Append(line);
+                        }
+                        TextRange textRange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
 
-                            textRange.Load(memoryStream, DataFormats.Rtf);
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            using (StreamWriter writer = new StreamWriter(memoryStream))
+                            {
+                                writer.Write(stringbuilder);
+                                writer.Flush();
+                                memoryStream.Position = 0; // Reset the stream position
+
+                                textRange.Load(memoryStream, DataFormats.Rtf);
+                            }
                         }
                     }
                 }
