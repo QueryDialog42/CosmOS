@@ -20,10 +20,6 @@ namespace WPFFrameworkApp
             MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
             TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
             if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
-
-            NoteApp.ToolTip = Versions.NOTE_VRS;
-            MusicApp.ToolTip = Versions.MUSIC_VRS;
-            MailApp.ToolTip = Versions.MAIL_VRS;
         }
         private void CheckConfig()
         {
@@ -103,7 +99,28 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, "the folder.\n", ex.Message);
             }
         }
-
+        private void RenameFolderName(object sender, RoutedEventArgs e)
+        {
+            if (Title != MainItems.MAIN_WIN)
+            {
+                string newfoldername = InputDialog.ShowInputDialog("Enter the new name:", "Rename Folder", ImagePaths.FOLDER_IMG, ImagePaths.RENM_IMG);
+                if (string.IsNullOrEmpty(newfoldername) == false && newfoldername != Configs.CDESK && newfoldername != MainItems.MAIN_WIN)
+                {
+                    Title = newfoldername;
+                    try
+                    {
+                        Directory.Move(currentDesktop, Path.Combine(Path.GetDirectoryName(currentDesktop), newfoldername));
+                    }
+                    catch (Exception ex) 
+                    {
+                        RoutineLogics.ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, newfoldername, ex.Message);
+                    }
+                }
+                else RoutineLogics.ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as null, ", Configs.CDESK, " or ", MainItems.MAIN_WIN);
+            }
+            else RoutineLogics.ErrorMessage(Errors.PRMS_ERR, "You can not rename ", MainItems.MAIN_WIN, " (", Configs.CDESK, ") folder.");
+            
+        }
         private void AboutGencosPage_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ShowAboutWindow("About GencOS", ImagePaths.HLOGO_IMG, ImagePaths.LOGO_IMG, Versions.GOS_VRS, Messages.ABT_DFLT_MSG);
@@ -180,7 +197,8 @@ namespace WPFFrameworkApp
         {
             if (RoutineLogics.IsMusicAppOpen() == false)
             {
-               new GenMusicApp();
+                GenMusicApp.allowToInitialize = true;
+                new GenMusicApp();
             }
         }
 

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -153,12 +153,66 @@ namespace WPFFrameworkApp
             aboutwindow.AboutMessage.Text = message;
         }
 
+        public static void RenameFile_Wanted(string filepath, string ImagePath, string icon = ImagePaths.RENM_IMG)
+        {
+            string filename = Path.GetFileName(filepath);
+            string currentDesktop = Path.GetDirectoryName(filepath);
+            
+            string input = InputDialog.ShowInputDialog("Enter the new name:", "Rename File", ImagePath, icon);
+            if (string.IsNullOrEmpty(input))
+            {
+                ErrorMessage(Errors.PRMS_ERR, "You can not rename your file as null");
+                return;
+            }
+            string newfilename = input.ToLower();
+            string pathToDirection = Path.Combine(currentDesktop, newfilename);
+
+            if (filename.EndsWith(SupportedFiles.TXT))
+            {
+                if (newfilename.EndsWith(SupportedFiles.TXT) == false && newfilename.EndsWith(SupportedFiles.RTF) == false) // TXT to RTF is supported
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename", filename, " as a non-TXT file except RTF file");
+                    return;
+                }
+            }
+            else if (filename.EndsWith(SupportedFiles.RTF))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.RTF) == false) 
+                { 
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-RTF file");
+                    return;
+                } 
+            }
+            else if (filename.EndsWith(SupportedFiles.WAV))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.WAV) == false) 
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-WAV file");
+                    return;
+                }
+            }
+            else if (filename.EndsWith(SupportedFiles.MP3))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.MP3) == false) 
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-MP3 file");
+                    return;
+                }
+            }
+            else if (filename.EndsWith(SupportedFiles.EXE))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.EXE) == false) 
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-EXE file");
+                    return;
+                }
+            }
+            MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
+        }
+
         #region Subroutines
 
-        private static void AppDraggingActive(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+        private static bool IsRenameAllowed(string filename, string newfilename, string checkfor) => filename.EndsWith(checkfor) && newfilename.EndsWith(checkfor);
 
         private static void InitTextFile(
             MainWindow window,
@@ -278,19 +332,9 @@ namespace WPFFrameworkApp
 
             app.Click += (o, e) =>
             {
-                GenMusicApp.mediaPlayer.Close();
-                GenMusicApp.currentAudio = filename;
-                GenMusicApp.isPaused = false;
-                new GenMusicApp();
-                try
-                {
-                    GenMusicApp.mediaPlayer.Open(new Uri(filepath, UriKind.Relative));
-                    GenMusicApp.mediaPlayer.Play();
-                }
-                catch (Exception ex)
-                {
-                    ErrorMessage("Audio" + Errors.OPEN_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
-                }
+                CloseAllGenMusicApps();
+                GenMusicApp musicapp = new GenMusicApp();
+                musicapp.MusicAppButton_Clicked(filepath, filename);
             };
         }
 
@@ -539,6 +583,17 @@ namespace WPFFrameworkApp
                 }
             }
             return false;
+        }
+
+        private static void CloseAllGenMusicApps()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is GenMusicApp musicapp)
+                {
+                    window.Close();  
+                }
+            }
         }
         #endregion
     }

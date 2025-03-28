@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Windows;
 
 namespace WPFFrameworkApp
@@ -45,6 +46,12 @@ namespace WPFFrameworkApp
         private void MoveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
+        }
+        private void RenameNote(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.NADD_IMG);
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            Close();
         }
         private void DeleteNote(object sender, RoutedEventArgs e)
         {

@@ -54,6 +54,7 @@
         public const string NADD_IMG = "NoteImages/noteadd.png";
         public const string NMOVE_IMG = "NoteImages/move.png";
         public const string NSAVE_IMG = "NoteImages/Save.png";
+        public const string RENM_IMG = "NoteImages/rename.png";
     }
 
     public struct HiddenFolders
@@ -79,10 +80,15 @@
 
     public struct Versions
     {
-        public const string NOTE_VRS = "GenNote v1.4.0";
-        public const string MUSIC_VRS = "GenMusic v1.4.3";
+        public const string NOTE_VRS = "GenNote v1.4.3";
+        public const string MUSIC_VRS = "GenMusic v1.5.6";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v1.6.7";
+        public const string GOS_VRS = "GencOS v1.7.6";
+    }
+
+    public struct MainItems
+    {
+        public const string MAIN_WIN = "GencOS main";
     }
 
     public struct Messages

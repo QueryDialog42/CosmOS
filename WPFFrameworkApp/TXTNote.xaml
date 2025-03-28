@@ -43,6 +43,11 @@
                         <Image Source="NoteImages/move.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem x:Name="rename" Header="Rename" Click="RenameNote">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/rename.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="delete" Header="_Delete" Click="DeleteNote">
                     <MenuItem.Icon>
                         <Image Source="NoteImages/notedelete.png" />

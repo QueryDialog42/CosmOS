@@ -45,6 +45,11 @@
                         <Image Source="DesktopImages/folderdelete2.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="_Rename Current Folder" Click="RenameFolderName">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/rename.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_About GencOS" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/paperplane2.png"/>
@@ -54,19 +59,17 @@
             <MenuItem Header="Setting" />
         </Menu>
         <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray"/>
-        <WrapPanel x:Name="safari" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c">
-            <Button x:Name="NoteApp" Height="60" Width="60" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
-                <StackPanel HorizontalAlignment="Center">
-                    <Image Source="NoteImages/gennote.png" RenderTransformOrigin="0.559,0.563" />
-                </StackPanel>
+        <StackPanel x:Name="safari" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c" Orientation="Horizontal">
+            <Button x:Name="NoteApp" Height="60" Width="60" ToolTip="GenNote" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
+                <Image Source="NoteImages/gennote.png" />
             </Button>
-            <Button x:Name="MusicApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
+            <Button x:Name="MusicApp" Height="55" Width="55" ToolTip="GenMusic" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
                 <Image Source="DesktopImages/Genmusic.png"/>
             </Button>
             <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
                 <Image Source="/DesktopImages/Mail128x128.png"/>
             </Button>
-        </WrapPanel>
+        </StackPanel>
         <StackPanel x:Name="folderdesktop" Grid.Row="1" Grid.Column="2" Background="#9c9268" Orientation="Vertical" />
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
             <Image x:Name="trashimage"  Source="DesktopImages/trashempty.png"/>

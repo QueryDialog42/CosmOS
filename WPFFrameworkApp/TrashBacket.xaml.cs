@@ -65,7 +65,7 @@ namespace WPFFrameworkApp
             {
                 try
                 {
-                    switch(QueryDialog.ShowQueryDialog(trashname, "Deleted Item", options, Image, ImagePaths.FULL_IMG)) 
+                    switch(QueryDialog.ShowQueryDialog(trashname, "Deleted Item Options", options, Image, ImagePaths.FULL_IMG)) 
                     {
                         case 0:
                             File.Delete(trash); // delete selected

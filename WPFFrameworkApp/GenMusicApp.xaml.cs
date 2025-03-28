@@ -19,10 +19,12 @@ namespace WPFFrameworkApp
     {
         public static string currentAudio;
         public static bool isPaused = true;
+        public static bool allowToInitialize = true;
         public static MediaPlayer mediaPlayer;
+        public static DispatcherTimer time;
         public Dictionary<ListBoxItem, TextBlock> datacontent; // to store items' TextBlock in order to get filename
         public string musicfilter = $"WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}";
-        public DispatcherTimer time;
+        
         double totaltime;
         public GenMusicApp()
         {
@@ -54,6 +56,8 @@ namespace WPFFrameworkApp
                 currentMusic.Text = currentAudio;
                 ShowCurrentMusic();
                 PaintSelectedMusic();
+                allowToInitialize = true;
+                InitializeSliderLogics();
             }
         }
 
@@ -61,24 +65,31 @@ namespace WPFFrameworkApp
         {
             try
             {
-                ListBoxItem item = listbox.SelectedItem as ListBoxItem;
-                if (item == null) throw new NullReferenceException(); // if no item is selected, do nothing
+                ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
                 datacontent.TryGetValue(item, out TextBlock textblock); // get Textblock of seelcted item
                 string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
                 currentMusic.Text = itemname;
                 currentAudio = itemname;
+                allowToInitialize = true;
                 try
                 {
                     if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
-                    else mediaPlayer.Close();
 
+                    mediaPlayer.Close();
                     mediaPlayer.Open(new Uri(Path.Combine(MainWindow.MusicAppPath, itemname), UriKind.Relative));
                     mediaPlayer.MediaOpened += InitializeMediaController;
                     mediaPlayer.Play();
-                    if (currentAudio != null) ShowCurrentMusic(); 
+                    if (currentAudio != null && currentMusic.IsVisible == false)
+                    {
+                        ShowCurrentMusic();
+                    }
+                    else if (currentMusic.IsVisible)
+                    {
+                        currentMusic.Text = currentAudio;
+                    }
                     PaintSelectedMusic();
-                } catch(Exception ex)
-                {
+                } catch (Exception ex)
+                { 
                     RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, itemname ?? "null MediaPlayer", "\n", ex.Message);
                 }
             } catch (NullReferenceException)
@@ -88,8 +99,8 @@ namespace WPFFrameworkApp
             }
         }
 
-        private void InitializeMediaController(object sender, EventArgs e)
-        {   
+        public void InitializeMediaController(object sender, EventArgs e)
+        {
             InitializeSliderLogics();
         }
 
@@ -100,17 +111,15 @@ namespace WPFFrameworkApp
             currentPanel.Visibility = Visibility.Visible;
             musicPanel1.Visibility = Visibility.Visible;
             musicPanel2.Visibility = Visibility.Visible;
-            musicSliderPanel.Visibility = Visibility.Visible;
+            slider.Visibility = Visibility.Visible;
+            remainedTime.Visibility = Visibility.Visible;
             SetDisableStyle(startButton);
             SetEnableStyle(stopButton);
             isPaused = false;
-
-            InitializeSliderLogics();
         }
 
         private void PlayMusic(object sender, RoutedEventArgs e)
         {
-            
             SetDisableStyle(startButton);
             SetEnableStyle(stopButton);
             isPaused = false;
@@ -120,24 +129,40 @@ namespace WPFFrameworkApp
 
         private void StopMusic(object sender, RoutedEventArgs e)
         {
-            time.Stop();
-            mediaPlayer.Pause();
-            isPaused = true;
-            SetEnableStyle(startButton);
-            SetDisableStyle(stopButton);
+            try
+            {
+                time.Stop();
+                mediaPlayer.Pause();
+                isPaused = true;
+                SetEnableStyle(startButton);
+                SetDisableStyle(stopButton);
+            }
+            catch (Exception) 
+            {
+                RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, "null Audio. It may be deleted. Please reload the main desktop.");
+            }
         }
 
         private void RestartMusic(object sender, RoutedEventArgs e)
         {
-            SetDisableStyle(startButton);
-            SetEnableStyle(stopButton);
-            isPaused = false;
-            slider.Value = 0;
-            mediaPlayer.Stop();
-            mediaPlayer.Play();
-            if (time.IsEnabled == false) time.Start();
 
-            InitializeSliderLogics();
+            try
+            {
+                SetDisableStyle(startButton);
+                SetEnableStyle(stopButton);
+                isPaused = false;
+                slider.Value = 0;
+                mediaPlayer.Stop();
+                mediaPlayer.Play();
+                if (time.IsEnabled == false) time.Start();
+                
+                allowToInitialize = true;
+                InitializeSliderLogics();
+            }
+            catch (Exception)
+            {
+                RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, "null Audio. It may be deleted. Please reload the main desktop.");
+            }
         }
 
         private void MusicBack(object sender, RoutedEventArgs e)
@@ -206,6 +231,30 @@ namespace WPFFrameworkApp
             RoutineLogics.ShowAboutWindow("About GenMusic", ImagePaths.MSC_IMG, ImagePaths.LMSC_IMG, Versions.MUSIC_VRS, Messages.ABT_DFLT_MSG);
         }
 
+        public void MusicAppButton_Clicked(string musicpath, string musicname)
+        {
+            allowToInitialize = true;
+            if (time != null)
+            {
+                time.Stop();
+                isPaused = true;
+            }
+
+            currentAudio = musicname;
+            currentMusic.Text = musicname;
+            
+            if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
+
+            mediaPlayer.Close();
+            mediaPlayer.Open(new Uri(musicpath, UriKind.Relative));
+            mediaPlayer.MediaOpened += InitializeMediaController;
+            
+            ShowCurrentMusic();
+            PaintSelectedMusic();
+            
+            mediaPlayer.Play();
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             // When window closed, no longer this variables needed
@@ -219,6 +268,7 @@ namespace WPFFrameworkApp
             datacontent = null;
             musicfilter = null;
             totaltime = 0;
+            allowToInitialize = false;
 
             if (isPaused)
             {
@@ -233,8 +283,42 @@ namespace WPFFrameworkApp
 
         #region Subroutines
 
+        private void ReloadDesktopNeeded(object sender, RoutedEventArgs e)
+        {
+            IsReloadNeeded(false);
+            ReloadMusicApp();
+        }
+
+        private void IsReloadNeeded(bool yesOrNo)
+        {
+            switch (yesOrNo)
+            {
+                case true:
+                    reloadNeeded.Visibility = Visibility.Visible;
+                    slider.Visibility = Visibility.Collapsed;
+                    remainedTime.Visibility = Visibility.Collapsed;
+                    startButton.Visibility = Visibility.Collapsed;
+                    stopButton.Visibility = Visibility.Collapsed;
+                    restartButton.Visibility = Visibility.Collapsed;
+                    back.Visibility = Visibility.Collapsed;
+                    front.Visibility = Visibility.Collapsed;
+                    break;
+                case false:
+                    reloadNeeded.Visibility = Visibility.Collapsed;
+                    slider.Visibility = Visibility.Visible;
+                    remainedTime.Visibility= Visibility.Visible;
+                    startButton.Visibility= Visibility.Visible;
+                    stopButton.Visibility= Visibility.Visible;
+                    restartButton.Visibility= Visibility.Visible;
+                    back.Visibility= Visibility.Visible;
+                    front.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+
         private void ReloadMusicApp_Wanted(object sender, RoutedEventArgs e)
         {
+            IsReloadNeeded(false);
             ReloadMusicApp();
         }
 
@@ -260,7 +344,6 @@ namespace WPFFrameworkApp
             // reset control panel
             startButton.IsEnabled = false;
             stopButton.IsEnabled = true;
-            restartButton.IsEnabled = true;
         }
 
         private void CreateMusicItem(string filename, string imagepath, SolidColorBrush textcolor)
@@ -285,7 +368,7 @@ namespace WPFFrameworkApp
             datacontent.Add(item, textblock);
         }
 
-        private void UpdateSliderPosition(object sender, EventArgs e)
+        public void UpdateSliderPosition(object sender, EventArgs e)
         {
             slider.Value += 1.035; // 1 second front
             totaltime -= 1.035;
@@ -306,25 +389,31 @@ namespace WPFFrameworkApp
 
         private void InitializeSliderLogics()
         {
-            // set the slider's range
-            slider.Minimum = 0;
-            if (mediaPlayer.NaturalDuration.HasTimeSpan)
-            {
+            if (mediaPlayer.NaturalDuration.HasTimeSpan && allowToInitialize) // slider starts with -1 minimum value, if minimum value is not -1, then slider is setted
+            {   
+                slider.Minimum = 0;
                 slider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; // get the total seconds of media player
                 slider.Value = mediaPlayer.Position.TotalSeconds; // get the current second of media player
                 totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
                 remainedTime.Text = TimeFormat(); //minutes:seconds
+
+                if (time == null)
+                {
+                    time = new DispatcherTimer();
+                    time.Tick += UpdateSliderPosition;
+                    time.Interval = TimeSpan.FromSeconds(1);
+                    time.Start();
+                }
+                else if (time.IsEnabled == false)
+                {
+                    time.Start();
+                }
+                allowToInitialize = false;
             }
-            if (time == null)
+
+            if (mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds != slider.Maximum) // check if slider is really represents the current audio
             {
-                time = new DispatcherTimer();
-                time.Tick += UpdateSliderPosition;
-                time.Interval = TimeSpan.FromSeconds(1);
-                time.Start();
-            }
-            else if (time.IsEnabled == false)
-            {
-                time.Start();
+                IsReloadNeeded(true);
             }
         }
 
@@ -347,28 +436,6 @@ namespace WPFFrameworkApp
             button.IsEnabled = true;
             button.Foreground = Brushes.White;
         }
-
-        /*
-        public static T GetChildOfType<T>(DependencyObject parent) where T : DependencyObject
-        {
-            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < childrenCount; i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T typedChild)
-                {
-                    return typedChild;
-                }
-                var childOfChild = GetChildOfType<T>(child);
-                if (childOfChild != null)
-                {
-                    return childOfChild;
-                }
-            }
-            return null;
-        
-        }
-        */
         #endregion
     }
 }

@@ -57,9 +57,9 @@
             <Image Source="DesktopImages/Genmusic.png" Width="120" VerticalAlignment="Top"/>
             <TextBlock x:Name="currentMusic" Foreground="White" FontWeight="Bold" Margin="0, 15, 0, 0"  HorizontalAlignment="Center"/>
         </StackPanel>
-        <StackPanel x:Name="musicSliderPanel" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Visibility="Collapsed">
-            <Slider x:Name="slider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/>
-            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
+        <StackPanel x:Name="musicSliderPanel" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Slider x:Name="slider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/>
+            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" Visibility="Collapsed" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel1" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
             <Button x:Name="startButton" Content="start" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="PlayMusic"/>
@@ -67,8 +67,14 @@
             <Button x:Name="restartButton" Content="Restart" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" Click="RestartMusic"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-            <Button Content="5s Back" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="MusicBack"/>
-            <Button Content="5s Front" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="MusicFront"/>
+            <Button x:Name="back" Content="5s Back" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="MusicBack"/>
+            <Button x:Name="front" Content="5s Front" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="MusicFront"/>
         </StackPanel>
+        <Button x:Name="reloadNeeded" Grid.Row="3" Grid.ColumnSpan="2" Width="180" HorizontalAlignment="Center" Visibility="Collapsed" Background="#262626" BorderThickness="0" Foreground="white" Click="ReloadDesktopNeeded">
+            <StackPanel Orientation="Horizontal">
+                <Image  Source="/DesktopImages/refresh.png" Width="20" VerticalAlignment="Center"/>
+                <TextBlock Text="  Reload desktop needed" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

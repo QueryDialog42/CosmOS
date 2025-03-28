@@ -14,7 +14,7 @@ namespace WPFFrameworkApp
         public static void NewNote_Wanted(MainWindow windowForNote, string currentDesktopForNote) 
         {
             string[] options = { "TXT", "RTF" };
-            switch (QueryDialog.ShowQueryDialog("Choose Note Type", "NoteApp", options, ImagePaths.NADD_IMG, ImagePaths.NADD_IMG))
+            switch (QueryDialog.ShowQueryDialog("Choose Note Type", "NoteApp", options, ImagePaths.NADD_IMG, ImagePaths.NOTE_IMG))
             {
                 case 0: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new TXTNote(), true); break;
                 case 1: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new RTFNote(), false); break;
@@ -72,8 +72,9 @@ namespace WPFFrameworkApp
                     using (StreamWriter writer = new StreamWriter(file))
                     {
                         writer.WriteLine(noteapp.note.Text);
-                        RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
                     }
+                    RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                    noteapp.Close();
                 }
                 catch (Exception ex)
                 {
@@ -118,6 +119,7 @@ namespace WPFFrameworkApp
                         textrange.Save(filestream, DataFormats.Rtf);
                     }
                     RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                    noteapp.Close();
                 }
                 catch(Exception ex)
                 {
@@ -163,6 +165,7 @@ namespace WPFFrameworkApp
             noteapp.save.IsEnabled = false;
             noteapp.copy.IsEnabled = false;
             noteapp.move.IsEnabled = false;
+            noteapp.rename.IsEnabled = false;
             noteapp.delete.IsEnabled = false;
             if (isButtonNull == false) noteapp.saveButton.IsEnabled = false;
         }

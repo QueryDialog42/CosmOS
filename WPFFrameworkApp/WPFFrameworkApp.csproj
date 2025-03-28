@@ -275,5 +275,8 @@
   <ItemGroup>
     <Resource Include="NoteImages\clearstyle.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\rename.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

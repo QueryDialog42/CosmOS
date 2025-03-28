@@ -3,6 +3,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.IO;
 
 namespace WPFFrameworkApp
 {
@@ -17,7 +18,7 @@ namespace WPFFrameworkApp
 
         public RTFNote()
         {
-            InitializeComponent();;
+            InitializeComponent();
             Show();
         }
 
@@ -49,6 +50,13 @@ namespace WPFFrameworkApp
         private void MoveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
+        }
+
+        private void RenameNote(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.NADD_IMG, ImagePaths.NADD_IMG);
+            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            Close();
         }
 
         private void DeleteNote(object sender, RoutedEventArgs e)
