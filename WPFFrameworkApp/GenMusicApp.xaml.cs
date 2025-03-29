@@ -378,7 +378,6 @@ namespace WPFFrameworkApp
                 time.Stop();
                 isPaused = true;
             }
-            Console.WriteLine(1);
         }
 
         private void SliderPositionChanged(object sender, MouseButtonEventArgs e) // MouseButtonEventArgs = waits until mause events, then do action
