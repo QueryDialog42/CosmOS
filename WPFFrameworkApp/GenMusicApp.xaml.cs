@@ -64,7 +64,7 @@ namespace WPFFrameworkApp
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
-            {
+            { 
                 ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
                 datacontent.TryGetValue(item, out TextBlock textblock); // get Textblock of seelcted item
                 string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
@@ -95,6 +95,9 @@ namespace WPFFrameworkApp
             } catch (NullReferenceException)
             {
                 // do nothing on null exception
+
+                allowToInitialize = true;
+                InitializeSliderLogics();
                 stopButton.IsEnabled = true; // to be avoid stop button is disable forever
             }
         }
@@ -251,6 +254,8 @@ namespace WPFFrameworkApp
             
             ShowCurrentMusic();
             PaintSelectedMusic();
+
+            if (time != null) time.Start();
 
             mediaPlayer.Play();
         }

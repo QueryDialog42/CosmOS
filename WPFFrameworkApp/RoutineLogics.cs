@@ -342,6 +342,7 @@ namespace WPFFrameworkApp
                     case 0:
                         CloseAllGenMusicApps();
                         GenMusicApp.isPaused = false;
+                        GenMusicApp.allowToInitialize = false;
                         GenMusicApp musicapp = new GenMusicApp();
                         musicapp.MusicAppButton_Clicked(filepath, filename);
                         break;
