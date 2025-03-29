@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -326,15 +325,39 @@ namespace WPFFrameworkApp
             {
                 Orientation = Orientation.Vertical
             };
+
             Appearence(image, stackpanel, app, appname, fileimage);
 
             window.desktop.Children.Add(app);
 
             app.Click += (o, e) =>
             {
-                CloseAllGenMusicApps();
-                GenMusicApp musicapp = new GenMusicApp();
-                musicapp.MusicAppButton_Clicked(filepath, filename);
+                short result;
+                if (filename.EndsWith(SupportedFiles.WAV)) result = AudioOptions(filename, "WAV", fileimage);
+                else result = AudioOptions(filename, "MP3", fileimage);
+
+                string currentdesktop = Path.GetDirectoryName(filepath);
+                switch(result)
+                {
+                    case 0:
+                        CloseAllGenMusicApps();
+                        GenMusicApp.isPaused = false;
+                        GenMusicApp musicapp = new GenMusicApp();
+                        musicapp.MusicAppButton_Clicked(filepath, filename);
+                        break;
+                    case 1:
+                        RenameFile_Wanted(filepath, ImagePaths.WAV_IMG);
+                        ReloadDesktop(window, currentdesktop);
+                        break;
+                    case 2:
+                        MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
+                        ReloadDesktop(window, currentdesktop);
+                        break;
+                    case 3:
+                        MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
+                        ReloadDesktop(window, currentdesktop);
+                        break;
+                }
             };
         }
 
@@ -357,7 +380,7 @@ namespace WPFFrameworkApp
 
             app.Click += (s, e) =>
             {
-                string[] options = { "Run", "Move", "Copy", "Delete" };
+                string[] options = { "Run", "Rename", "Move", "Copy", "Delete" };
                 switch (QueryDialog.ShowQueryDialog(filename, "Executable File Options", options, ImagePaths.EXE_IMG))
                 {
                     case 0:
@@ -375,14 +398,18 @@ namespace WPFFrameworkApp
                         }
                         break;
                     case 1:
-                        MoveAnythingWithQuery("Move Exe File", "EXE Files (*.exe)|*.exe", filename, desktopPath, desktopPath, 1);
+                        RenameFile_Wanted(filepath, ImagePaths.EXE_IMG);
                         ReloadDesktop(window, desktopPath);
                         break;
                     case 2:
-                        CopyAnythingWithQuery("Copy Exe File", "EXE Files (*.exe)|*.exe", filename, desktopPath, desktopPath);
+                        MoveAnythingWithQuery("Move Exe File", "EXE Files (*.exe)|*.exe", filename, desktopPath, desktopPath, 1);
                         ReloadDesktop(window, desktopPath);
                         break;
                     case 3:
+                        CopyAnythingWithQuery("Copy Exe File", "EXE Files (*.exe)|*.exe", filename, desktopPath, desktopPath);
+                        ReloadDesktop(window, desktopPath);
+                        break;
+                    case 4:
                         File.Move(filepath, Path.Combine(MainWindow.TrashPath, filename));
                         ReloadDesktop(window, desktopPath);
                         break;
@@ -546,6 +573,11 @@ namespace WPFFrameworkApp
             }
         }
 
+        private static short AudioOptions(string appname, string type, string fileimage)
+        {
+            string[] options = {"Play", "Rename", "Add to GenMusic", "Delete" };
+            return QueryDialog.ShowQueryDialog(appname, type + " File Options", options, fileimage);
+        }
         public static bool IsMusicAppOpen()
         {
             foreach (Window window in Application.Current.Windows)

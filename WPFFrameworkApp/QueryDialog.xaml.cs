@@ -33,7 +33,8 @@ namespace WPFFrameworkApp
                 Button button = new Button
                 {
                     Content = option,
-                    Width = 50,
+                    Width = double.NaN, // auto width for button
+                    Padding = new Thickness(3),
                     Margin = new Thickness(5, 0, 5, 0),
                     Background = Brushes.Transparent
                 };
