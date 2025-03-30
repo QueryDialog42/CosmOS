@@ -23,7 +23,6 @@ namespace WPFFrameworkApp
             string WindowIconPath = ImagePaths.LOGO_IMG,
             string OKOption = "OK",
             string CancelOption = "Cancel")
-
         {
             InputDialog inputdialog = new InputDialog
             {
@@ -35,7 +34,14 @@ namespace WPFFrameworkApp
             inputdialog.ImageIcon.Source = new BitmapImage(new Uri(ImagePath, UriKind.RelativeOrAbsolute));
             inputdialog.OKButton.Content = OKOption;
             inputdialog.CancelButton.Content = CancelOption;
-            inputdialog.ShowDialog();
+            try
+            {
+                inputdialog.ShowDialog();
+            } catch(Exception ex)
+            {
+
+            } 
+            
             return inputdialog.UserInput;
         }
 

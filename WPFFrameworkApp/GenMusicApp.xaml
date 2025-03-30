@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
         mc:Ignorable="d" Background="#424242" Icon="/DesktopImages/genmusic32x32.png"
-        Title="GenMusicApp" Height="310" Width="444">
+        Title="GenMusicApp" Height="340" Width="460">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

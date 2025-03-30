@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="90" />
         </Grid.ColumnDefinitions>
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <MenuItem Header="_New">
@@ -70,7 +70,9 @@
                 <Image Source="/DesktopImages/Mail128x128.png"/>
             </Button>
         </StackPanel>
-        <StackPanel x:Name="folderdesktop" Grid.Row="1" Grid.Column="2" Background="#9c9268" Orientation="Vertical" />
+        <ScrollViewer Grid.Row="1" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="folderdesktop" Background="#9c9268" Orientation="Vertical" />
+        </ScrollViewer>
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
             <Image x:Name="trashimage"  Source="DesktopImages/trashempty.png"/>
         </Button>

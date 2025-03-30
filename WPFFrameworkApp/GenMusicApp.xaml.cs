@@ -300,30 +300,29 @@ namespace WPFFrameworkApp
             {
                 case true:
                     reloadNeeded.Visibility = Visibility.Visible;
-                    slider.Visibility = Visibility.Collapsed;
-                    remainedTime.Visibility = Visibility.Collapsed;
                     startButton.Visibility = Visibility.Collapsed;
                     stopButton.Visibility = Visibility.Collapsed;
                     restartButton.Visibility = Visibility.Collapsed;
                     back.Visibility = Visibility.Collapsed;
                     front.Visibility = Visibility.Collapsed;
+                    slider.Visibility = Visibility.Collapsed;
+                    remainedTime.Visibility = Visibility.Collapsed;
                     break;
                 case false:
                     reloadNeeded.Visibility = Visibility.Collapsed;
-                    slider.Visibility = Visibility.Visible;
-                    remainedTime.Visibility= Visibility.Visible;
                     startButton.Visibility= Visibility.Visible;
                     stopButton.Visibility= Visibility.Visible;
                     restartButton.Visibility= Visibility.Visible;
                     back.Visibility= Visibility.Visible;
                     front.Visibility = Visibility.Visible;
+                    slider.Visibility = Visibility.Visible;
+                    remainedTime.Visibility = Visibility.Visible;
                     break;
             }
         }
 
         private void ReloadMusicApp_Wanted(object sender, RoutedEventArgs e)
         {
-            IsReloadNeeded(false);
             ReloadMusicApp();
         }
 
