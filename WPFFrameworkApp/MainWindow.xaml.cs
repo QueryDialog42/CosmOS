@@ -127,7 +127,7 @@ namespace WPFFrameworkApp
         }
         private string ConfigurePath(string ConfigFileText)
         {
-            string input = InputDialog.ShowInputDialog("Path Needed", "Please enter ", Configs.CDESK, " path");
+            string input = InputDialog.ShowInputDialog("Please enter " + Configs.CDESK + " path", "Path Needed");
             //Resumes until valid path is entered
             while (true)
             {
