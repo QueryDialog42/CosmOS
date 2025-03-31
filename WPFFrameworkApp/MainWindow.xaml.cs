@@ -15,11 +15,18 @@ namespace WPFFrameworkApp
         {
             InitializeComponent();
             if (TempPath == null) CheckConfig();
-            currentDesktop = TempPath.Trim();
-            CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.CPATH)).Trim();
-            MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
-            TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
-            if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+            try
+            {
+                currentDesktop = TempPath.Trim();
+                CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.CPATH)).Trim();
+                MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
+                TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
+                if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+            } catch (Exception)
+            {
+                // user tried to open without path
+                MessageBox.Show("Window opened without C_DESKTOP path.\nMinimal operation system will be used", "GencOS without path", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
         private void CheckConfig()
         {
@@ -49,14 +56,12 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         private static void ImportFile(MainWindow window, string desktopPath)
         {
             RoutineLogics.MoveAnythingWithQuery("Import File", $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}",
                 null, desktopPath, desktopPath, 4);
             RoutineLogics.ReloadDesktop(window, desktopPath);
         }
-
         private void NewFolder(object sender, RoutedEventArgs e)
         {
             try
@@ -78,7 +83,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.CRT_ERR, Errors.READ_ERR_MSG, "the folder\n", ex.Message);
             }
         }
-
         private void DeleteFolder(object sender, RoutedEventArgs e)
         {
             try
@@ -176,7 +180,6 @@ namespace WPFFrameworkApp
         {
             NoteAppLogics.NewNote_Wanted(this, currentDesktop);
         }
-
         private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
         {
             if (RoutineLogics.IsMailAppOpen() == false)
@@ -184,7 +187,6 @@ namespace WPFFrameworkApp
                 new GenMailApp();
             }
         }
-
         private void OpenTrashBacket(object sender, RoutedEventArgs e)
         {
             if (RoutineLogics.IsTrashBacketOpen() == false)
@@ -192,7 +194,6 @@ namespace WPFFrameworkApp
                 new TrashBacket();
             }
         }
-
         private void MusicAppStart(object sender, RoutedEventArgs e)
         {
             if (RoutineLogics.IsMusicAppOpen() == false)
@@ -201,12 +202,10 @@ namespace WPFFrameworkApp
                 new GenMusicApp();
             }
         }
-
         private void ReloadDesktop_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ReloadDesktop(this, currentDesktop);
         }
-
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {
             ImportFile(this, currentDesktop);

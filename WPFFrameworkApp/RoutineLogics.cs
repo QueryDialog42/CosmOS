@@ -87,7 +87,6 @@ namespace WPFFrameworkApp
                     break;
             }
         }
-
         public static void MoveAnythingWithoutQuery(
             string currentDesktop,
             string filename,
@@ -102,7 +101,6 @@ namespace WPFFrameworkApp
                 ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null File", "\n", e.Message);
             }
         }
-
         public static void CopyAnythingWithQuery(
             string title,
             string filter,
@@ -139,7 +137,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         public static void ShowAboutWindow(string title, string image, string icon, string version, string message)
         {
             AboutWindow aboutwindow = new AboutWindow
@@ -151,7 +148,6 @@ namespace WPFFrameworkApp
             aboutwindow.Version.Text = version;
             aboutwindow.AboutMessage.Text = message;
         }
-
         public static void RenameFile_Wanted(string filepath, string ImagePath, string icon = ImagePaths.RENM_IMG)
         {
             string filename = Path.GetFileName(filepath);
@@ -208,11 +204,8 @@ namespace WPFFrameworkApp
             }
             MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
         }
-
         #region Subroutines
-
         private static bool IsRenameAllowed(string filename, string newfilename, string checkfor) => filename.EndsWith(checkfor) && newfilename.EndsWith(checkfor);
-
         private static void InitTextFile(
             MainWindow window,
             string desktopPath,
@@ -256,7 +249,6 @@ namespace WPFFrameworkApp
                 }
             };
         }
-
         private static void InitRTFFile(
             MainWindow window,
             string desktopPath,
@@ -361,7 +353,6 @@ namespace WPFFrameworkApp
                 }
             };
         }
-
         private static void InitEXEFile(
             MainWindow window,
             string desktopPath,
@@ -417,7 +408,6 @@ namespace WPFFrameworkApp
                 }
             };
         }
-
         private static void InitFolder(
             MainWindow window,
             string desktopPath,
@@ -443,7 +433,6 @@ namespace WPFFrameworkApp
                 };
             };
         }
-
         private static ImageSource InitTrashBacket()
         {
             try
@@ -458,7 +447,6 @@ namespace WPFFrameworkApp
                 return new BitmapImage(new Uri(ImagePaths.EMPT_IMG, UriKind.RelativeOrAbsolute));
             }
         }
-
         public static void Appearence(
             Image image,
             StackPanel stackpanel,
@@ -475,7 +463,6 @@ namespace WPFFrameworkApp
 
             app.Content = stackpanel;
         }
-
         public static Button CreateButton(string filename)
         {
             return new Button()
@@ -487,7 +474,6 @@ namespace WPFFrameworkApp
                 ToolTip = filename,
             };
         }
-
         public static TextBlock CreateTextBlock(string filename)
         {
             return new TextBlock()
@@ -496,7 +482,6 @@ namespace WPFFrameworkApp
                 Text = filename
             };
         }
-
         public static Image CreateImage()
         {
             return new Image
@@ -505,7 +490,6 @@ namespace WPFFrameworkApp
                 Height = 60, // Set desired height
             };
         }
-
         private static void MoveSomeWhere(
             string title,
             string filter,
@@ -573,7 +557,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         private static short AudioOptions(string appname, string type, string fileimage)
         {
             string[] options = {"Play", "Rename", "Add to GenMusic", "Delete" };
@@ -591,7 +574,6 @@ namespace WPFFrameworkApp
             }
             return false; // GenMusic is close
         }
-
         public static bool IsTrashBacketOpen()
         {
             foreach (Window window in Application.Current.Windows)
@@ -604,7 +586,6 @@ namespace WPFFrameworkApp
             }
             return false;
         }
-
         public static bool IsMailAppOpen()
         {
             foreach (Window window in Application.Current.Windows)
@@ -617,7 +598,6 @@ namespace WPFFrameworkApp
             }
             return false;
         }
-
         private static void CloseAllGenMusicApps()
         {
             foreach (Window window in Application.Current.Windows)
