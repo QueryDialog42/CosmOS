@@ -198,7 +198,6 @@ namespace WPFFrameworkApp
         {
             if (RoutineLogics.IsMusicAppOpen() == false)
             {
-                GenMusicApp.allowToInitialize = true;
                 new GenMusicApp();
             }
         }

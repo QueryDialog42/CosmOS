@@ -333,8 +333,9 @@ namespace WPFFrameworkApp
                 {
                     case 0:
                         CloseAllGenMusicApps();
-                        GenMusicApp.isPaused = false;
-                        GenMusicApp.allowToInitialize = false;
+                        GenMusicApp.mediaPlayer?.Close();
+                        GenMusicApp.mediaPlayer = null;
+                        GenMusicApp.isPaused = true;
                         GenMusicApp musicapp = new GenMusicApp();
                         musicapp.MusicAppButton_Clicked(filepath, filename);
                         break;

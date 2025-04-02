@@ -20,7 +20,6 @@ namespace WPFFrameworkApp
                 case 1: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new RTFNote(), false); break;
             }
         }
-
         public static void OpenNote_Wanted(MainWindow windowForNote, string currentDesktopForNote)
         {
             OpenFileDialog fileDialog = new OpenFileDialog
@@ -39,7 +38,6 @@ namespace WPFFrameworkApp
                 else RoutineLogics.ErrorMessage(Errors.UNSUPP_ERR, file, " is not supported for ", Versions.GOS_VRS, "\n.txt\n.rtf\nis supported for now.");
             }
         }
-        
         public static void TXTSaveNote_Wanted(string currentDesktopForNote, TXTNote noteapp)
         {
             string filename = noteapp.Title;
@@ -55,7 +53,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
             }
         }
-
         public static void TXTSaveAsNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, TXTNote noteapp)
         {
             SaveFileDialog filedialog = new SaveFileDialog
@@ -82,7 +79,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         public static void RTFSaveNote_Wanted(string currentDesktopForNote, RTFNote noteapp)
         {
             string filename = noteapp.Title;
@@ -99,7 +95,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
             }
         }
-
         public static void RTFSaveAsNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, RTFNote noteapp)
         {
             SaveFileDialog filedialog = new SaveFileDialog
@@ -127,7 +122,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         public static void CopyNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
@@ -135,7 +129,6 @@ namespace WPFFrameworkApp
             RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
             
         }
-
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
@@ -143,7 +136,6 @@ namespace WPFFrameworkApp
             RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
             
         }
-
         public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
         {
             string filename = noteapp.Title;
@@ -169,7 +161,6 @@ namespace WPFFrameworkApp
             noteapp.delete.IsEnabled = false;
             if (isButtonNull == false) noteapp.saveButton.IsEnabled = false;
         }
-
         public static void FontChange_Wanted(RichTextBox RichNote, double value)
         {
             TextSelection selection = RichNote.Selection;
@@ -193,7 +184,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         public static void ColorChange_Wanted(RichTextBox RichNote)
         {
             System.Windows.Forms.ColorDialog colordialog = new System.Windows.Forms.ColorDialog();
@@ -214,7 +204,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         private static void OpenTXTFile(MainWindow windowForNote, string folder, string filepath)
         {
             TXTNote TXTnoteapp = new TXTNote
@@ -241,7 +230,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, Path.GetFileName(filepath), "\n", ex.Message);
             }
         }
-
         private static void OpenRTFFile(MainWindow windowForNote, string folder, string filepath)
         {
             RTFNote RTFnoteapp = new RTFNote
