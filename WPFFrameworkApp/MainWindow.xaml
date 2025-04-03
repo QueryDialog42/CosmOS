@@ -66,6 +66,15 @@
             <Button x:Name="MusicApp" Height="55" Width="55" ToolTip="GenMusic" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
                 <Image Source="DesktopImages/Genmusic.png"/>
             </Button>
+            
+            <!--only when reload desktop needed-->
+            <Button x:Name="reloadNeed" Height="35" Background="#4a4a4a" Foreground="White" BorderThickness="0" Visibility="Collapsed" Click="ReloadDesktop_Wanted">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
+                    <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                </StackPanel>
+            </Button>
+            
             <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
                 <Image Source="/DesktopImages/Mail128x128.png"/>
             </Button>
@@ -74,7 +83,7 @@
             <StackPanel x:Name="folderdesktop" Background="#9c9268" Orientation="Vertical" />
         </ScrollViewer>
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
-            <Image x:Name="trashimage"  Source="DesktopImages/trashempty.png"/>
+            <Image x:Name="trashimage" Source="DesktopImages/trashempty.png"/>
         </Button>
     </Grid>
 </Window>

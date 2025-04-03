@@ -18,7 +18,7 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        private void ReloadTrashBacket()
+        public void ReloadTrashBacket()
         {
             trashPanel.Children.Clear();
             string[] options = { "Shred", "Rescue" };
@@ -72,7 +72,7 @@ namespace WPFFrameworkApp
                             ReloadTrashBacket();
                             break;
                         case 1:
-                            File.Move(trash, Path.Combine(MainWindow.CDesktopPath, trashname)); // rescue selected
+                            RoutineLogics.MoveAnythingWithoutQuery(MainWindow.TrashPath, trashname, Path.Combine(MainWindow.CDesktopPath, trashname)); // rescue selected
                             ReloadTrashBacket();
                             break;
                     }
@@ -96,7 +96,15 @@ namespace WPFFrameworkApp
                 IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(MainWindow.TrashPath);
                 foreach (string trash in trashes)
                 {
-                    File.Move(trash, Path.Combine(MainWindow.CDesktopPath, Path.GetFileName(trash)));
+                    try
+                    {
+                        File.Move(trash, Path.Combine(MainWindow.CDesktopPath, Path.GetFileName(trash)));
+                    } catch(Exception ex)
+                    {
+                        RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, $"Trash Backet, deleting {Path.GetFileName(trash)}", "\n", ex.Message);
+                        File.Delete(trash); // delete selected
+                    }
+                    RoutineLogics.WindowReloadNeeded(MainWindow.CDesktopPath);
                 }
                 trashPanel.Children.Clear();
             }

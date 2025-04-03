@@ -47,6 +47,7 @@ namespace WPFFrameworkApp
                         File.Delete(file);
                     }
                 }
+                SetApplications(window);
                 window.Show();
             }
             catch (Exception e)
@@ -78,12 +79,15 @@ namespace WPFFrameworkApp
                     break;
                 case 2:
                     MoveCertainWindow(title, filter, initialDirectory, currentDesktop, MainWindow.MusicAppPath);
+                    MusicAppReloadNeeded();
                     break;
                 case 3:
                     MoveCertainWindow(title, filter, initialDirectory, currentDesktop, MainWindow.TrashPath);
+                    TrashBacketReloadNeeded();
                     break;
                 case 4:
                     MoveCertainWindow(title, filter, initialDirectory, currentDesktop, MainWindow.CDesktopPath);
+                    WindowReloadNeeded(MainWindow.CDesktopPath);
                     break;
             }
         }
@@ -95,6 +99,10 @@ namespace WPFFrameworkApp
             try
             {
                 File.Move(Path.Combine(currentDesktop, filename), pathToDirection);
+                string directoryName = Path.GetDirectoryName(pathToDirection);
+                if (directoryName == MainWindow.TrashPath) TrashBacketReloadNeeded();
+                else if (directoryName == MainWindow.MusicAppPath) MusicAppReloadNeeded();
+                else WindowReloadNeeded(directoryName);
             }
             catch (Exception e)
             {
@@ -125,6 +133,7 @@ namespace WPFFrameworkApp
                     try
                     {
                         File.Copy(Path.Combine(currentDesktop, filename), filepath);
+                        WindowReloadNeeded(Path.GetDirectoryName(filepath));
                     }
                     catch (Exception ex)
                     {
@@ -346,6 +355,8 @@ namespace WPFFrameworkApp
                     case 2:
                         MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
                         ReloadDesktop(window, currentdesktop);
+                        GenMusicApp genmusicapp = GetMusicAppWindow();
+                        genmusicapp?.IsReloadNeeded(true);
                         break;
                     case 3:
                         MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
@@ -515,13 +526,14 @@ namespace WPFFrameworkApp
                     try
                     {
                         File.Move(Path.Combine(currentDesktop, filename), filepath);
+                        WindowReloadNeeded(Path.GetDirectoryName(filepath));
                     }
                     catch (Exception ex)
                     {
                         ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                     }
                 }
-                else
+                else // user tried to move into hidden folders
                 {
                     ErrorMessage(Errors.PRMS_ERR, "You can not move or copy files into hidden folders manually");
                 }
@@ -607,6 +619,79 @@ namespace WPFFrameworkApp
                 {
                     window.Close();  
                 }
+            }
+        }
+        private static GenMusicApp GetMusicAppWindow()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is GenMusicApp)
+                {
+                    return (GenMusicApp)window;
+                }
+            }
+            return null;
+        }
+        private static MainWindow GetMainWindow(string directoryPath)
+        {
+            string title;
+            if (directoryPath.EndsWith(Configs.CDESK)) title = MainItems.MAIN_WIN;
+            else title = GetDirectoryName(directoryPath);
+            foreach (Window window in Application.Current.Windows)
+            {
+                if ((window is MainWindow) && (title == window.Title))
+                {
+                    return (MainWindow)window;
+                }
+            }
+            return null;
+        }
+        private static TrashBacket GetTrashBacketWindow()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is TrashBacket)
+                {
+                    return (TrashBacket)window;
+                }
+            }
+            return null;
+        }
+        public static void WindowReloadNeeded(string directoryName)
+        {
+            MainWindow directionFolder = GetMainWindow(directoryName);
+            if (directionFolder != null && directoryName != null) ReloadDesktop(directionFolder, directoryName);
+        }
+        private static void MusicAppReloadNeeded()
+        {
+            GenMusicApp musicapp = GetMusicAppWindow();
+            if (musicapp != null)
+            {
+                musicapp.IsReloadNeeded(true);
+            }
+        }
+        private static void TrashBacketReloadNeeded()
+        {
+            TrashBacket trashapp = GetTrashBacketWindow();
+            trashapp?.ReloadTrashBacket();
+        }
+        private static string GetDirectoryName(string directoryPath)
+        {
+            string[] parts = directoryPath.Split(Path.DirectorySeparatorChar);
+            if (parts.Length > 0)
+            {
+                return parts[parts.Length - 1];
+            }
+            return string.Empty;
+        }
+        private static void SetApplications(MainWindow window)
+        {
+            if (window.reloadNeed.IsVisible)
+            {
+                window.reloadNeed.Visibility = Visibility.Collapsed;
+                window.NoteApp.Visibility = Visibility.Visible;
+                window.MusicApp.Visibility = Visibility.Visible;
+                window.MailApp.Visibility = Visibility.Visible;
             }
         }
         #endregion

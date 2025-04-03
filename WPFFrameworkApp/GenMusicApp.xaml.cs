@@ -32,7 +32,7 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        private void ReloadMusicApp()
+        public void ReloadMusicApp()
         {
             datacontent = new Dictionary<ListBoxItem, TextBlock>(); // to restore item and its textblock
             listbox.Items.Clear();
@@ -74,7 +74,7 @@ namespace WPFFrameworkApp
             {
                 // do nothing on null exception
                 InitializeSliderLogics();
-                stopButton.IsEnabled = true; // to be avoid stop button is disable forever
+                stopButton.IsEnabled = true; // to be avoid stop button is disabled forever
             }
         }
 
@@ -307,7 +307,7 @@ namespace WPFFrameworkApp
             ReloadMusicApp();
         }
 
-        private void IsReloadNeeded(bool yesOrNo)
+        public void IsReloadNeeded(bool yesOrNo)
         {
             reloadNeeded.Visibility = yesOrNo ? Visibility.Visible : Visibility.Collapsed;
             startButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;

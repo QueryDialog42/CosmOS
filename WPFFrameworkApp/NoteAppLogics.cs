@@ -145,7 +145,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
                 noteapp.Close();
                 RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
-                
             }
         }
 
