@@ -57,24 +57,44 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings" Height="20">
-                <MenuItem Header="Color Settings" Click="ColorSettings_Clicked">
+                <MenuItem Header="_Color Settings" Click="ColorSettings_Clicked">
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/colors.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Font Settings" >
+                <MenuItem Header="_Font Settings" Click="FontSettings_Clicked" >
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/clearstyle.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Icon Settings" >
+                <MenuItem Header="_Icon Settings" >
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/clearstyle.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray"/>
+        <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray">
+            <WrapPanel.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="New File" Click="NoteApp_Clicked">
+                        <MenuItem.Icon>
+                            <Image Source="/NoteImages/noteadd.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="New Folder" Click="NewFolder">
+                        <MenuItem.Icon>
+                            <Image Source="/DesktopImages/newfolder.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Reload desktop" Click="ReloadDesktop_Wanted">
+                        <MenuItem.Icon>
+                            <Image Source="/DesktopImages/refresh.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </WrapPanel.ContextMenu>
+        </WrapPanel>
         <StackPanel x:Name="safari" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c" Orientation="Horizontal">
             <Button x:Name="NoteApp" Height="60" Width="60" ToolTip="GenNote" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
                 <Image Source="NoteImages/gennote.png" />
@@ -99,6 +119,20 @@
             <StackPanel x:Name="folderdesktop" Background="#9c9268" Orientation="Vertical" />
         </ScrollViewer>
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Empty Trash" Click="EmptyTrash_Wanted">
+                        <MenuItem.Icon>
+                            <Image Source="/DesktopImages/trashempty.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Rescue All" Click="RescueTrashes_Wanted">
+                        <MenuItem.Icon>
+                            <Image Source="/DesktopImages/rescueme.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </Button.ContextMenu>
             <Image x:Name="trashimage" Source="DesktopImages/trashempty.png"/>
         </Button>
     </Grid>

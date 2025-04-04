@@ -235,6 +235,8 @@ namespace WPFFrameworkApp
 
             window.desktop.Children.Add(app);
 
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(desktopPath, filename), ImagePaths.TXT_IMG);
+
             app.Click += (sender, e) =>
             {
                 try
@@ -277,6 +279,8 @@ namespace WPFFrameworkApp
             Appearence(image, stackpanel, app, appname, ImagePaths.RTF_IMG);
 
             window.desktop.Children.Add(app);
+
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(desktopPath, filename), ImagePaths.RTF_IMG);
 
             app.Click += (sender, e) =>
             {
@@ -335,6 +339,8 @@ namespace WPFFrameworkApp
 
             window.desktop.Children.Add(app);
 
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, filepath, fileimage);
+
             app.Click += (o, e) =>
             {
                 short result;
@@ -386,41 +392,24 @@ namespace WPFFrameworkApp
 
             window.desktop.Children.Add(app);
 
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.EXE_IMG, ImagePaths.DELEXE_IMG, filepath, ImagePaths.EXE_IMG);
+
             app.Click += (s, e) =>
             {
-                string[] options = { "Run", "Rename", "Move", "Copy", "Delete" };
-                switch (QueryDialog.ShowQueryDialog(filename, "Executable File Options", options, ImagePaths.EXE_IMG))
+                string[] options = { "Run", "Cancel"};
+                if (QueryDialog.ShowQueryDialog($"Are you sure you want to run {filename}?", "Executable File Run", options, ImagePaths.EXE_IMG) == 0)
                 {
-                    case 0:
-                        Process process = new Process();
-                        process.StartInfo.FileName = filepath;
-                        process.StartInfo.CreateNoWindow = true;
-                        try
-                        {
-                            process.Start();
-                            process.WaitForExit();
-                        }
-                        catch (Exception ex)
-                        {
-                            ErrorMessage($"{Errors.RUN_ERR_MSG}{filename}.\n" + ex.Message, Errors.RUN_ERR);
-                        }
-                        break;
-                    case 1:
-                        RenameFile_Wanted(filepath, ImagePaths.EXE_IMG);
-                        ReloadDesktop(window, desktopPath);
-                        break;
-                    case 2:
-                        MoveAnythingWithQuery("Move Exe File", "EXE Files (*.exe)|*.exe", filename, desktopPath, desktopPath, 1);
-                        ReloadDesktop(window, desktopPath);
-                        break;
-                    case 3:
-                        CopyAnythingWithQuery("Copy Exe File", "EXE Files (*.exe)|*.exe", filename, desktopPath, desktopPath);
-                        ReloadDesktop(window, desktopPath);
-                        break;
-                    case 4:
-                        File.Move(filepath, Path.Combine(MainWindow.TrashPath, filename));
-                        ReloadDesktop(window, desktopPath);
-                        break;
+                    Process process = new Process();
+                    process.StartInfo.FileName = filepath;
+                    process.StartInfo.CreateNoWindow = true;
+                    try
+                    {
+                        process.Start();
+                        process.WaitForExit();
+                    } catch (Exception ex)
+                    {
+                        ErrorMessage(Errors.RUN_ERR, Errors.RUN_ERR_MSG, filename ?? "null File", "\n", ex.Message);
+                    }
                 }
             };
         }
@@ -439,6 +428,8 @@ namespace WPFFrameworkApp
             Appearence(image, stackpanel, app, appname, ImagePaths.FOLDER_IMG);
 
             window.folderdesktop.Children.Add(app);
+
+            app.ContextMenu = SetShortKeyOptionsForFolders(window, desktopPath, filename);
 
             app.Click += (sender, e) =>
             {
@@ -479,6 +470,147 @@ namespace WPFFrameworkApp
 
             app.Content = stackpanel;
         }
+        private static ContextMenu SetShortKeyOptions(
+            MainWindow window,
+            string copyicon,
+            string deleteicon,
+            string filepath,
+            string imageicon)
+        {
+            string currentdesktop = Path.GetDirectoryName(filepath);
+            string filename = Path.GetFileName(filepath);
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem renameItem = new MenuItem
+            {
+                Header = "Rename",
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(ImagePaths.RENM_IMG, UriKind.RelativeOrAbsolute)),
+                }
+            };
+
+            MenuItem moveitem = new MenuItem
+            {
+                Header = "Move",
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(ImagePaths.NMOVE_IMG, UriKind.RelativeOrAbsolute)),
+                }
+            };
+
+            MenuItem copyitem = new MenuItem
+            {
+                Header = "Copy",
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(copyicon, UriKind.RelativeOrAbsolute)),
+                }
+            };
+
+            MenuItem deleteitem = new MenuItem
+            {
+                Header = "Delete",
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(deleteicon, UriKind.RelativeOrAbsolute)),
+                }
+            };
+
+            renameItem.Click += (sender, e) =>
+            {
+                RenameFile_Wanted(filepath, imageicon);
+                ReloadDesktop(window, currentdesktop);
+            };
+            copyitem.Click += (sender, e) =>
+            {
+                CopyAnythingWithQuery("Copy File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop);
+                ReloadDesktop(window, currentdesktop);
+            };
+            moveitem.Click += (sender, e) =>
+            {
+                MoveAnythingWithQuery("Move File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop, 1);
+                ReloadDesktop(window, currentdesktop);
+            };
+            deleteitem.Click += (sender, e) => 
+            {
+                if (MessageBox.Show($"Are you sure to delete {filename}?", "Delete File", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) 
+                {
+                    MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
+                    ReloadDesktop(window, currentdesktop);
+                }
+            };
+
+            contextMenu.Items.Add(renameItem);
+            contextMenu.Items.Add(moveitem);
+            contextMenu.Items.Add(copyitem);
+            contextMenu.Items.Add(deleteitem);
+
+            return contextMenu;
+        }
+
+        private static ContextMenu SetShortKeyOptionsForFolders(MainWindow window, string desktopPath, string filename)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem renameItem = new MenuItem
+            {
+                Header = "Rename",
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(ImagePaths.RENM_IMG, UriKind.RelativeOrAbsolute)),
+                }
+            };
+
+            MenuItem deleteitem = new MenuItem
+            {
+                Header = "Delete",
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(ImagePaths.FDEL_IMG, UriKind.RelativeOrAbsolute)),
+                }
+            };
+
+            renameItem.Click += (sender, e) =>
+            {
+                string newfilename = InputDialog.ShowInputDialog("Enter the new name:", "Rename Folder", ImagePaths.FOLDER_IMG);
+                if (string.IsNullOrEmpty(newfilename) == false)
+                {
+                    if (newfilename == HiddenFolders.HAUD_FOL || newfilename == HiddenFolders.HTRSH_FOL)
+                    {
+                        ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as same as hidden folders.");
+                        return;
+                    }
+                    try
+                    {
+                        Directory.Move(Path.Combine(desktopPath, filename), Path.Combine(desktopPath, newfilename));
+                        ReloadDesktop(window, desktopPath);
+                    } catch (Exception ex)
+                    {
+                        ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
+                    }
+                }
+                else ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as null, ", Configs.CDESK, " or ", MainItems.MAIN_WIN);
+            };
+
+            deleteitem.Click += (sender, e) =>
+            {
+                if (MessageBox.Show($"Are you sure to delete {filename} folder?", "Folder Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        Directory.Delete(Path.Combine(desktopPath, filename));
+                        ReloadDesktop(window, desktopPath);
+                    } catch (Exception ex)
+                    {
+                        ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
+                    }
+                }
+            };
+
+            contextMenu.Items.Add(renameItem);
+            contextMenu.Items.Add(deleteitem);
+
+            return contextMenu;
+        }
         public static Button CreateButton(string filename)
         {
             return new Button()
@@ -487,7 +619,7 @@ namespace WPFFrameworkApp
                 Height = 80,
                 Background = Brushes.Transparent,
                 BorderBrush = Brushes.Transparent,
-                ToolTip = filename,
+                ToolTip = filename
             };
         }
         public static TextBlock CreateTextBlock(string filename)
@@ -656,6 +788,18 @@ namespace WPFFrameworkApp
             foreach (Window window in Application.Current.Windows)
             {
                 if (window is ColorSettings)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsFontSettingsOpen()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is FontSettings)
                 {
                     window.Activate();
                     return true;

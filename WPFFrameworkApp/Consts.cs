@@ -1,4 +1,6 @@
-﻿namespace WPFFrameworkApp
+﻿using System.Windows.Markup;
+
+namespace WPFFrameworkApp
 {
     public struct Errors
     {
@@ -50,11 +52,17 @@
         public const string FULL_IMG = "DesktopImages/trashfull.png";
         public const string WRNG_IMG = "DesktopImages/warning1.png";
         public const string QST_IMG = "DesktopImages/question2.png";
+        public const string FDEL_IMG = "DesktopImages/folderdelete2.png";
+        public const string DELEXE_IMG = "DesktopImages/deleteexe.png";
         public const string NOTE_IMG = "NoteImages/gennote.png";
         public const string NADD_IMG = "NoteImages/noteadd.png";
+        public const string NDEL_IMG = "NoteImages/notedelete.png";
         public const string NMOVE_IMG = "NoteImages/move.png";
+        public const string NCOPY_IMG = "NoteImages/notecopy.png";
         public const string NSAVE_IMG = "NoteImages/Save.png";
         public const string RENM_IMG = "NoteImages/rename.png";
+        public const string SDEL_IMG = "MusicImages/sounddelete.png";
+        public const string SCOPY_IMG = "MusicImages/soundbutcopy.png";
     }
 
     public struct HiddenFolders

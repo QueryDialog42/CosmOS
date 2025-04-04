@@ -93,12 +93,14 @@ namespace WPFFrameworkApp
 
         private void ChangeColorOfText(TextBlock textblock)
         {
-            System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog();
-            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            using (System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog())
             {
-                textblock.Foreground = new SolidColorBrush(Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
-                int hexcolor = colorDialog.Color.ToArgb(); //X8 means hexadecimal with 8 digits
-                textblock.Text = $"#{hexcolor & 0x00FFFFFF:X6}"; // only RGB, X6 = hexadecimal with 6 digits
+                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    textblock.Foreground = new SolidColorBrush(Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
+                    int hexcolor = colorDialog.Color.ToArgb(); //X8 means hexadecimal with 8 digits
+                    textblock.Text = $"#{hexcolor & 0x00FFFFFF:X6}"; // only RGB, X6 = hexadecimal with 6 digits
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WPFFrameworkApp
 {
@@ -26,7 +27,7 @@ namespace WPFFrameworkApp
             foreach (string trash in trashes)
             {
                 string trashname = Path.GetFileName(trash);
-                Button app = RoutineLogics.CreateButton(trashname);
+                Button app = CreateButtonForTrashBacket(trashname);
                 TextBlock appname = RoutineLogics.CreateTextBlock(trashname);
                 Image image = RoutineLogics.CreateImage();
                 StackPanel stackpanel = new StackPanel() { Orientation = Orientation.Vertical };
@@ -104,10 +105,22 @@ namespace WPFFrameworkApp
                         RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, $"Trash Backet, deleting {Path.GetFileName(trash)}", "\n", ex.Message);
                         File.Delete(trash); // delete selected
                     }
-                    RoutineLogics.WindowReloadNeeded(MainWindow.CDesktopPath);
                 }
+                RoutineLogics.WindowReloadNeeded(MainWindow.CDesktopPath);
                 trashPanel.Children.Clear();
             }
+        }
+
+        private Button CreateButtonForTrashBacket(string filename)
+        {
+            return new Button()
+            {
+                Width = 80,
+                Height = 80,
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.Transparent,
+                ToolTip = filename,
+            };
         }
 
         private void EmptyTrash(object sender, RoutedEventArgs e)

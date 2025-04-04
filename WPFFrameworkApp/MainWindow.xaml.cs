@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
 using System.Windows;
@@ -117,6 +118,12 @@ namespace WPFFrameworkApp
             if (Title != MainItems.MAIN_WIN)
             {
                 string newfoldername = InputDialog.ShowInputDialog("Enter the new name:", "Rename Folder", ImagePaths.FOLDER_IMG, ImagePaths.RENM_IMG);
+                if (newfoldername == HiddenFolders.HAUD_FOL || newfoldername == HiddenFolders.HTRSH_FOL)
+                {
+                    RoutineLogics.ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as same as hidden folders.");
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(newfoldername) == false && newfoldername != Configs.CDESK && newfoldername != MainItems.MAIN_WIN)
                 {
                     Title = newfoldername;
@@ -247,6 +254,51 @@ namespace WPFFrameworkApp
             if (RoutineLogics.IsColorSettingsOpen() == false)
             {
                 new ColorSettings();
+            }
+        }
+        private void FontSettings_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsFontSettingsOpen() == false)
+            {
+                new FontSettings();
+            }
+        }
+        private void EmptyTrash_Wanted(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure to empty the Trash Backet?", "Empty trash", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(TrashPath);
+                    foreach (string trash in trashes)
+                    {
+                        File.Delete(trash);
+                    }
+                    RoutineLogics.WindowReloadNeeded(CDesktopPath);
+                } catch (Exception ex)
+                {
+                    RoutineLogics.ErrorMessage(Errors.DEL_ERR, "An error occured while empting Trash Backet\n", ex.Message);
+                }
+            }
+        }
+        private void RescueTrashes_Wanted(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure to rescue all files from TrashBacket?", "Empty Trash", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+                IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(TrashPath);
+                foreach (string trash in trashes)
+                {
+                    try
+                    {
+                        File.Move(trash, Path.Combine(CDesktopPath, Path.GetFileName(trash)));
+                    }
+                    catch (Exception ex)
+                    {
+                        RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, $"Trash Backet, deleting {Path.GetFileName(trash)}", "\n", ex.Message);
+                        File.Delete(trash); // delete selected
+                    }
+                }
+                RoutineLogics.WindowReloadNeeded(CDesktopPath);
             }
         }
         #endregion

@@ -18,7 +18,7 @@
                         <Image Source="/DesktopImages/trashempty.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Rescue All" Click="RescueAll">
+                <MenuItem Header="_Rescue All" Click="RescueAll">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/rescueme.png"/>
                     </MenuItem.Icon>

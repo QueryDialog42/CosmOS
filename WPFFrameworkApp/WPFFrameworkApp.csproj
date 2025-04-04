@@ -65,6 +65,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="FontSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GenMailApp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +96,9 @@
       <DependentUpon>ColorSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Consts.cs" />
+    <Compile Include="FontSettings.xaml.cs">
+      <DependentUpon>FontSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenMailApp.xaml.cs">
       <DependentUpon>GenMailApp.xaml</DependentUpon>
     </Compile>
@@ -293,6 +300,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DesktopImages\restore.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\deleteexe.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
