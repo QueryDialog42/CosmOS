@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
 using System.Windows;
 
 namespace WPFFrameworkApp
@@ -46,23 +45,37 @@ namespace WPFFrameworkApp
                     TempPath = ConfigurePath(ConfigFileText);
                 else Environment.Exit(0);
             }
-            else
+            if (File.Exists(Path.Combine(ConfigFolder, Configs.CCOL)) == false)
             {
-                try
+                MessageBox.Show($"{Configs.CCOL} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
+                using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CCOL)))
                 {
-                    TempPath = File.ReadAllText(ConfigFileText);
-                    if (Directory.Exists(TempPath) == false)
-                    {
-                        if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
-                            TempPath = ConfigurePath(ConfigFileText);
-                        else Environment.Exit(0);
-                    }
+                    CreateColorConfig(writer);
                 }
-                catch (Exception ex)
+            }
+            if (File.Exists(Path.Combine(ConfigFolder, Configs.CFONT)) == false)
+            {
+                MessageBox.Show($"{Configs.CFONT} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
+                using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CFONT)))
                 {
-                    RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
-                    Environment.Exit(0);
+                    CreateFontConfig(writer);
                 }
+            }
+
+            try
+            {
+                TempPath = File.ReadAllText(ConfigFileText);
+                if (Directory.Exists(TempPath) == false)
+                {
+                    if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                        TempPath = ConfigurePath(ConfigFileText);
+                    else Environment.Exit(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
+                Environment.Exit(0);
             }
         }
         private static void ImportFile(MainWindow window, string desktopPath)
@@ -196,17 +209,31 @@ namespace WPFFrameworkApp
             //C desktop colors
             using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CCOL)))
             {
-                writer.WriteLineAsync(Defaults.MAIN_DESK_COl);
-                writer.WriteLineAsync(Defaults.FOL_DESK_COL);
-                writer.WriteLineAsync(Defaults.SAFARI_COL);
-                writer.WriteLineAsync(Defaults.MENU_COL);
+                CreateColorConfig(writer);
             }
             // C fonts
             using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CFONT)))
             {
-                writer.WriteLineAsync(Defaults.FONT);
+                CreateFontConfig(writer);
             }
         }
+
+        private void CreateColorConfig(StreamWriter writer)
+        {
+            writer.WriteLineAsync(Defaults.MAIN_DESK_COl);
+            writer.WriteLineAsync(Defaults.FOL_DESK_COL);
+            writer.WriteLineAsync(Defaults.SAFARI_COL);
+            writer.WriteLineAsync(Defaults.MENU_COL);
+        }
+        private void CreateFontConfig(StreamWriter writer)
+        {
+            writer.WriteLineAsync(Defaults.FONT);
+            writer.WriteLineAsync(Defaults.FONT_COL);
+            writer.WriteLineAsync(Defaults.FONT_WEIGHT);
+            writer.WriteLineAsync(Defaults.FONT_STYLE);
+            writer.WriteLineAsync(Defaults.FONT_SIZE);
+        }
+
         private void CreateHiddenDirectories(string desktopPath)
         {
             string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);

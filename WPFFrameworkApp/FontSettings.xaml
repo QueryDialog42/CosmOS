@@ -4,17 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d"
-        Title="Font Settings" Height="200" Width="400">
+        mc:Ignorable="d" Background="Gray"
+        Title="Font Settings" Height="180" Width="483">
     <Grid>
-        <TextBox>
-            <TextBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Font1"/>
-                    <MenuItem Header="Font2"/>
-                    <MenuItem Header="Font3"/>
-                </ContextMenu>
-            </TextBox.ContextMenu>
-        </TextBox>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="DarkGray">
+            <MenuItem Header="Result" Height="20">
+                <MenuItem Header="Apply Changes" Click="ApplyChanges_Clicked">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/Save.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Quit without saving" Click="CancelChanges_Clicked">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/Quit.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Restore default settings" Click="RestoreDefaults_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/restore.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Button x:Name="SelectFont" Content="Select Font" Grid.Row="1" Grid.Column="0" Margin="30, 30, 30, 30" BorderThickness="0" Background="DimGray" Foreground="White" Click="ChooseFont_Click"/>
+        <TextBox x:Name="SelectedFont" Grid.Row="1" Grid.Column="1" Margin="30, 30, 30, 30" Background="LightGray" MaxLength="20" VerticalContentAlignment="Center"/>
     </Grid>
 </Window>

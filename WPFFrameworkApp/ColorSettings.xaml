@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Background="Gray" Icon="/DesktopImages/Settings.png"
+        mc:Ignorable="d" Background="Gray" Icon="/DesktopImages/Settings.png" ResizeMode="NoResize"
         Title="Color Settings" Height="300" Width="400">
     <Grid>
         <Grid.RowDefinitions>

@@ -28,7 +28,7 @@ namespace WPFFrameworkApp
             {
                 string trashname = Path.GetFileName(trash);
                 Button app = CreateButtonForTrashBacket(trashname);
-                TextBlock appname = RoutineLogics.CreateTextBlock(trashname);
+                TextBlock appname = RoutineLogics.CreateTextBlock(trashname, "Black");
                 Image image = RoutineLogics.CreateImage();
                 StackPanel stackpanel = new StackPanel() { Orientation = Orientation.Vertical };
 

@@ -16,6 +16,7 @@ namespace WPFFrameworkApp
     public partial class RoutineLogics
     {
         public static string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
+        public static string fontcolor = GetFontColor();
         public static void ReloadDesktop(MainWindow window, string desktopPath)
         {
             window.desktop.Children.Clear();
@@ -225,7 +226,7 @@ namespace WPFFrameworkApp
             string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename);
+            TextBlock appname = CreateTextBlock(filename, fontcolor);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -270,7 +271,7 @@ namespace WPFFrameworkApp
             string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename);
+            TextBlock appname = CreateTextBlock(filename, fontcolor);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -328,7 +329,7 @@ namespace WPFFrameworkApp
         {
             string filename = Path.GetFileName(filepath);
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename);
+            TextBlock appname = CreateTextBlock(filename, fontcolor);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -382,7 +383,7 @@ namespace WPFFrameworkApp
             string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename);
+            TextBlock appname = CreateTextBlock(filename, fontcolor);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -419,7 +420,7 @@ namespace WPFFrameworkApp
             string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename);
+            TextBlock appname = CreateTextBlock(filename, fontcolor);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -622,12 +623,13 @@ namespace WPFFrameworkApp
                 ToolTip = filename
             };
         }
-        public static TextBlock CreateTextBlock(string filename)
+        public static TextBlock CreateTextBlock(string filename, string foreground)
         {
             return new TextBlock()
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Text = filename
+                Text = filename,
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(foreground))
             };
         }
         public static Image CreateImage()
@@ -710,7 +712,7 @@ namespace WPFFrameworkApp
         private static void SetWindowSettings(MainWindow window)
         {
             string[] colors = File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
-            string fontfamily = File.ReadAllText(Path.Combine(configFolder, Configs.CFONT));
+            string[] fonts = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
             try
             {
                 window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
@@ -719,8 +721,31 @@ namespace WPFFrameworkApp
                 window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
                 window.trashApp.Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(colors[2]));
 
-                window.FontFamily = new FontFamily(fontfamily);
-                window.menu.FontFamily = new FontFamily(fontfamily);
+                window.FontFamily = new FontFamily(fonts[0]);
+                window.menu.FontFamily = new FontFamily(fonts[0]);
+                window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[1]));
+                if (fonts[2] == "Bold")
+                {
+                    window.FontWeight = FontWeights.Bold;
+                    window.menu.FontWeight = FontWeights.Bold;
+                }
+                else
+                {
+                    window.FontWeight = FontWeights.Regular;
+                    window.menu.FontWeight = FontWeights.Regular;
+                }
+                if (fonts[3] == "Italic")
+                {
+                    window.FontStyle = FontStyles.Italic;
+                    window.menu.FontStyle = FontStyles.Italic;
+                }
+                else
+                {
+                    window.FontStyle = FontStyles.Normal;
+                    window.menu.FontStyle = FontStyles.Normal;
+                }
+                window.FontSize = float.Parse(fonts[4]);
+                
 
             } catch (Exception)
             {
@@ -732,6 +757,12 @@ namespace WPFFrameworkApp
 
                 window.FontFamily = new FontFamily(Defaults.FONT);
                 window.menu.FontFamily = new FontFamily(Defaults.FONT);
+                window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FONT_COL));
+                window.FontWeight = FontWeights.Regular;
+                window.FontStyle = FontStyles.Normal;
+                window.FontSize = float.Parse(Defaults.FONT_SIZE);
+
+                fontcolor = Defaults.FONT_COL;
 
                 SetSettingsDefault();
             }
@@ -739,8 +770,9 @@ namespace WPFFrameworkApp
         private static void SetSettingsDefault()
         {
             string[] colors = { Defaults.MAIN_DESK_COl, Defaults.FOL_DESK_COL, Defaults.SAFARI_COL, Defaults.MENU_COL };
+            string[] fonts = { Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE};
             File.WriteAllLines(Path.Combine(configFolder, Configs.CCOL), colors);
-            File.WriteAllText(Path.Combine(configFolder, Configs.CFONT), Defaults.FONT);
+            File.WriteAllLines(Path.Combine(configFolder, Configs.CFONT), fonts);
         }
         private static short AudioOptions(string appname, string type, string fileimage)
         {
@@ -889,6 +921,21 @@ namespace WPFFrameworkApp
                 window.MusicApp.Visibility = Visibility.Visible;
                 window.MailApp.Visibility = Visibility.Visible;
             }
+        }
+        public static void ReloadNeededForEveryWindow()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is MainWindow)
+                {
+                    MainWindowManuallyReloadNeeded((MainWindow)window);
+                }
+            }
+        }
+        private static string GetFontColor()
+        {
+            string[] fontcolor = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
+            return fontcolor[1];    
         }
 
         #endregion

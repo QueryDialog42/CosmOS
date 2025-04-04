@@ -94,7 +94,7 @@ namespace WPFFrameworkApp
         public const string NOTE_VRS = "GenNote v1.4.4";
         public const string MUSIC_VRS = "GenMusic v1.6.1";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v1.8.6";
+        public const string GOS_VRS = "GencOS v1.9.0";
     }
 
     public struct MainItems
@@ -114,5 +114,9 @@ namespace WPFFrameworkApp
         public const string SAFARI_COL = "#5c5c5c";
         public const string MENU_COL = "White";
         public const string FONT = "Arial";
+        public const string FONT_COL = "Black";
+        public const string FONT_WEIGHT = "Regular";
+        public const string FONT_STYLE = "Normal";
+        public const string FONT_SIZE = "12";
     }
 }

@@ -51,19 +51,8 @@ namespace WPFFrameworkApp
             newcolors[2] = safariColor.Text;
             newcolors[3] = menuColor.Text;
             File.WriteAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL), newcolors);
-            ReloadNeeded();
+            RoutineLogics.ReloadNeededForEveryWindow();
             Close();
-        }
-
-        private void ReloadNeeded()
-        {
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window is MainWindow)
-                {
-                    RoutineLogics.MainWindowManuallyReloadNeeded((MainWindow)window);
-                }
-            }
         }
 
         private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
