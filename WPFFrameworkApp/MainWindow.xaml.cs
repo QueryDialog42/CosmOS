@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Packaging;
 using System.Windows;
 
 namespace WPFFrameworkApp
@@ -18,7 +19,7 @@ namespace WPFFrameworkApp
             try
             {
                 currentDesktop = TempPath.Trim();
-                CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.CPATH)).Trim();
+                CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
                 if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
@@ -30,7 +31,14 @@ namespace WPFFrameworkApp
         }
         private void CheckConfig()
         {
-            string ConfigFileText = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.CPATH); //Home Directory\CDesktop.txt
+            string ConfigFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
+            string ConfigFileText = Path.Combine(ConfigFolder, Configs.CPATH);
+            if (Directory.Exists(ConfigFolder) == false)
+            {
+                MessageBox.Show($"{Configs.C_CONFIGS} folder not found. Will be created after path is entered.", "Configuration Proccess", MessageBoxButton.OK, MessageBoxImage.Warning);
+                TempPath = ConfigurePath(ConfigFileText);
+                return;
+            }
             if (File.Exists(ConfigFileText) == false)
             {
                 if (MessageBox.Show($"{Configs.CPATH} could not find. Resetting path needed.", "Path could not find", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
@@ -92,6 +100,7 @@ namespace WPFFrameworkApp
                     new DirectoryInfo(currentDesktop) { Attributes = FileAttributes.Normal };
                     Directory.Delete(currentDesktop);
                     Close();
+                    RoutineLogics.WindowReloadNeeded(Path.GetDirectoryName(currentDesktop));
                 }
                 else
                 {
@@ -143,17 +152,11 @@ namespace WPFFrameworkApp
                     {
                         try
                         {
-                            using (StreamWriter writer = new StreamWriter(File.Create(ConfigFileText)))
-                            {
-                                writer.WriteLineAsync(input);
-                                string trashpath = Path.Combine(input, HiddenFolders.HTRSH_FOL);
-                                string musicpath = Path.Combine(input, HiddenFolders.HAUD_FOL);
-                                Directory.CreateDirectory(musicpath);
-                                Directory.CreateDirectory(trashpath);
-                                new DirectoryInfo(musicpath) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
-                                new DirectoryInfo(trashpath) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
-                                return input;
-                            }
+                            string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
+                            Directory.CreateDirectory(configFolder); // create the folder that contains all the configuration datas
+                            CreateConfigFiles(ConfigFileText, input, configFolder);
+                            CreateHiddenDirectories(input); // create the hidden folders
+                            return input;
                         } catch(Exception ex)
                         {
                             RoutineLogics.ErrorMessage(Errors.WRT_ERR, Errors.WRT_ERR_MSG, "the path to file.\n", ex.Message);
@@ -176,6 +179,36 @@ namespace WPFFrameworkApp
         }
 
         #region Subroutines
+        private void CreateConfigFiles(string ConfigFileText, string input, string configFolder)
+        {
+            // C path
+            using (StreamWriter writer = new StreamWriter(File.Create(ConfigFileText)))
+            {
+                writer.WriteLineAsync(input);
+            }
+            //C desktop colors
+            using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CCOL)))
+            {
+                writer.WriteLineAsync(Defaults.MAIN_DESK_COl);
+                writer.WriteLineAsync(Defaults.FOL_DESK_COL);
+                writer.WriteLineAsync(Defaults.SAFARI_COL);
+                writer.WriteLineAsync(Defaults.MENU_COL);
+            }
+            // C fonts
+            using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CFONT)))
+            {
+                writer.WriteLineAsync(Defaults.FONT);
+            }
+        }
+        private void CreateHiddenDirectories(string desktopPath)
+        {
+            string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);
+            string musicpath = Path.Combine(desktopPath, HiddenFolders.HAUD_FOL);
+            Directory.CreateDirectory(musicpath);
+            Directory.CreateDirectory(trashpath);
+            new DirectoryInfo(musicpath) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
+            new DirectoryInfo(trashpath) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
+        }
         private void NoteApp_Clicked(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.NewNote_Wanted(this, currentDesktop);
@@ -208,6 +241,13 @@ namespace WPFFrameworkApp
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {
             ImportFile(this, currentDesktop);
+        }
+        private void ColorSettings_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsColorSettingsOpen() == false)
+            {
+                new ColorSettings();
+            }
         }
         #endregion
     }

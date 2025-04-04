@@ -15,10 +15,12 @@ namespace WPFFrameworkApp
 {
     public partial class RoutineLogics
     {
+        public static string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
         public static void ReloadDesktop(MainWindow window, string desktopPath)
         {
             window.desktop.Children.Clear();
             window.folderdesktop.Children.Clear();
+            SetWindowSettings(window);
             try
             {
                 string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL };
@@ -53,6 +55,7 @@ namespace WPFFrameworkApp
             catch (Exception e)
             {
                 ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, "Main Window\n", e.Message);
+                MainWindowManuallyReloadNeeded(window);
             }
         }
         public static void ErrorMessage(string errtitle, params string[] errmessage)
@@ -213,6 +216,7 @@ namespace WPFFrameworkApp
             }
             MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
         }
+
         #region Subroutines
         private static bool IsRenameAllowed(string filename, string newfilename, string checkfor) => filename.EndsWith(checkfor) && newfilename.EndsWith(checkfor);
         private static void InitTextFile(
@@ -570,6 +574,42 @@ namespace WPFFrameworkApp
                 }
             }
         }
+
+        private static void SetWindowSettings(MainWindow window)
+        {
+            string[] colors = File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
+            string fontfamily = File.ReadAllText(Path.Combine(configFolder, Configs.CFONT));
+            try
+            {
+                window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+                window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
+                window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
+                window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
+                window.trashApp.Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(colors[2]));
+
+                window.FontFamily = new FontFamily(fontfamily);
+                window.menu.FontFamily = new FontFamily(fontfamily);
+
+            } catch (Exception)
+            {
+                MessageBox.Show("An error occured while configuring desktop. \nDefault settings will be used.", "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Information);
+                window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MAIN_DESK_COl));
+                window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FOL_DESK_COL));
+                window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.SAFARI_COL));
+                window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MENU_COL));
+
+                window.FontFamily = new FontFamily(Defaults.FONT);
+                window.menu.FontFamily = new FontFamily(Defaults.FONT);
+
+                SetSettingsDefault();
+            }
+        }
+        private static void SetSettingsDefault()
+        {
+            string[] colors = { Defaults.MAIN_DESK_COl, Defaults.FOL_DESK_COL, Defaults.SAFARI_COL, Defaults.MENU_COL };
+            File.WriteAllLines(Path.Combine(configFolder, Configs.CCOL), colors);
+            File.WriteAllText(Path.Combine(configFolder, Configs.CFONT), Defaults.FONT);
+        }
         private static short AudioOptions(string appname, string type, string fileimage)
         {
             string[] options = {"Play", "Rename", "Add to GenMusic", "Delete" };
@@ -604,6 +644,18 @@ namespace WPFFrameworkApp
             foreach (Window window in Application.Current.Windows)
             {
                 if (window is GenMailApp)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsColorSettingsOpen()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is ColorSettings)
                 {
                     window.Activate();
                     return true;
@@ -693,6 +745,18 @@ namespace WPFFrameworkApp
                 window.MusicApp.Visibility = Visibility.Visible;
                 window.MailApp.Visibility = Visibility.Visible;
             }
+        }
+
+        #endregion
+
+        #region ManualActions
+        // If an error occures that can not be handled by the program, then this function will be called
+        public static void MainWindowManuallyReloadNeeded(MainWindow mainfolder)
+        {
+            mainfolder.reloadNeed.Visibility = Visibility.Visible;
+            mainfolder.NoteApp.Visibility = Visibility.Hidden;
+            mainfolder.MusicApp.Visibility = Visibility.Collapsed;
+            mainfolder.MailApp.Visibility = Visibility.Collapsed;
         }
         #endregion
     }

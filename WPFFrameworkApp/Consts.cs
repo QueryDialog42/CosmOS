@@ -65,8 +65,11 @@
 
     public struct Configs
     {
+        public const string C_CONFIGS = "C_CONFIGS";
         public const string CPATH = "CDesktop.txt";
         public const string CDESK = "C_DESKTOP";
+        public const string CCOL = "Ccolor.txt";
+        public const string CFONT = "Cfont.txt";
     }
 
     public struct SupportedFiles
@@ -94,5 +97,14 @@
     public struct Messages
     {
         public const string ABT_DFLT_MSG = "Made with C# 7.3 in Visual Studio\n2025 - No licence"; // about page's default message
+    }
+
+    public struct Defaults
+    {
+        public const string MAIN_DESK_COl = "LightGray";
+        public const string FOL_DESK_COL = "#9c9268";
+        public const string SAFARI_COL = "#5c5c5c";
+        public const string MENU_COL = "White";
+        public const string FONT = "Arial";
     }
 }

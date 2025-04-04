@@ -61,6 +61,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ColorSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GenMailApp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -83,6 +87,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ColorSettings.xaml.cs">
+      <DependentUpon>ColorSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Consts.cs" />
     <Compile Include="GenMailApp.xaml.cs">
@@ -277,6 +284,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="NoteImages\rename.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Quit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\restore.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

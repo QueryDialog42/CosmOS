@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" FontFamily="Arial" Icon="DesktopImages/paperplane2.png"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Icon="DesktopImages/paperplane2.png"
         Title="GencOS main" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -16,8 +16,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="90" />
         </Grid.ColumnDefinitions>
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <MenuItem Header="_New">
+        <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <MenuItem Header="_New" Height="20">
                 <MenuItem Header="_Import File" Click="ImportFile_Wanted" >
                     <MenuItem.Icon >
                         <Image Source="DesktopImages/importfile.png"/>
@@ -34,7 +34,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Desktop">
+            <MenuItem Header="_Desktop" Height="20">
                 <MenuItem Header="_Reload Desktop" Click="ReloadDesktop_Wanted">
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/refresh.png" />
@@ -56,7 +56,23 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Setting" />
+            <MenuItem Header="_Settings" Height="20">
+                <MenuItem Header="Color Settings" Click="ColorSettings_Clicked">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/colors.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Font Settings" >
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/clearstyle.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Icon Settings" >
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/clearstyle.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
         </Menu>
         <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray"/>
         <StackPanel x:Name="safari" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c" Orientation="Horizontal">
