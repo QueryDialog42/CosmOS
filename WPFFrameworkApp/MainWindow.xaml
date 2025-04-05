@@ -50,6 +50,7 @@
                         <Image Source="/NoteImages/rename.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator  />
                 <MenuItem Header="_About GencOS" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/paperplane2.png"/>
@@ -64,12 +65,7 @@
                 </MenuItem>
                 <MenuItem Header="_Font Settings" Click="FontSettings_Clicked" >
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/clearstyle.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="_Icon Settings" >
-                    <MenuItem.Icon>
-                        <Image Source="/NoteImages/clearstyle.png"/>
+                        <Image Source="/DesktopImages/font.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

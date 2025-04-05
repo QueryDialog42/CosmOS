@@ -56,10 +56,7 @@ namespace WPFFrameworkApp
             if (File.Exists(Path.Combine(ConfigFolder, Configs.CFONT)) == false)
             {
                 MessageBox.Show($"{Configs.CFONT} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
-                using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CFONT)))
-                {
-                    CreateFontConfig(writer);
-                }
+                CreateFontConfig(ConfigFolder);
             }
 
             try
@@ -211,11 +208,9 @@ namespace WPFFrameworkApp
             {
                 CreateColorConfig(writer);
             }
+
             // C fonts
-            using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CFONT)))
-            {
-                CreateFontConfig(writer);
-            }
+            CreateFontConfig(configFolder);
         }
 
         private void CreateColorConfig(StreamWriter writer)
@@ -225,13 +220,19 @@ namespace WPFFrameworkApp
             writer.WriteLineAsync(Defaults.SAFARI_COL);
             writer.WriteLineAsync(Defaults.MENU_COL);
         }
-        private void CreateFontConfig(StreamWriter writer)
+        private void CreateFontConfig(string ConfigFolder)
         {
-            writer.WriteLineAsync(Defaults.FONT);
-            writer.WriteLineAsync(Defaults.FONT_COL);
-            writer.WriteLineAsync(Defaults.FONT_WEIGHT);
-            writer.WriteLineAsync(Defaults.FONT_STYLE);
-            writer.WriteLineAsync(Defaults.FONT_SIZE);
+            using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CFONT)))
+            {
+                // desktop default font
+                WriteDefaultFonts(writer);
+
+                // folder default font
+                WriteDefaultFonts(writer);
+
+                // menu default font
+                WriteDefaultFonts(writer);
+            }
         }
 
         private void CreateHiddenDirectories(string desktopPath)
@@ -327,6 +328,14 @@ namespace WPFFrameworkApp
                 }
                 RoutineLogics.WindowReloadNeeded(CDesktopPath);
             }
+        }
+        private void WriteDefaultFonts(StreamWriter writer)
+        {
+            writer.WriteLineAsync(Defaults.FONT);
+            writer.WriteLineAsync(Defaults.FONT_COL);
+            writer.WriteLineAsync(Defaults.FONT_WEIGHT);
+            writer.WriteLineAsync(Defaults.FONT_STYLE);
+            writer.WriteLineAsync(Defaults.FONT_SIZE);
         }
         #endregion
     }

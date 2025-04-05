@@ -304,5 +304,8 @@
   <ItemGroup>
     <Resource Include="DesktopImages\deleteexe.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\font.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -53,6 +53,7 @@
                         <Image Source="NoteImages/notedelete.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator />
                 <MenuItem Header="About GenNote" Click="AboutGennotePage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/gennote.png" />

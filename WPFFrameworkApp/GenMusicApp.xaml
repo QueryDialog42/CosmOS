@@ -45,6 +45,7 @@
                         <Image Source="/DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator />
                 <MenuItem Header="About GenMusic" Background="#2b2b2b" Click="AboutGenmusicPage_Wanted" BorderThickness="0">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/genmusic32x32.png" />

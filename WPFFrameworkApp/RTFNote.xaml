@@ -55,6 +55,7 @@
                             <Image Source="NoteImages/notedelete.png" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator />
                     <MenuItem Header="About GenNote" Click="AboutGennotePage_Wanted">
                         <MenuItem.Icon>
                             <Image Source="/NoteImages/gennote.png" />
@@ -84,6 +85,9 @@
                 </Button>
                 <Button Width="21" Height="21" Click="ColorChange" ToolTip="Change color">
                     <Image Source="NoteImages/colors.png" />
+                </Button>
+                <Button Width="21" Height="21" Click="FontChange" ToolTip="Change Font">
+                    <Image Source="/DesktopImages/font.png" />
                 </Button>
                 <Button Width="21" Height="21" Click="RemoveStyles" ToolTip="Remove style">
                     <Image Source="/NoteImages/clearstyle.png"/>

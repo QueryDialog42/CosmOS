@@ -16,7 +16,11 @@ namespace WPFFrameworkApp
     public partial class RoutineLogics
     {
         public static string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
-        public static string fontcolor = GetFontColor();
+        private static string[] fontcolor = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
+
+        public static string desktopFontcolor = GetFontColor(fontcolor, 0);
+        public static string folderFontcolor = GetFontColor(fontcolor, 1); 
+        public static string menuFontColor = GetFontColor(fontcolor, 2);
         public static void ReloadDesktop(MainWindow window, string desktopPath)
         {
             window.desktop.Children.Clear();
@@ -24,6 +28,7 @@ namespace WPFFrameworkApp
             SetWindowSettings(window);
             try
             {
+                string[] fontsettings = GetFontSettingsFromCfont();
                 string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL };
                 IEnumerable<string> files = Directory.EnumerateFileSystemEntries(desktopPath);
                 foreach (string file in files)
@@ -31,7 +36,7 @@ namespace WPFFrameworkApp
                     string filename = Path.GetFileName(file);
                     if (Directory.Exists(file))
                     {
-                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, desktopPath, filename);
+                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, desktopPath, filename, fontsettings);
                         else // then it is trashbacket
                         {
                             Grid.SetColumnSpan(window.safari, 1);
@@ -39,11 +44,11 @@ namespace WPFFrameworkApp
                             window.trashimage.Source = InitTrashBacket();
                         }
                     }
-                    else if (filename.EndsWith(SupportedFiles.TXT)) InitTextFile(window, desktopPath, filename);
-                    else if (filename.EndsWith(SupportedFiles.RTF)) InitRTFFile(window, desktopPath, filename);
-                    else if (filename.EndsWith(SupportedFiles.WAV)) InitAudioFile(window, file, ImagePaths.WAV_IMG);
-                    else if (filename.EndsWith(SupportedFiles.MP3)) InitAudioFile(window, file, ImagePaths.MP3_IMG);
-                    else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, desktopPath, file, filename);
+                    else if (filename.EndsWith(SupportedFiles.TXT)) InitTextFile(window, desktopPath, filename, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.RTF)) InitRTFFile(window, desktopPath, filename, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.WAV)) InitAudioFile(window, file, ImagePaths.WAV_IMG, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.MP3)) InitAudioFile(window, file, ImagePaths.MP3_IMG, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, desktopPath, file, filename, fontsettings);
                     else
                     {
                         ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS);
@@ -223,10 +228,11 @@ namespace WPFFrameworkApp
         private static void InitTextFile(
             MainWindow window,
             string desktopPath,
-            string filename)
+            string filename,
+            string[] fontSettings)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontcolor);
+            TextBlock appname = CreateTextBlock(filename, fontSettings, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -268,10 +274,11 @@ namespace WPFFrameworkApp
         private static void InitRTFFile(
             MainWindow window,
             string desktopPath,
-            string filename)
+            string filename,
+            string[] fontsettings)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontcolor);
+            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -325,11 +332,12 @@ namespace WPFFrameworkApp
         private static void InitAudioFile(
             MainWindow window,
             string filepath,
-            string fileimage)
+            string fileimage,
+            string[] fontsettings)
         {
             string filename = Path.GetFileName(filepath);
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontcolor);
+            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -344,46 +352,23 @@ namespace WPFFrameworkApp
 
             app.Click += (o, e) =>
             {
-                short result;
-                if (filename.EndsWith(SupportedFiles.WAV)) result = AudioOptions(filename, "WAV", fileimage);
-                else result = AudioOptions(filename, "MP3", fileimage);
-
-                string currentdesktop = Path.GetDirectoryName(filepath);
-                switch(result)
-                {
-                    case 0:
-                        CloseAllGenMusicApps();
-                        GenMusicApp.mediaPlayer?.Close();
-                        GenMusicApp.mediaPlayer = null;
-                        GenMusicApp.isPaused = true;
-                        GenMusicApp musicapp = new GenMusicApp();
-                        musicapp.MusicAppButton_Clicked(filepath, filename);
-                        break;
-                    case 1:
-                        RenameFile_Wanted(filepath, ImagePaths.WAV_IMG);
-                        ReloadDesktop(window, currentdesktop);
-                        break;
-                    case 2:
-                        MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
-                        ReloadDesktop(window, currentdesktop);
-                        GenMusicApp genmusicapp = GetMusicAppWindow();
-                        genmusicapp?.IsReloadNeeded(true);
-                        break;
-                    case 3:
-                        MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
-                        ReloadDesktop(window, currentdesktop);
-                        break;
-                }
+                CloseAllGenMusicApps();
+                GenMusicApp.mediaPlayer?.Close();
+                GenMusicApp.mediaPlayer = null;
+                GenMusicApp.isPaused = true;
+                GenMusicApp musicapp = new GenMusicApp();
+                musicapp.MusicAppButton_Clicked(filepath, filename);
             };
         }
         private static void InitEXEFile(
             MainWindow window,
             string desktopPath,
             string filepath,
-            string filename)
+            string filename,
+            string[] fontsettings)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontcolor);
+            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -417,10 +402,11 @@ namespace WPFFrameworkApp
         private static void InitFolder(
             MainWindow window,
             string desktopPath,
-            string filename)
+            string filename,
+            string[] fontsettings)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontcolor);
+            TextBlock appname = CreateTextBlock(filename, fontsettings, 1);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -544,6 +530,29 @@ namespace WPFFrameworkApp
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(moveitem);
             contextMenu.Items.Add(copyitem);
+
+            if (imageicon == ImagePaths.WAV_IMG || imageicon == ImagePaths.MP3_IMG)
+            {
+                MenuItem addtogenmuic = new MenuItem
+                {
+                    Header = "Add to GenMusic",
+                    Icon = new Image
+                    {
+                        Source = new BitmapImage(new Uri(ImagePaths.SADD_IMG, UriKind.RelativeOrAbsolute)),
+                    }
+                };
+
+                addtogenmuic.Click += (sender, e) =>
+                {
+                    MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
+                    ReloadDesktop(window, currentdesktop);
+                    GenMusicApp genmusicapp = GetMusicAppWindow();
+                    genmusicapp?.IsReloadNeeded(true);
+                };
+
+                contextMenu.Items.Add(addtogenmuic);
+            }
+
             contextMenu.Items.Add(deleteitem);
 
             return contextMenu;
@@ -623,14 +632,14 @@ namespace WPFFrameworkApp
                 ToolTip = filename
             };
         }
-        public static TextBlock CreateTextBlock(string filename, string foreground)
+        public static TextBlock CreateTextBlock(string filename, string[] fontsettings, short which)
         {
-            return new TextBlock()
+            switch (which)
             {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Text = filename,
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(foreground))
-            };
+                case 0: return CreateTextBlockForDesktop(filename, fontsettings);
+                case 1: return CreateTextBlockForFolder(filename, fontsettings);
+                default: return null;
+            }
         }
         public static Image CreateImage()
         {
@@ -715,37 +724,8 @@ namespace WPFFrameworkApp
             string[] fonts = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
             try
             {
-                window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
-                window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
-                window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
-                window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
-                window.trashApp.Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(colors[2]));
-
-                window.FontFamily = new FontFamily(fonts[0]);
-                window.menu.FontFamily = new FontFamily(fonts[0]);
-                window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[1]));
-                if (fonts[2] == "Bold")
-                {
-                    window.FontWeight = FontWeights.Bold;
-                    window.menu.FontWeight = FontWeights.Bold;
-                }
-                else
-                {
-                    window.FontWeight = FontWeights.Regular;
-                    window.menu.FontWeight = FontWeights.Regular;
-                }
-                if (fonts[3] == "Italic")
-                {
-                    window.FontStyle = FontStyles.Italic;
-                    window.menu.FontStyle = FontStyles.Italic;
-                }
-                else
-                {
-                    window.FontStyle = FontStyles.Normal;
-                    window.menu.FontStyle = FontStyles.Normal;
-                }
-                window.FontSize = float.Parse(fonts[4]);
-                
+                SetBackgroundSettings(window, colors);
+                SetMenuFontSettings(window, fonts);
 
             } catch (Exception)
             {
@@ -762,7 +742,7 @@ namespace WPFFrameworkApp
                 window.FontStyle = FontStyles.Normal;
                 window.FontSize = float.Parse(Defaults.FONT_SIZE);
 
-                fontcolor = Defaults.FONT_COL;
+                fontcolor[1] = Defaults.FONT_COL;
 
                 SetSettingsDefault();
             }
@@ -770,7 +750,10 @@ namespace WPFFrameworkApp
         private static void SetSettingsDefault()
         {
             string[] colors = { Defaults.MAIN_DESK_COl, Defaults.FOL_DESK_COL, Defaults.SAFARI_COL, Defaults.MENU_COL };
-            string[] fonts = { Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE};
+            string[] fonts = { Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE,
+                               Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE,
+                               Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE};
+
             File.WriteAllLines(Path.Combine(configFolder, Configs.CCOL), colors);
             File.WriteAllLines(Path.Combine(configFolder, Configs.CFONT), fonts);
         }
@@ -932,10 +915,76 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        private static string GetFontColor()
+        private static string GetFontColor(string[] fontcolor, short which)
         {
-            string[] fontcolor = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
-            return fontcolor[1];    
+            switch (which)
+            {
+                case 0: return fontcolor[1]; // desktop font color
+                case 1: return fontcolor[6]; // folder font color
+                case 2: return fontcolor[11]; // menu font color
+                default: return null;
+            } 
+        }
+        private static void SetBackgroundSettings(MainWindow window, string[] colors)
+        {
+            window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+            window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
+            window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
+            window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
+            window.trashApp.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
+        }
+        private static void SetMenuFontSettings(MainWindow window, string[] fonts)
+        {
+            window.menu.FontFamily = new FontFamily(fonts[10]);
+            window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
+            if (fonts[12] == "Bold")
+            {
+                window.menu.FontWeight = FontWeights.Bold;
+            }
+            else
+            {
+                window.menu.FontWeight = FontWeights.Regular;
+            }
+            if (fonts[13] == "Italic")
+            {
+                window.menu.FontStyle = FontStyles.Italic;
+            }
+            else
+            {
+                window.menu.FontStyle = FontStyles.Normal;
+            }
+            window.menu.FontSize = float.Parse(fonts[14]);
+        }
+        public static string[] GetFontSettingsFromCfont()
+        {
+            string[] fontsettings = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
+            return fontsettings;
+        }
+        private static TextBlock CreateTextBlockForDesktop(string filename, string[] fontsettings)
+        {
+            return new TextBlock()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Text = filename,
+                FontFamily = new FontFamily(fontsettings[0]),
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1])),
+                FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
+                FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
+                FontSize = float.Parse(fontsettings[4])
+            };
+        }
+        private static TextBlock CreateTextBlockForFolder(string filename, string[] fontsettings)
+        {
+            return new TextBlock()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Text = filename,
+                FontFamily = new FontFamily(fontsettings[5]),
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6])),
+                FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
+                FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
+                FontSize = float.Parse(fontsettings[9])
+            };
         }
 
         #endregion

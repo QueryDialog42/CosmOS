@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Background="Gray"
-        Title="Font Settings" Height="180" Width="483">
+        mc:Ignorable="d" Background="Gray" Icon="/DesktopImages/Settings.png"
+        Title="Font Settings" Height="300" Width="483">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -34,7 +36,11 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <Button x:Name="SelectFont" Content="Select Font" Grid.Row="1" Grid.Column="0" Margin="30, 30, 30, 30" BorderThickness="0" Background="DimGray" Foreground="White" Click="ChooseFont_Click"/>
-        <TextBox x:Name="SelectedFont" Grid.Row="1" Grid.Column="1" Margin="30, 30, 30, 30" Background="LightGray" MaxLength="20" VerticalContentAlignment="Center"/>
+        <Button x:Name="SelectDesktopFont" Content="Main Desktop Font" Grid.Row="1" Grid.Column="0" Margin="30, 10, 30, 10" BorderThickness="0" Background="DimGray" Foreground="White" Click="ChooseDesktopFont_Click"/>
+        <Button x:Name="SelectFolderFont" Content="Folder Desktop Font" Grid.Row="2" Grid.Column="0" Margin="30, 10, 30, 10" BorderThickness="0" Background="DimGray" Foreground="White" Click="ChooseFolderFont_Click"/>
+        <Button x:Name="SelectMenuFont" Content="Menu Font" Grid.Row="3" Grid.Column="0" Margin="30, 10, 30, 10" BorderThickness="0" Background="DimGray" Foreground="White" Click="ChooseMenuFont_Click"/>
+        <TextBox x:Name="desktopFontPreview" Grid.Row="1" Grid.Column="1" Margin="30, 10, 30, 10" Background="#8a8a8a" MaxLength="20" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="folderFontPreview" Grid.Row="2" Grid.Column="1" Margin="30, 10, 30, 10" Background="#8a8a8a" MaxLength="20" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="menuFontPreview" Grid.Row="3" Grid.Column="1" Margin="30, 10, 30, 10" Background="#8a8a8a" MaxLength="20" VerticalContentAlignment="Center"/>
     </Grid>
 </Window>

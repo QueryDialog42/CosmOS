@@ -62,6 +62,7 @@ namespace WPFFrameworkApp
         public const string NSAVE_IMG = "NoteImages/Save.png";
         public const string RENM_IMG = "NoteImages/rename.png";
         public const string SDEL_IMG = "MusicImages/sounddelete.png";
+        public const string SADD_IMG = "MusicImages/soundadd.png";
         public const string SCOPY_IMG = "MusicImages/soundbutcopy.png";
     }
 
@@ -91,10 +92,10 @@ namespace WPFFrameworkApp
 
     public struct Versions
     {
-        public const string NOTE_VRS = "GenNote v1.4.4";
-        public const string MUSIC_VRS = "GenMusic v1.6.1";
+        public const string NOTE_VRS = "GenNote v1.4.6";
+        public const string MUSIC_VRS = "GenMusic v1.6.3";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v1.9.0";
+        public const string GOS_VRS = "GencOS v2.0.0";
     }
 
     public struct MainItems

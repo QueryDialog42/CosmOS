@@ -109,6 +109,26 @@ namespace WPFFrameworkApp
             NoteAppLogics.FontChange_Wanted(RichNote, 1.0);
         }
 
+        private void FontChange(object sender, RoutedEventArgs e)
+        {
+            FontDialog fontdialog = new FontDialog();
+            if (fontdialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.Drawing.Font selectedfont = fontdialog.Font;
+                // Convert to WPF FontFamily
+                FontFamily wpfFontFamily = new FontFamily(selectedfont.Name);
+                TextSelection selection = RichNote.Selection;
+
+                if (selection.IsEmpty == false)
+                {
+                    TextRange textRange = new TextRange(selection.Start, selection.End);
+                    // Apply the new font family to the selected text
+                    textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, wpfFontFamily);
+                    textRange.ApplyPropertyValue(TextElement.FontSizeProperty, (double)selectedfont.Size);
+                }
+            }
+        }
+
         private void ColorChange(object sender, RoutedEventArgs e)
         {
             ColorDialog colordialog = new ColorDialog();
@@ -137,6 +157,7 @@ namespace WPFFrameworkApp
             {
                 TextRange textrange = new TextRange(selection.Start, selection.End);
                 textrange.ClearAllProperties();
+                textrange.ApplyPropertyValue(TextElement.FontFamilyProperty, new FontFamily(Defaults.FONT));
             }
         }
 
