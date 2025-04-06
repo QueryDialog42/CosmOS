@@ -95,7 +95,7 @@ namespace WPFFrameworkApp
         public const string NOTE_VRS = "GenNote v1.4.6";
         public const string MUSIC_VRS = "GenMusic v1.6.3";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v2.0.0";
+        public const string GOS_VRS = "GencOS v2.0.1";
     }
 
     public struct MainItems

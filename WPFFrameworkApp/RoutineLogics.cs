@@ -464,6 +464,7 @@ namespace WPFFrameworkApp
             string filepath,
             string imageicon)
         {
+            string[] fontsettings = GetFontSettingsFromCfont();
             string currentdesktop = Path.GetDirectoryName(filepath);
             string filename = Path.GetFileName(filepath);
             ContextMenu contextMenu = new ContextMenu();
@@ -555,6 +556,8 @@ namespace WPFFrameworkApp
 
             contextMenu.Items.Add(deleteitem);
 
+            contextMenu = MakeContextMenuSettings(contextMenu, fontsettings);
+
             return contextMenu;
         }
 
@@ -618,6 +621,8 @@ namespace WPFFrameworkApp
 
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(deleteitem);
+
+            contextMenu = MakeContextMenuSettings(contextMenu, GetFontSettingsFromCfont());
 
             return contextMenu;
         }
@@ -935,25 +940,30 @@ namespace WPFFrameworkApp
         }
         private static void SetMenuFontSettings(MainWindow window, string[] fonts)
         {
-            window.menu.FontFamily = new FontFamily(fonts[10]);
-            window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
+            ForAllMenu(window.menu, fonts);
+            ForAllMenu(window.mainContextMenu, fonts);
+        }
+        private static void ForAllMenu(dynamic item, string[] fonts)
+        {
+            item.FontFamily = new FontFamily(fonts[10]);
+            item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
             if (fonts[12] == "Bold")
             {
-                window.menu.FontWeight = FontWeights.Bold;
+                item.FontWeight = FontWeights.Bold;
             }
             else
             {
-                window.menu.FontWeight = FontWeights.Regular;
+                item.FontWeight = FontWeights.Regular;
             }
             if (fonts[13] == "Italic")
             {
-                window.menu.FontStyle = FontStyles.Italic;
+                item.FontStyle = FontStyles.Italic;
             }
             else
             {
-                window.menu.FontStyle = FontStyles.Normal;
+                item.FontStyle = FontStyles.Normal;
             }
-            window.menu.FontSize = float.Parse(fonts[14]);
+            item.FontSize = float.Parse(fonts[14]);
         }
         public static string[] GetFontSettingsFromCfont()
         {
@@ -985,6 +995,16 @@ namespace WPFFrameworkApp
                 FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
                 FontSize = float.Parse(fontsettings[9])
             };
+        }
+        private static ContextMenu MakeContextMenuSettings(ContextMenu contextmenu, string[] fontsettings)
+        {
+            contextmenu.FontFamily = new FontFamily(fontsettings[10]);
+            contextmenu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[11]));
+            contextmenu.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+            contextmenu.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+            contextmenu.FontSize = Convert.ToDouble(fontsettings[14]);
+
+            return contextmenu;
         }
 
         #endregion
