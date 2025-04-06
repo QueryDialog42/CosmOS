@@ -37,21 +37,7 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        private void ChooseDesktopFont_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeFontOf(desktopFontPreview, 0);
-        }
-
-        private void ChooseFolderFont_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeFontOf(folderFontPreview, 1);
-        }
-
-        private void ChooseMenuFont_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeFontOf(menuFontPreview, 2);
-        }
-
+        #region FontSettings menuitems functions
         private void ApplyChanges_Clicked(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(selectedDesktopFont) || string.IsNullOrEmpty(selectedFolderFont) || string.IsNullOrEmpty(selectedMenuFont))
@@ -71,7 +57,6 @@ namespace WPFFrameworkApp
             RoutineLogics.ReloadNeededForEveryWindow();
             Close();
         }
-
         private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
         {
             if (System.Windows.MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -79,7 +64,6 @@ namespace WPFFrameworkApp
                 Close();
             }
         }
-
         private void RestoreDefaults_Wanted(object sender, RoutedEventArgs e)
         {
             if (System.Windows.MessageBox.Show("Do you really want to restore default settings?", "Restore Defaults", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -87,7 +71,21 @@ namespace WPFFrameworkApp
                 SetFontSettingsDefaults();
             }
         }
+        #endregion
 
+        #region Font change functions
+        private void ChooseDesktopFont_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeFontOf(desktopFontPreview, 0);
+        }
+        private void ChooseFolderFont_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeFontOf(folderFontPreview, 1);
+        }
+        private void ChooseMenuFont_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeFontOf(menuFontPreview, 2);
+        }
         private void ChangeFontOf(System.Windows.Controls.TextBox textbox, short which)
         {
             using (FontDialog fontDialog = new FontDialog())
@@ -114,34 +112,25 @@ namespace WPFFrameworkApp
                 }
             }
         }
+        #endregion
 
+        #region SetFontSettings functions
         private void SetDesktopFontSettings(FontDialog fontDialog)
         {
             SetSettings(fontDialog, selectedDesktopFont, selectedDesktopFontColor, selectedDesktopFontWeight, selectedDesktopFontStyle, selectedDesktopFontSize);
             RoutineLogics.desktopFontcolor = selectedDesktopFontColor;
         }
-
         private void SetFolderFontSettings(FontDialog fontDialog)
         {
             SetSettings(fontDialog, selectedFolderFont, selectedFolderFontColor, selectedFolderFontWeight, selectedFolderFontStyle, selectedFolderFontSize);
             RoutineLogics.folderFontcolor = selectedFolderFontColor;
         }
-
         private void SetMenuFontSettings(FontDialog fontDialog)
         {
             SetSettings(fontDialog, selectedMenuFont, selectedMenuFontColor, selectedMenuFontWeight, selectedMenuFontStyle, selectedMenuFontSize);
             RoutineLogics.menuFontColor = selectedMenuFontColor;
         }
-
-        #region Subroutines
-
-        private void SetSettings(
-            FontDialog fontDialog,
-            string selectedFont, 
-            string selectedFontColor,
-            string selectedFontWeight,
-            string selectedFontStyle,
-            float selectedFontSize)
+        private void SetSettings(FontDialog fontDialog, string selectedFont, string selectedFontColor, string selectedFontWeight, string selectedFontStyle, float selectedFontSize)
         {
             selectedFont = fontDialog.Font.Name;
             selectedFontColor = $"#{fontDialog.Color.R:X2}{fontDialog.Color.G:X2}{fontDialog.Color.B:X2}";
@@ -149,14 +138,12 @@ namespace WPFFrameworkApp
             selectedFontStyle = fontDialog.Font.Italic ? "Italic" : "Normal";
             selectedFontSize = (float)fontDialog.Font.Size;
         }
-
         private void SetFontSettingsDefaults()
         {
             SetDesktopDefault();
             SetFolderDefault();
             SetMenuDefault();
         }
-
         private void SetDesktopDefault()
         {
             selectedDesktopFont = Defaults.FONT;
@@ -174,7 +161,6 @@ namespace WPFFrameworkApp
 
             RoutineLogics.desktopFontcolor = selectedDesktopFontColor;
         }
-
         private void SetFolderDefault()
         {
             selectedFolderFont = Defaults.FONT;
@@ -192,7 +178,6 @@ namespace WPFFrameworkApp
 
             RoutineLogics.folderFontcolor = selectedFolderFontColor;
         }
-
         private void SetMenuDefault()
         {
             selectedMenuFont = Defaults.FONT;
@@ -210,7 +195,60 @@ namespace WPFFrameworkApp
 
             RoutineLogics.menuFontColor = selectedMenuFontColor;
         }
+        #endregion
 
+        #region GetFontSettings functions
+        private string[] GetDeskopFontSettings(string[] allfontsettings)
+        {
+            selectedDesktopFont = desktopFontPreview.FontFamily.ToString();
+            selectedDesktopFontColor = desktopFontPreview.Foreground.ToString();
+            selectedDesktopFontWeight = desktopFontPreview.FontWeight.ToString();
+            selectedDesktopFontStyle = desktopFontPreview.FontStyle.ToString();
+            selectedDesktopFontSize = (float)desktopFontPreview.FontSize;
+
+            allfontsettings[0] = selectedDesktopFont;
+            allfontsettings[1] = selectedDesktopFontColor;
+            allfontsettings[2] = selectedDesktopFontWeight;
+            allfontsettings[3] = selectedDesktopFontStyle;
+            allfontsettings[4] = selectedDesktopFontSize.ToString();
+
+            return allfontsettings;
+        }
+        private string[] GetFolderFontSettings(string[] allfontsettings)
+        {
+            selectedFolderFont = folderFontPreview.FontFamily.ToString();
+            selectedFolderFontColor = folderFontPreview.Foreground.ToString();
+            selectedFolderFontWeight = folderFontPreview.FontWeight.ToString();
+            selectedFolderFontStyle = folderFontPreview.FontStyle.ToString();
+            selectedFolderFontSize = (float)folderFontPreview.FontSize;
+
+            allfontsettings[5] = selectedFolderFont;
+            allfontsettings[6] = selectedFolderFontColor;
+            allfontsettings[7] = selectedFolderFontWeight;
+            allfontsettings[8] = selectedFolderFontStyle;
+            allfontsettings[9] = selectedFolderFontSize.ToString();
+
+            return allfontsettings;
+        }
+        private string[] GetMenuFontSettings(string[] allfontsettings)
+        {
+            selectedMenuFont = menuFontPreview.FontFamily.ToString();
+            selectedMenuFontColor = menuFontPreview.Foreground.ToString();
+            selectedMenuFontWeight = menuFontPreview.FontWeight.ToString();
+            selectedMenuFontStyle = menuFontPreview.FontStyle.ToString();
+            selectedMenuFontSize = (float)menuFontPreview.FontSize;
+
+            allfontsettings[10] = selectedMenuFont;
+            allfontsettings[11] = selectedMenuFontColor;
+            allfontsettings[12] = selectedMenuFontWeight;
+            allfontsettings[13] = selectedMenuFontStyle;
+            allfontsettings[14] = selectedMenuFontSize.ToString();
+
+            return allfontsettings;
+        }
+        #endregion
+
+        #region Apply settings functions
         private void ApplyAllFontSettings()
         {
             string[] fontsSettings = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
@@ -218,7 +256,6 @@ namespace WPFFrameworkApp
             ApplyCurrentFolderFontSettings(fontsSettings);
             ApplyCurrentMenuFontSettings(fontsSettings);
         }
-
         private void ApplyCurrentDesktopFontSettings(string[] fontsettings)
         {
             try
@@ -238,13 +275,13 @@ namespace WPFFrameworkApp
 
                 RoutineLogics.desktopFontcolor = fontsettings[1];
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 System.Windows.MessageBox.Show("An error occured while configuring desktop font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 SetFontSettingsDefaults();
             }
         }
-
         private void ApplyCurrentFolderFontSettings(string[] fontsettings)
         {
             try
@@ -270,7 +307,6 @@ namespace WPFFrameworkApp
                 SetFontSettingsDefaults();
             }
         }
-
         private void ApplyCurrentMenuFontSettings(string[] fontsettings)
         {
             try
@@ -295,57 +331,6 @@ namespace WPFFrameworkApp
                 System.Windows.MessageBox.Show("An error occured while configuring menu font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 SetFontSettingsDefaults();
             }
-        }
-
-        private string[] GetDeskopFontSettings(string[] allfontsettings)
-        {
-            selectedDesktopFont = desktopFontPreview.FontFamily.ToString();
-            selectedDesktopFontColor = desktopFontPreview.Foreground.ToString();
-            selectedDesktopFontWeight = desktopFontPreview.FontWeight.ToString();
-            selectedDesktopFontStyle = desktopFontPreview.FontStyle.ToString();
-            selectedDesktopFontSize = (float)desktopFontPreview.FontSize;
-
-            allfontsettings[0] = selectedDesktopFont;
-            allfontsettings[1] = selectedDesktopFontColor;
-            allfontsettings[2] = selectedDesktopFontWeight;
-            allfontsettings[3] = selectedDesktopFontStyle;
-            allfontsettings[4] = selectedDesktopFontSize.ToString();
-
-            return allfontsettings;
-        }
-
-        private string[] GetFolderFontSettings(string[] allfontsettings)
-        {
-            selectedFolderFont = folderFontPreview.FontFamily.ToString();
-            selectedFolderFontColor = folderFontPreview.Foreground.ToString();
-            selectedFolderFontWeight = folderFontPreview.FontWeight.ToString();
-            selectedFolderFontStyle = folderFontPreview.FontStyle.ToString();
-            selectedFolderFontSize = (float)folderFontPreview.FontSize;
-
-            allfontsettings[5] = selectedFolderFont;
-            allfontsettings[6] = selectedFolderFontColor;
-            allfontsettings[7] = selectedFolderFontWeight;
-            allfontsettings[8] = selectedFolderFontStyle;
-            allfontsettings[9] = selectedFolderFontSize.ToString();
-
-            return allfontsettings;
-        }
-
-        private string[] GetMenuFontSettings(string[] allfontsettings)
-        {
-            selectedMenuFont = menuFontPreview.FontFamily.ToString();
-            selectedMenuFontColor = menuFontPreview.Foreground.ToString();
-            selectedMenuFontWeight = menuFontPreview.FontWeight.ToString();
-            selectedMenuFontStyle = menuFontPreview.FontStyle.ToString();
-            selectedMenuFontSize = (float)menuFontPreview.FontSize;
-
-            allfontsettings[10] = selectedMenuFont;
-            allfontsettings[11] = selectedMenuFontColor;
-            allfontsettings[12] = selectedMenuFontWeight;
-            allfontsettings[13] = selectedMenuFontStyle;
-            allfontsettings[14] = selectedMenuFontSize.ToString();
-
-            return allfontsettings;
         }
         #endregion
     }

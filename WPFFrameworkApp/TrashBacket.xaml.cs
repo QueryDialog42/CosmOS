@@ -20,6 +20,7 @@ namespace WPFFrameworkApp
             Show();
         }
 
+        #region Reload Operation functions
         public void ReloadTrashBacket()
         {
             trashPanel.Children.Clear();
@@ -62,13 +63,27 @@ namespace WPFFrameworkApp
                 trashPanel.Children.Add(app);
             }
         }
+        #endregion
+
+        #region Trash creation functions
+        private Button CreateButtonForTrashBacket(string filename)
+        {
+            return new Button()
+            {
+                Width = 80,
+                Height = 80,
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.Transparent,
+                ToolTip = filename,
+            };
+        }
         private void AddListener(Button app, string trash, string trashname, string[] options, string Image)
         {
             app.Click += (sender, e) =>
             {
                 try
                 {
-                    switch(QueryDialog.ShowQueryDialog(trashname, "Deleted Item Options", options, Image, ImagePaths.FULL_IMG)) 
+                    switch (QueryDialog.ShowQueryDialog(trashname, "Deleted Item Options", options, Image, ImagePaths.FULL_IMG))
                     {
                         case 0:
                             File.Delete(trash); // delete selected
@@ -86,12 +101,21 @@ namespace WPFFrameworkApp
                 }
             };
         }
+        #endregion
 
-        private void TrashBacketReload_Wanted(object sender, RoutedEventArgs e)
+        #region TrashBacket menuitem options functions
+        private void EmptyTrash(object sender, RoutedEventArgs e)
         {
-            ReloadTrashBacket();
+            if (MessageBox.Show("Are you sure to empty the TrashBacket?\nYou can not take back again.", "Empty Trash", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+                IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(MainWindow.TrashPath);
+                foreach (string trash in trashes)
+                {
+                    File.Delete(trash);
+                }
+                trashPanel.Children.Clear();
+            }
         }
-
         private void RescueAll(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure to rescue all files from TrashBacket?", "Empty Trash", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
@@ -102,7 +126,8 @@ namespace WPFFrameworkApp
                     try
                     {
                         File.Move(trash, Path.Combine(MainWindow.CDesktopPath, Path.GetFileName(trash)));
-                    } catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, $"Trash Backet, deleting {Path.GetFileName(trash)}", "\n", ex.Message);
                         File.Delete(trash); // delete selected
@@ -112,30 +137,10 @@ namespace WPFFrameworkApp
                 trashPanel.Children.Clear();
             }
         }
-
-        private Button CreateButtonForTrashBacket(string filename)
+        private void TrashBacketReload_Wanted(object sender, RoutedEventArgs e)
         {
-            return new Button()
-            {
-                Width = 80,
-                Height = 80,
-                Background = Brushes.Transparent,
-                BorderBrush = Brushes.Transparent,
-                ToolTip = filename,
-            };
+            ReloadTrashBacket();
         }
-
-        private void EmptyTrash(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Are you sure to empty the TrashBacket?\nYou can not take back again.", "Empty Trash", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
-            {
-                IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(MainWindow.TrashPath);
-                foreach(string trash in trashes)
-                {
-                    File.Delete(trash);
-                }
-                trashPanel.Children.Clear();
-            }
-        }
+        #endregion
     }
 }

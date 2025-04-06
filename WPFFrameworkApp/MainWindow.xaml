@@ -18,52 +18,52 @@
         </Grid.ColumnDefinitions>
         <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <MenuItem Header="_New" Height="20">
-                <MenuItem Header="_Import File" Click="ImportFile_Wanted" >
+                <MenuItem x:Name="menuitem1" Header="_Import File" Click="ImportFile_Wanted" >
                     <MenuItem.Icon >
                         <Image Source="DesktopImages/importfile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="New _File" Click="NoteApp_Clicked" >
+                <MenuItem x:Name="menuitem2" Header="New _File" Click="NoteApp_Clicked" >
                     <MenuItem.Icon>
                         <Image Source="NoteImages/noteadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="New F_older" Click="NewFolder">
+                <MenuItem x:Name="menuitem3" Header="New F_older" Click="NewFolder">
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/newfolder.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Desktop" Height="20">
-                <MenuItem Header="_Reload Desktop" Click="ReloadDesktop_Wanted">
+                <MenuItem x:Name="menuitem4" Header="_Reload Desktop" Click="ReloadDesktop_Wanted">
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Delete Current Folder" Click="DeleteFolder" >
+                <MenuItem x:Name="menuitem5" Header="_Delete Current Folder" Click="DeleteFolder" >
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/folderdelete2.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Rename Current Folder" Click="RenameFolderName">
+                <MenuItem x:Name="menuitem6" Header="_Rename Current Folder" Click="RenameFolderName">
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/rename.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator  />
-                <MenuItem Header="_About GencOS" Click="AboutGencosPage_Wanted">
+                <MenuItem x:Name="menuitem7" Header="_About GencOS" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/paperplane2.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings" Height="20">
-                <MenuItem Header="_Color Settings" Click="ColorSettings_Clicked">
+                <MenuItem x:Name="menuitem8" Header="_Color Settings" Click="ColorSettings_Clicked">
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/colors.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Font Settings" Click="FontSettings_Clicked" >
+                <MenuItem x:Name="menuitem9" Header="_Font Settings" Click="FontSettings_Clicked" >
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/font.png"/>
                     </MenuItem.Icon>
@@ -72,18 +72,18 @@
         </Menu>
         <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray">
             <WrapPanel.ContextMenu>
-                <ContextMenu x:Name="mainContextMenu">
-                    <MenuItem Header="New File" Click="NoteApp_Clicked">
+                <ContextMenu x:Name="mainContextMenu" BorderThickness="0">
+                    <MenuItem x:Name="itemmenu1" Header="New File" BorderThickness="0" Click="NoteApp_Clicked">
                         <MenuItem.Icon>
                             <Image Source="/NoteImages/noteadd.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="New Folder" Click="NewFolder">
+                    <MenuItem x:Name="itemmenu2" Header="New Folder" BorderThickness="0" Click="NewFolder">
                         <MenuItem.Icon>
                             <Image Source="/DesktopImages/newfolder.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Reload desktop" Click="ReloadDesktop_Wanted">
+                    <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadDesktop_Wanted">
                         <MenuItem.Icon>
                             <Image Source="/DesktopImages/refresh.png"/>
                         </MenuItem.Icon>
@@ -116,13 +116,13 @@
         </ScrollViewer>
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
             <Button.ContextMenu>
-                <ContextMenu x:Name="trashContextMenu">
-                    <MenuItem Header="Empty Trash" Click="EmptyTrash_Wanted">
+                <ContextMenu x:Name="trashContextMenu" BorderThickness="0">
+                    <MenuItem x:Name="trashitem1" Header="Empty Trash" BorderThickness="0" Click="EmptyTrash_Wanted">
                         <MenuItem.Icon>
                             <Image Source="/DesktopImages/trashempty.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Rescue All" Click="RescueTrashes_Wanted">
+                    <MenuItem x:Name="trashitem2" Header="Rescue All" BorderThickness="0" Click="RescueTrashes_Wanted">
                         <MenuItem.Icon>
                             <Image Source="/DesktopImages/rescueme.png"/>
                         </MenuItem.Icon>

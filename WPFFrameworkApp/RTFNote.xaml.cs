@@ -23,48 +23,48 @@ namespace WPFFrameworkApp
             Show();
         }
 
+        #region RTFnote menuitems functions
         private void NewNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.NewNote_Wanted(windowForNote, currentDesktopForNote);
         }
-
         private void OpenNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.OpenNote_Wanted(windowForNote, currentDesktopForNote);
         }
-
         private void SaveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.RTFSaveNote_Wanted(currentDesktopForNote, this);
         }
-
         private void SaveAsNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.RTFSaveAsNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
-
         private void CopyNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.CopyNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
         }
-
         private void MoveNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
         }
-
         private void RenameNote(object sender, RoutedEventArgs e)
         {
             RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.NADD_IMG, ImagePaths.NADD_IMG);
             RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
             Close();
         }
-
         private void DeleteNote(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
+        private void AboutGennotePage_Wanted(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
+        }
+        #endregion
 
+        #region Toolbar style functions
         private void MakeBold(object sender, RoutedEventArgs e)
         {
             // Get the current selection
@@ -80,7 +80,6 @@ namespace WPFFrameworkApp
                 textRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
             }
         }
-
         private void MakeItalic(object sender, RoutedEventArgs e)
         {
             TextSelection selection = RichNote.Selection;
@@ -90,7 +89,6 @@ namespace WPFFrameworkApp
                 textrange.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
             }
         }
-
         private void MakeUnderline(object sender, RoutedEventArgs e)
         {
             TextSelection selection = RichNote.Selection;
@@ -104,12 +102,10 @@ namespace WPFFrameworkApp
         {
             NoteAppLogics.FontChange_Wanted(RichNote, -1.0);
         }
-
         private void FontUp(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.FontChange_Wanted(RichNote, 1.0);
         }
-
         private void FontChange(object sender, RoutedEventArgs e)
         {
             FontDialog fontdialog = new FontDialog();
@@ -129,7 +125,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         private void ColorChange(object sender, RoutedEventArgs e)
         {
             ColorDialog colordialog = new ColorDialog();
@@ -150,7 +145,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         private void RemoveStyles(object sender, RoutedEventArgs e)
         {
             TextSelection selection = RichNote.Selection;
@@ -161,17 +155,15 @@ namespace WPFFrameworkApp
                 textrange.ApplyPropertyValue(TextElement.FontFamilyProperty, new FontFamily(Defaults.FONT));
             }
         }
+        #endregion
 
-        private void AboutGennotePage_Wanted(object sender, RoutedEventArgs e)
-        {
-            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
-        }
-
+        #region OnClosing functions
         protected override void OnClosing(CancelEventArgs e)
         {
             currentDesktopForNote = null;
             windowForNote = null;
             filter = null;
         }
+        #endregion
     }
 }

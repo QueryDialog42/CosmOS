@@ -29,6 +29,8 @@ namespace WPFFrameworkApp
                 MessageBox.Show("Window opened without C_DESKTOP path.\nMinimal operation system will be used", "GencOS without path", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        #region Configuration functions
         private void CheckConfig()
         {
             string ConfigFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
@@ -75,6 +77,104 @@ namespace WPFFrameworkApp
                 Environment.Exit(0);
             }
         }
+        private string ConfigurePath(string ConfigFileText)
+        {
+            string input = InputDialog.ShowInputDialog("Please enter " + Configs.CDESK + " path", "Path Needed");
+            //Resumes until valid path is entered
+            while (true)
+            {
+                if (InputDialog.Result == true)
+                {
+                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nIf {Configs.CDESK} folder does not exists, create one\nand enter the path of the folder", "Invalid path", ImagePaths.WRNG_IMG);
+                    else if (Directory.Exists(input) == false) input = InputDialog.ShowInputDialog($"Path to {Configs.CDESK} does not exists.\nPlease check if the path is correct.", "Incorrect path", ImagePaths.WRNG_IMG);
+                    else
+                    {
+                        try
+                        {
+                            string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
+                            Directory.CreateDirectory(configFolder); // create the folder that contains all the configuration datas
+                            CreateConfigFiles(ConfigFileText, input, configFolder);
+                            CreateHiddenDirectories(input); // create the hidden folders
+                            return input;
+                        }
+                        catch (Exception ex)
+                        {
+                            RoutineLogics.ErrorMessage(Errors.WRT_ERR, Errors.WRT_ERR_MSG, "the path to file.\n", ex.Message);
+                            Environment.Exit(0);
+                        }
+                    }
+                }
+                else
+                {
+                    switch (MessageBox.Show("If you continue without valid path, your files will not be loaded.\nDo you want to continue?", "OS Without Desktop Path", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
+                    {
+                        case MessageBoxResult.Yes: return null;
+                        case MessageBoxResult.No:
+                            input = InputDialog.ShowInputDialog($"Please enter {Configs.CDESK} path", "Path Needed");
+                            continue;
+                        default: Environment.Exit(0); break;
+
+                    }
+                }
+            }
+        }
+        private void CreateConfigFiles(string ConfigFileText, string input, string configFolder)
+        {
+            // C path
+            using (StreamWriter writer = new StreamWriter(File.Create(ConfigFileText)))
+            {
+                writer.WriteLineAsync(input);
+            }
+            //C desktop colors
+            using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CCOL)))
+            {
+                CreateColorConfig(writer);
+            }
+
+            // C fonts
+            CreateFontConfig(configFolder);
+        }
+        private void CreateColorConfig(StreamWriter writer)
+        {
+            writer.WriteLineAsync(Defaults.MAIN_DESK_COl);
+            writer.WriteLineAsync(Defaults.FOL_DESK_COL);
+            writer.WriteLineAsync(Defaults.SAFARI_COL);
+            writer.WriteLineAsync(Defaults.MENU_COL);
+        }
+        private void CreateFontConfig(string ConfigFolder)
+        {
+            using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CFONT)))
+            {
+                // desktop default font
+                WriteDefaultFonts(writer);
+
+                // folder default font
+                WriteDefaultFonts(writer);
+
+                // menu default font
+                WriteDefaultFonts(writer);
+            }
+        }
+        private void CreateHiddenDirectories(string desktopPath)
+        {
+            string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);
+            string musicpath = Path.Combine(desktopPath, HiddenFolders.HAUD_FOL);
+            Directory.CreateDirectory(musicpath);
+            Directory.CreateDirectory(trashpath);
+            new DirectoryInfo(musicpath) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
+            new DirectoryInfo(trashpath) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
+        }
+        private void WriteDefaultFonts(StreamWriter writer)
+        {
+            writer.WriteLineAsync(Defaults.FONT);
+            writer.WriteLineAsync(Defaults.FONT_COL);
+            writer.WriteLineAsync(Defaults.FONT_WEIGHT);
+            writer.WriteLineAsync(Defaults.FONT_STYLE);
+            writer.WriteLineAsync(Defaults.FONT_SIZE);
+        }
+        #endregion
+
+        #region Desktop MenuItem Option functions
         private static void ImportFile(MainWindow window, string desktopPath)
         {
             RoutineLogics.MoveAnythingWithQuery("Import File", $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}",
@@ -155,120 +255,6 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.ShowAboutWindow("About GencOS", ImagePaths.HLOGO_IMG, ImagePaths.LOGO_IMG, Versions.GOS_VRS, Messages.ABT_DFLT_MSG);
         }
-        private string ConfigurePath(string ConfigFileText)
-        {
-            string input = InputDialog.ShowInputDialog("Please enter " + Configs.CDESK + " path", "Path Needed");
-            //Resumes until valid path is entered
-            while (true)
-            {
-                if (InputDialog.Result == true)
-                {
-                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nIf {Configs.CDESK} folder does not exists, create one\nand enter the path of the folder", "Invalid path", ImagePaths.WRNG_IMG);
-                    else if (Directory.Exists(input) == false) input = InputDialog.ShowInputDialog($"Path to {Configs.CDESK} does not exists.\nPlease check if the path is correct.", "Incorrect path", ImagePaths.WRNG_IMG);
-                    else
-                    {
-                        try
-                        {
-                            string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
-                            Directory.CreateDirectory(configFolder); // create the folder that contains all the configuration datas
-                            CreateConfigFiles(ConfigFileText, input, configFolder);
-                            CreateHiddenDirectories(input); // create the hidden folders
-                            return input;
-                        } catch(Exception ex)
-                        {
-                            RoutineLogics.ErrorMessage(Errors.WRT_ERR, Errors.WRT_ERR_MSG, "the path to file.\n", ex.Message);
-                            Environment.Exit(0);
-                        }
-                    }
-                }
-                else
-                {
-                    switch(MessageBox.Show("If you continue without valid path, your files will not be loaded.\nDo you want to continue?", "OS Without Desktop Path", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning)){
-                        case MessageBoxResult.Yes: return null;
-                        case MessageBoxResult.No:
-                            input = InputDialog.ShowInputDialog($"Please enter {Configs.CDESK} path", "Path Needed");
-                            continue;
-                        default: Environment.Exit(0); break;
-
-                    }
-                }
-            }
-        }
-
-        #region Subroutines
-        private void CreateConfigFiles(string ConfigFileText, string input, string configFolder)
-        {
-            // C path
-            using (StreamWriter writer = new StreamWriter(File.Create(ConfigFileText)))
-            {
-                writer.WriteLineAsync(input);
-            }
-            //C desktop colors
-            using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CCOL)))
-            {
-                CreateColorConfig(writer);
-            }
-
-            // C fonts
-            CreateFontConfig(configFolder);
-        }
-
-        private void CreateColorConfig(StreamWriter writer)
-        {
-            writer.WriteLineAsync(Defaults.MAIN_DESK_COl);
-            writer.WriteLineAsync(Defaults.FOL_DESK_COL);
-            writer.WriteLineAsync(Defaults.SAFARI_COL);
-            writer.WriteLineAsync(Defaults.MENU_COL);
-        }
-        private void CreateFontConfig(string ConfigFolder)
-        {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CFONT)))
-            {
-                // desktop default font
-                WriteDefaultFonts(writer);
-
-                // folder default font
-                WriteDefaultFonts(writer);
-
-                // menu default font
-                WriteDefaultFonts(writer);
-            }
-        }
-
-        private void CreateHiddenDirectories(string desktopPath)
-        {
-            string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);
-            string musicpath = Path.Combine(desktopPath, HiddenFolders.HAUD_FOL);
-            Directory.CreateDirectory(musicpath);
-            Directory.CreateDirectory(trashpath);
-            new DirectoryInfo(musicpath) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
-            new DirectoryInfo(trashpath) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
-        }
-        private void NoteApp_Clicked(object sender, RoutedEventArgs e)
-        {
-            NoteAppLogics.NewNote_Wanted(this, currentDesktop);
-        }
-        private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsMailAppOpen() == false)
-            {
-                new GenMailApp();
-            }
-        }
-        private void OpenTrashBacket(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsTrashBacketOpen() == false)
-            {
-                new TrashBacket();
-            }
-        }
-        private void MusicAppStart(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsMusicAppOpen() == false)
-            {
-                new GenMusicApp();
-            }
-        }
         private void ReloadDesktop_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ReloadDesktop(this, currentDesktop);
@@ -303,7 +289,8 @@ namespace WPFFrameworkApp
                         File.Delete(trash);
                     }
                     RoutineLogics.WindowReloadNeeded(CDesktopPath);
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     RoutineLogics.ErrorMessage(Errors.DEL_ERR, "An error occured while empting Trash Backet\n", ex.Message);
                 }
@@ -329,13 +316,33 @@ namespace WPFFrameworkApp
                 RoutineLogics.WindowReloadNeeded(CDesktopPath);
             }
         }
-        private void WriteDefaultFonts(StreamWriter writer)
+        #endregion
+
+        #region App Clicked functions
+        private void NoteApp_Clicked(object sender, RoutedEventArgs e)
         {
-            writer.WriteLineAsync(Defaults.FONT);
-            writer.WriteLineAsync(Defaults.FONT_COL);
-            writer.WriteLineAsync(Defaults.FONT_WEIGHT);
-            writer.WriteLineAsync(Defaults.FONT_STYLE);
-            writer.WriteLineAsync(Defaults.FONT_SIZE);
+            NoteAppLogics.NewNote_Wanted(this, currentDesktop);
+        }
+        private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsMailAppOpen() == false)
+            {
+                new GenMailApp();
+            }
+        }
+        private void OpenTrashBacket(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsTrashBacketOpen() == false)
+            {
+                new TrashBacket();
+            }
+        }
+        private void MusicAppStart(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsMusicAppOpen() == false)
+            {
+                new GenMusicApp();
+            }
         }
         #endregion
     }

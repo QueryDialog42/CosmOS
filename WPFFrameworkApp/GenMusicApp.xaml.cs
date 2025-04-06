@@ -33,6 +33,7 @@ namespace WPFFrameworkApp
             Show();
         }
 
+        #region Reload Operation functions
         public void ReloadMusicApp()
         {
             datacontent = new Dictionary<ListBoxItem, TextBlock>(); // to restore item and its textblock
@@ -54,76 +55,38 @@ namespace WPFFrameworkApp
             if (mediaPlayer != null && isPaused == false)
             {
                 currentMusic.Text = currentAudio;
-                ShowCurrentMusic();
                 PaintSelectedMusic();
                 InitializeSliderLogics();
             }
+            ShowCurrentMusic();
         }
-
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ReloadDesktopNeeded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
-                datacontent.TryGetValue(item, out TextBlock textblock); // get Textblock of selected item
-                string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
-                currentMusic.Text = itemname;
-                currentAudio = itemname;
-                InitializeMediaPlayer(itemname);
-            }
-            catch (NullReferenceException)
-            {
-                // do nothing on null exception
-                InitializeSliderLogics();
-                stopButton.IsEnabled = true; // to be avoid stop button is disabled forever
-            }
+            IsReloadNeeded(false);
+            ReloadMusicApp();
         }
-
-        private void InitializeMediaPlayer(string itemname)
+        public void IsReloadNeeded(bool yesOrNo)
         {
-            try
+            reloadNeeded.Visibility = yesOrNo ? Visibility.Visible : Visibility.Collapsed;
+            startButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            stopButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            restartButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            back.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            front.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            slider.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            remainedTime.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
+            if (yesOrNo == false) ShowCurrentMusic();
+            else
             {
-                if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
-
-                mediaPlayer.Close();
-                mediaPlayer.Open(new Uri(Path.Combine(MainWindow.MusicAppPath, itemname), UriKind.Relative));
-                mediaPlayer.MediaOpened += InitializeMediaController;
-                mediaPlayer.Play();
-                if (currentAudio != null && currentMusic.IsVisible == false)
-                {
-                    ShowCurrentMusic();
-                }
-                else if (currentMusic.IsVisible)
-                {
-                    currentMusic.Text = currentAudio;
-                }
-                PaintSelectedMusic();
-            }
-            catch (Exception ex)
-            {
-                RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, itemname ?? "null MediaPlayer", "\n", ex.Message);
+                Grid.SetRowSpan(listbox, 1);
+                musicSliderPanel.Visibility = Visibility.Visible;
+                musicPanel1.Visibility = Visibility.Visible;
+                musicPanel2.Visibility = Visibility.Visible;
             }
         }
+        #endregion
 
-        public void InitializeMediaController(object sender, EventArgs e)
-        {
-            InitializeSliderLogics();
-        }
-
-        private void ShowCurrentMusic()
-        {
-            Grid.SetColumnSpan(listbox, 1);
-            Grid.SetRowSpan(listbox, 1);
-            currentPanel.Visibility = Visibility.Visible;
-            musicPanel1.Visibility = Visibility.Visible;
-            musicPanel2.Visibility = Visibility.Visible;
-            slider.Visibility = Visibility.Visible;
-            remainedTime.Visibility = Visibility.Visible;
-            SetDisableStyle(startButton);
-            SetEnableStyle(stopButton);
-            isPaused = false;
-        }
-
+        #region Music Movement functions
         private void PlayMusic(object sender, RoutedEventArgs e)
         {
             SetDisableStyle(startButton);
@@ -132,7 +95,6 @@ namespace WPFFrameworkApp
             mediaPlayer.Play();
             time.Start();
         }
-
         private void StopMusic(object sender, RoutedEventArgs e)
         {
             try
@@ -148,7 +110,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, "null Audio. It may be deleted. Please reload the main desktop.");
             }
         }
-
         private void RestartMusic(object sender, RoutedEventArgs e)
         {
             try
@@ -166,25 +127,99 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, "null Audio. It may be deleted. Please reload the main desktop.");
             }
         }
-
         private void MusicBack(object sender, RoutedEventArgs e)
         {
             AdjustMusicPosition(-5);
         }
-
         private void MusicFront(object sender, RoutedEventArgs e)
         {
             AdjustMusicPosition(5);
         }
+        #endregion
 
-        private void AdjustMusicPosition(int seconds)
+        #region Panel Sytle functions
+        private void ShowCurrentMusic()
         {
-            mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(seconds));
-            slider.Value = mediaPlayer.Position.TotalSeconds;
-            totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
-            remainedTime.Text = TimeFormat();
+            if (currentAudio != null)
+            {
+                Grid.SetColumnSpan(listbox, 1);
+                Grid.SetRowSpan(listbox, 1);
+                currentPanel.Visibility = Visibility.Visible;
+                musicPanel1.Visibility = Visibility.Visible;
+                musicPanel2.Visibility = Visibility.Visible;
+                slider.Visibility = Visibility.Visible;
+                remainedTime.Visibility = Visibility.Visible;
+                SetDisableStyle(startButton);
+                SetEnableStyle(stopButton);
+                isPaused = false;
+            }
+            else
+            {
+                currentPanel.Visibility = Visibility.Collapsed;
+                musicPanel1.Visibility = Visibility.Collapsed;
+                musicPanel2.Visibility = Visibility.Collapsed;
+                slider.Visibility = Visibility.Collapsed;
+                remainedTime.Visibility = Visibility.Collapsed;
+                Grid.SetColumnSpan(listbox, 2);
+                Grid.SetRowSpan(listbox, 4);
+            }
         }
+        private void SetDisableStyle(Button button)
+        {
+            button.IsEnabled = false;
+            button.Foreground = Brushes.Gray;
+        }
+        private void SetEnableStyle(Button button)
+        {
+            button.IsEnabled = true;
+            button.Foreground = Brushes.White;
+        }
+        private void PaintSelectedMusic()
+        {
+            if (currentAudio != null)
+            {
+                foreach (ListBoxItem item in listbox.Items)
+                {
+                    datacontent.TryGetValue(item, out TextBlock itemname);
+                    if (itemname.Text.Trim() == currentAudio)
+                    {
+                        item.Background = Brushes.Gray;
+                        itemname.Foreground = new SolidColorBrush(Colors.Black);
+                    }
+                    else
+                    {
+                        item.Background = Brushes.Black;
+                        itemname.Foreground = new SolidColorBrush(Colors.White);
+                    }
+                }
+            }
+            // reset control panel
+            SetDisableStyle(startButton);
+            SetEnableStyle(stopButton);
+        }
+        private void CreateMusicItem(string filename, string imagepath, SolidColorBrush textcolor)
+        {
+            BitmapImage bitmapImage = new BitmapImage(new Uri(imagepath, UriKind.RelativeOrAbsolute));
+            bitmapImage.Freeze(); // for higher performance
 
+            TextBlock textblock = new TextBlock
+            {
+                Text = "  " + filename, // spaces for left margin
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = textcolor
+            };
+
+            StackPanel itempanel = new StackPanel { Orientation = Orientation.Horizontal, Height = 25 };
+            itempanel.Children.Add(new Image { Source = bitmapImage });
+            itempanel.Children.Add(textblock);
+
+            ListBoxItem item = new ListBoxItem { Content = itempanel };
+            listbox.Items.Add(item); // supported audios
+            datacontent.Add(item, textblock);
+        }
+        #endregion
+
+        #region Music MenuItem options functions
         private void AddAudio(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog()
@@ -212,53 +247,31 @@ namespace WPFFrameworkApp
                 }
             }
         }
-
         private void MoveAudio(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Audio", musicfilter, null, MainWindow.MusicAppPath, MainWindow.MusicAppPath, 1);
             ReloadMusicApp();
         }
-
         private void CopyAudio(object sender, RoutedEventArgs e)
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Audio", musicfilter, null, MainWindow.MusicAppPath, MainWindow.MusicAppPath);
         }
-
         private void DeleteAudio(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Delete Audio", musicfilter, null, MainWindow.MusicAppPath, MainWindow.TrashPath, 3);
             ReloadMusicApp();
         }
-
+        private void ReloadMusicApp_Wanted(object sender, RoutedEventArgs e)
+        {
+            ReloadMusicApp();
+        }
         private void AboutGenmusicPage_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ShowAboutWindow("About GenMusic", ImagePaths.MSC_IMG, ImagePaths.LMSC_IMG, Versions.MUSIC_VRS, Messages.ABT_DFLT_MSG);
         }
+        #endregion
 
-        public void MusicAppButton_Clicked(string musicpath, string musicname)
-        {
-            if (time != null)
-            {
-                time.Stop();
-                isPaused = true;
-            }
-
-            currentAudio = musicname;
-            currentMusic.Text = musicname;
-            
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.Close();
-            mediaPlayer.Open(new Uri(musicpath, UriKind.Relative));
-            mediaPlayer.MediaOpened += InitializeMediaController;
-
-            ShowCurrentMusic();
-            PaintSelectedMusic();
-
-            if (time != null) time.Start();
-
-            mediaPlayer.Play();
-        }
-
+        #region OnClosing functions
         protected override void OnClosing(CancelEventArgs e)
         {
             // When window closed, no longer this variables needed
@@ -266,15 +279,12 @@ namespace WPFFrameworkApp
             ShredMediaPlayer();
             ShredTempData();
         }
-
-        #region Subroutines
         private void ShredTempData()
         {
             datacontent = null;
             musicfilter = null;
             totaltime = 0;
         }
-
         private void ShredTime()
         {
             if (time != null)
@@ -284,7 +294,6 @@ namespace WPFFrameworkApp
                 time = null;
             }
         }
-
         private void ShredMediaPlayer()
         {
             if (isPaused)
@@ -301,75 +310,41 @@ namespace WPFFrameworkApp
                 mediaPlayer.MediaOpened -= InitializeMediaController;
             }
         }
+        #endregion
 
-        private void ReloadDesktopNeeded(object sender, RoutedEventArgs e)
+        #region MediaPlayer functions
+        private void InitializeMediaPlayer(string itemname)
         {
-            IsReloadNeeded(false);
-            ReloadMusicApp();
-        }
-
-        public void IsReloadNeeded(bool yesOrNo)
-        {
-            reloadNeeded.Visibility = yesOrNo ? Visibility.Visible : Visibility.Collapsed;
-            startButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-            stopButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-            restartButton.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-            back.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-            front.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-            slider.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-            remainedTime.Visibility = yesOrNo ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        private void ReloadMusicApp_Wanted(object sender, RoutedEventArgs e)
-        {
-            ReloadMusicApp();
-        }
-
-        private void PaintSelectedMusic()
-        {
-            if (currentAudio != null)
+            try
             {
-                foreach (ListBoxItem item in listbox.Items)
+                if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
+
+                mediaPlayer.Close();
+                mediaPlayer.Open(new Uri(Path.Combine(MainWindow.MusicAppPath, itemname), UriKind.Relative));
+                mediaPlayer.MediaOpened += InitializeMediaController;
+                mediaPlayer.Play();
+                if (currentAudio != null && currentMusic.IsVisible == false)
                 {
-                    datacontent.TryGetValue(item, out TextBlock itemname);
-                    if (itemname.Text.Trim() == currentAudio)
-                    {
-                        item.Background = Brushes.Gray;
-                        itemname.Foreground = new SolidColorBrush(Colors.Black);
-                    }
-                    else
-                    {
-                        item.Background = Brushes.Black;
-                        itemname.Foreground = new SolidColorBrush(Colors.White);
-                    }
+                    ShowCurrentMusic();
                 }
+                else if (currentMusic.IsVisible)
+                {
+                    currentMusic.Text = currentAudio;
+                }
+                PaintSelectedMusic();
             }
-            // reset control panel
-            SetDisableStyle(startButton);
-            SetEnableStyle(stopButton);
-        }
-
-        private void CreateMusicItem(string filename, string imagepath, SolidColorBrush textcolor)
-        {
-            BitmapImage bitmapImage = new BitmapImage(new Uri(imagepath, UriKind.RelativeOrAbsolute));
-            bitmapImage.Freeze(); // for higher performance
-
-            TextBlock textblock = new TextBlock
+            catch (Exception ex)
             {
-                Text = "  " + filename, // spaces for left margin
-                VerticalAlignment = VerticalAlignment.Center,
-                Foreground = textcolor
-            };
-
-            StackPanel itempanel = new StackPanel { Orientation = Orientation.Horizontal, Height = 25 };
-            itempanel.Children.Add(new Image { Source = bitmapImage });
-            itempanel.Children.Add(textblock);
-
-            ListBoxItem item = new ListBoxItem { Content = itempanel };
-            listbox.Items.Add(item); // supported audios
-            datacontent.Add(item, textblock);
+                RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, itemname ?? "null MediaPlayer", "\n", ex.Message);
+            }
         }
+        public void InitializeMediaController(object sender, EventArgs e)
+        {
+            InitializeSliderLogics();
+        }
+        #endregion
 
+        #region Slider functions
         public void UpdateSliderPosition(object sender, EventArgs e)
         {
             slider.Value += 1.035; // 1 second front
@@ -381,14 +356,12 @@ namespace WPFFrameworkApp
                 isPaused = true;
             }
         }
-
         private void SliderPositionChanged(object sender, MouseButtonEventArgs e) // MouseButtonEventArgs = waits until mouse events, then do action
         {
             mediaPlayer.Position = TimeSpan.FromSeconds(slider.Value);
             totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
             remainedTime.Text = TimeFormat();
         }
-
         private void InitializeSliderLogics()
         {
             if (mediaPlayer.NaturalDuration.HasTimeSpan) // slider starts with -1 minimum value, if minimum value is not -1, then slider is set
@@ -415,7 +388,6 @@ namespace WPFFrameworkApp
                 IsReloadNeeded(true);
             }
         }
-
         private string TimeFormat()
         {
             int minutes = (int)(totaltime / 60);
@@ -423,17 +395,60 @@ namespace WPFFrameworkApp
 
             return string.Format("{0:00}:{1:00}", minutes, seconds);
         }
-
-        private void SetDisableStyle(Button button)
+        private void AdjustMusicPosition(int seconds)
         {
-            button.IsEnabled = false;
-            button.Foreground = Brushes.Gray;
+            mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(seconds));
+            slider.Value = mediaPlayer.Position.TotalSeconds;
+            totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
+            remainedTime.Text = TimeFormat();
         }
 
-        private void SetEnableStyle(Button button)
+        #endregion
+
+        #region Unclassified public functions
+        public void MusicAppButton_Clicked(string musicpath, string musicname)
         {
-            button.IsEnabled = true;
-            button.Foreground = Brushes.White;
+            if (time != null)
+            {
+                time.Stop();
+                isPaused = true;
+            }
+
+            currentAudio = musicname;
+            currentMusic.Text = musicname;
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.Close();
+            mediaPlayer.Open(new Uri(musicpath, UriKind.Relative));
+            mediaPlayer.MediaOpened += InitializeMediaController;
+
+            ShowCurrentMusic();
+            PaintSelectedMusic();
+
+            if (time != null) time.Start();
+
+            mediaPlayer.Play();
+        }
+        #endregion
+
+        #region Unclassified private functions
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
+                datacontent.TryGetValue(item, out TextBlock textblock); // get Textblock of selected item
+                string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
+                currentMusic.Text = itemname;
+                currentAudio = itemname;
+                InitializeMediaPlayer(itemname);
+            }
+            catch (NullReferenceException)
+            {
+                // do nothing on null exception
+                InitializeSliderLogics();
+                stopButton.IsEnabled = true; // to be avoid stop button is disabled forever
+            }
         }
         #endregion
     }

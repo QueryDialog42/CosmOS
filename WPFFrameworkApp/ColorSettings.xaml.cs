@@ -23,26 +23,7 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        private void MainDesktopColorChange_Clicked(object sender, RoutedEventArgs e)
-        {
-            ChangeColorOfText(mainDesktopColor);
-        }
-
-        private void FolderDesktopColorChange_Clicked(object sender, RoutedEventArgs e)
-        {
-            ChangeColorOfText(folderDesktopColor);
-        }
-
-        private void SafariColorChange_Clicked(object sender, RoutedEventArgs e)
-        {
-            ChangeColorOfText(safariColor);
-        }
-
-        private void MenuColorChange_Clicked(object sender, RoutedEventArgs e)
-        {
-            ChangeColorOfText(menuColor);
-        }
-
+        #region ColorSettings menuitems functions
         private void ApplyChanges_Clicked(object sender, RoutedEventArgs e)
         {
             string[] newcolors = new string[4];
@@ -54,16 +35,14 @@ namespace WPFFrameworkApp
             RoutineLogics.ReloadNeededForEveryWindow();
             Close();
         }
-
         private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
         {
-            
-            if (MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes) 
+
+            if (MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 Close();
             }
         }
-
         private void RestoreDefaults_Wanted(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Do you really want to restore default settings?", "Restore Defaults", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -79,7 +58,25 @@ namespace WPFFrameworkApp
                 menuColor.Foreground = Brushes.Black;
             }
         }
+        #endregion
 
+        #region Color change functions
+        private void MainDesktopColorChange_Clicked(object sender, RoutedEventArgs e)
+        {
+            ChangeColorOfText(mainDesktopColor);
+        }
+        private void FolderDesktopColorChange_Clicked(object sender, RoutedEventArgs e)
+        {
+            ChangeColorOfText(folderDesktopColor);
+        }
+        private void SafariColorChange_Clicked(object sender, RoutedEventArgs e)
+        {
+            ChangeColorOfText(safariColor);
+        }
+        private void MenuColorChange_Clicked(object sender, RoutedEventArgs e)
+        {
+            ChangeColorOfText(menuColor);
+        }
         private void ChangeColorOfText(TextBlock textblock)
         {
             using (System.Windows.Forms.ColorDialog colorDialog = new System.Windows.Forms.ColorDialog())
@@ -92,5 +89,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
+        #endregion
     }
 }
