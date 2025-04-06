@@ -19,6 +19,7 @@ namespace WPFFrameworkApp
         public RTFNote()
         {
             InitializeComponent();
+            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             Show();
         }
 

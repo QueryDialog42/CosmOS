@@ -942,8 +942,9 @@ namespace WPFFrameworkApp
         {
             ForAllMenu(window.menu, fonts);
             ForAllMenu(window.mainContextMenu, fonts);
+            ForAllMenu(window.trashContextMenu, fonts);
         }
-        private static void ForAllMenu(dynamic item, string[] fonts)
+        public static void ForAllMenu(dynamic item, string[] fonts)
         {
             item.FontFamily = new FontFamily(fonts[10]);
             item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
@@ -996,7 +997,7 @@ namespace WPFFrameworkApp
                 FontSize = float.Parse(fontsettings[9])
             };
         }
-        private static ContextMenu MakeContextMenuSettings(ContextMenu contextmenu, string[] fontsettings)
+        public static ContextMenu MakeContextMenuSettings(ContextMenu contextmenu, string[] fontsettings)
         {
             contextmenu.FontFamily = new FontFamily(fontsettings[10]);
             contextmenu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[11]));

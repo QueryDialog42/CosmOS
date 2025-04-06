@@ -116,7 +116,7 @@
         </ScrollViewer>
         <Button x:Name="trashApp" Grid.Row="2" Grid.Column="2" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
             <Button.ContextMenu>
-                <ContextMenu>
+                <ContextMenu x:Name="trashContextMenu">
                     <MenuItem Header="Empty Trash" Click="EmptyTrash_Wanted">
                         <MenuItem.Icon>
                             <Image Source="/DesktopImages/trashempty.png" />

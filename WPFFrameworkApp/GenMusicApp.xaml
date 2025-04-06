@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
         mc:Ignorable="d" Background="#424242" Icon="/DesktopImages/genmusic32x32.png"
-        Title="GenMusicApp" Height="340" Width="460">
+        Title="GenMusic" Height="340" Width="460">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -18,7 +18,7 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="#2b2b2b" Foreground="White">
+        <Menu x:Name="fileMenu" Grid.Row="0" Grid.ColumnSpan="2" Background="#2b2b2b" Foreground="White">
             <MenuItem Header="_Audio" Background="#2b2b2b" Width="50">
                 <MenuItem Header="_Add Audio" Background="#2b2b2b" Click="AddAudio" BorderThickness="0">
                     <MenuItem.Icon>

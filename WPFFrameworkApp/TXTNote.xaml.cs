@@ -15,6 +15,7 @@ namespace WPFFrameworkApp
         public TXTNote()
         {
             InitializeComponent();
+            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             Show();
         }
 

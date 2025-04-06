@@ -28,6 +28,7 @@ namespace WPFFrameworkApp
         public GenMusicApp()
         {
             InitializeComponent();
+            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             ReloadMusicApp();
             Show();
         }

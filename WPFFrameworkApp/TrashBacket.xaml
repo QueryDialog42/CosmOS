@@ -11,7 +11,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" >
+        <Menu Grid.Row="0" x:Name="fileMenu">
             <MenuItem Header="_Trash">
                 <MenuItem Header="_Empty Trash" Click="EmptyTrash">
                     <MenuItem.Icon>

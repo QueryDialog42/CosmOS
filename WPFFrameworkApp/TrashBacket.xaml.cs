@@ -16,6 +16,7 @@ namespace WPFFrameworkApp
         {
             InitializeComponent();
             ReloadTrashBacket();
+            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             Show();
         }
 
