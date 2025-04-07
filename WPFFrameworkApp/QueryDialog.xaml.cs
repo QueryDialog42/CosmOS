@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace WPFFrameworkApp
@@ -16,12 +16,7 @@ namespace WPFFrameworkApp
         {
             InitializeComponent();
         }
-        public static short ShowQueryDialog(
-            string message,
-            string title,
-            string[] options,
-            string Image = ImagePaths.QST_IMG,
-            string windowIcon = ImagePaths.LOGO_IMG)
+        public static short ShowQueryDialog(string message, string title, string[] options, string Image = ImagePaths.QST_IMG, string windowIcon = ImagePaths.LOGO_IMG)
         {
             QueryDialog dialog = new QueryDialog
             {

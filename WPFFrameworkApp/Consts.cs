@@ -1,6 +1,4 @@
-﻿using System.Windows.Markup;
-
-namespace WPFFrameworkApp
+﻿namespace WPFFrameworkApp
 {
     public struct Errors
     {

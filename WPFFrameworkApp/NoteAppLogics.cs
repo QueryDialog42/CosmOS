@@ -1,11 +1,11 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Windows;
+using Microsoft.Win32;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace WPFFrameworkApp
 {

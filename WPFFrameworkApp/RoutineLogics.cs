@@ -1,14 +1,14 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using Microsoft.Win32;
+using System.Diagnostics;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 namespace WPFFrameworkApp
@@ -149,77 +149,9 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        public static void RenameFile_Wanted(string filepath, string ImagePath, string icon = ImagePaths.RENM_IMG)
-        {
-            string filename = Path.GetFileName(filepath);
-            string currentDesktop = Path.GetDirectoryName(filepath);
-
-            string input = InputDialog.ShowInputDialog("Enter the new name:", "Rename File", ImagePath, icon);
-            if (string.IsNullOrEmpty(input))
-            {
-                ErrorMessage(Errors.PRMS_ERR, "You can not rename your file as null");
-                return;
-            }
-            string newfilename = input.ToLower();
-            string pathToDirection = Path.Combine(currentDesktop, newfilename);
-
-            if (filename.EndsWith(SupportedFiles.TXT))
-            {
-                if (newfilename.EndsWith(SupportedFiles.TXT) == false && newfilename.EndsWith(SupportedFiles.RTF) == false) // TXT to RTF is supported
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename", filename, " as a non-TXT file except RTF file");
-                    return;
-                }
-            }
-            else if (filename.EndsWith(SupportedFiles.RTF))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.RTF) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-RTF file");
-                    return;
-                }
-            }
-            else if (filename.EndsWith(SupportedFiles.WAV))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.WAV) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-WAV file");
-                    return;
-                }
-            }
-            else if (filename.EndsWith(SupportedFiles.MP3))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.MP3) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-MP3 file");
-                    return;
-                }
-            }
-            else if (filename.EndsWith(SupportedFiles.EXE))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.EXE) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-EXE file");
-                    return;
-                }
-            }
-            MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
-        }
-        private static bool IsRenameAllowed(string filename, string newfilename, string checkfor) => filename.EndsWith(checkfor) && newfilename.EndsWith(checkfor);
         #endregion
 
         #region App Creation functions
-        public static void Appearence(Image image, StackPanel stackpanel, Button app, TextBlock appname, string logo)
-        {
-            BitmapImage bitmap = new BitmapImage(new Uri(logo, UriKind.RelativeOrAbsolute));
-            bitmap.Freeze();
-            image.Source = bitmap;
-
-            stackpanel.Children.Add(image);
-            stackpanel.Children.Add(appname);
-
-            app.Content = stackpanel;
-        }
         public static Button CreateButton(string filename)
         {
             return new Button()
@@ -237,6 +169,66 @@ namespace WPFFrameworkApp
             {
                 Width = 60, // Set desired width
                 Height = 60, // Set desired height
+            };
+        }
+        public static TextBlock CreateTextBlock(string filename, string[] fontsettings, short which)
+        {
+            switch (which)
+            {
+                case 0: return CreateTextBlockForDesktop(filename, fontsettings);
+                case 1: return CreateTextBlockForFolder(filename, fontsettings);
+                default: return null;
+            }
+        }
+        public static void Appearence(Image image, StackPanel stackpanel, Button app, TextBlock appname, string logo)
+        {
+            BitmapImage bitmap = new BitmapImage(new Uri(logo, UriKind.RelativeOrAbsolute));
+            bitmap.Freeze();
+            image.Source = bitmap;
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(appname);
+
+            app.Content = stackpanel;
+        }
+        private static ImageSource InitTrashBacket()
+        {
+            try
+            {
+                IEnumerable<string> files = Directory.GetFiles(Path.Combine(MainWindow.CDesktopPath, HiddenFolders.HTRSH_FOL));
+                if (files.Any()) return new BitmapImage(new Uri(ImagePaths.FULL_IMG, UriKind.RelativeOrAbsolute));
+                else return new BitmapImage(new Uri(ImagePaths.EMPT_IMG, UriKind.RelativeOrAbsolute));
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage("Trashbacket" + Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, HiddenFolders.HTRSH_FOL, "\n", ex.Message);
+                return new BitmapImage(new Uri(ImagePaths.EMPT_IMG, UriKind.RelativeOrAbsolute));
+            }
+        }
+        private static TextBlock CreateTextBlockForDesktop(string filename, string[] fontsettings)
+        {
+            return new TextBlock()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Text = filename,
+                FontFamily = new FontFamily(fontsettings[0]),
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1])),
+                FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
+                FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
+                FontSize = float.Parse(fontsettings[4])
+            };
+        }
+        private static TextBlock CreateTextBlockForFolder(string filename, string[] fontsettings)
+        {
+            return new TextBlock()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Text = filename,
+                FontFamily = new FontFamily(fontsettings[5]),
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6])),
+                FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
+                FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
+                FontSize = float.Parse(fontsettings[9])
             };
         }
         private static void InitTextFile(MainWindow window, string desktopPath, string filename, string[] fontSettings)
@@ -421,89 +413,6 @@ namespace WPFFrameworkApp
                 };
             };
         }
-        private static ImageSource InitTrashBacket()
-        {
-            try
-            {
-                IEnumerable<string> files = Directory.GetFiles(Path.Combine(MainWindow.CDesktopPath, HiddenFolders.HTRSH_FOL));
-                if (files.Any()) return new BitmapImage(new Uri(ImagePaths.FULL_IMG, UriKind.RelativeOrAbsolute));
-                else return new BitmapImage(new Uri(ImagePaths.EMPT_IMG, UriKind.RelativeOrAbsolute));
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage("Trashbacket" + Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, HiddenFolders.HTRSH_FOL, "\n", ex.Message);
-                return new BitmapImage(new Uri(ImagePaths.EMPT_IMG, UriKind.RelativeOrAbsolute));
-            }
-        }
-        public static ContextMenu MakeContextMenuSettings(ContextMenu contextmenu, string[] fontsettings)
-        {
-            contextmenu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
-            contextmenu.BorderThickness = new Thickness(0);
-            contextmenu.FontFamily = new FontFamily(fontsettings[10]);
-            contextmenu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[11]));
-            contextmenu.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
-            contextmenu.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
-            contextmenu.FontSize = Convert.ToDouble(fontsettings[14]);
-
-            return contextmenu;
-        }
-        public static TextBlock CreateTextBlock(string filename, string[] fontsettings, short which)
-        {
-            switch (which)
-            {
-                case 0: return CreateTextBlockForDesktop(filename, fontsettings);
-                case 1: return CreateTextBlockForFolder(filename, fontsettings);
-                default: return null;
-            }
-        }
-        private static TextBlock CreateTextBlockForDesktop(string filename, string[] fontsettings)
-        {
-            return new TextBlock()
-            {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Text = filename,
-                FontFamily = new FontFamily(fontsettings[0]),
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1])),
-                FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
-                FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
-                FontSize = float.Parse(fontsettings[4])
-            };
-        }
-        private static TextBlock CreateTextBlockForFolder(string filename, string[] fontsettings)
-        {
-            return new TextBlock()
-            {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Text = filename,
-                FontFamily = new FontFamily(fontsettings[5]),
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6])),
-                FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
-                FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
-                FontSize = float.Parse(fontsettings[9])
-            };
-        }
-        public static void ForAllMenu(dynamic item, string[] fonts)
-        {
-            item.FontFamily = new FontFamily(fonts[10]);
-            item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
-            if (fonts[12] == "Bold")
-            {
-                item.FontWeight = FontWeights.Bold;
-            }
-            else
-            {
-                item.FontWeight = FontWeights.Regular;
-            }
-            if (fonts[13] == "Italic")
-            {
-                item.FontStyle = FontStyles.Italic;
-            }
-            else
-            {
-                item.FontStyle = FontStyles.Normal;
-            }
-            item.FontSize = float.Parse(fonts[14]);
-        }
         #endregion
 
         #region IsOpen functions
@@ -652,19 +561,6 @@ namespace WPFFrameworkApp
                 MainWindowManuallyReloadNeeded(window);
             }
         }
-        private static void MusicAppReloadNeeded()
-        {
-            GenMusicApp musicapp = GetMusicAppWindow();
-            if (musicapp != null)
-            {
-                musicapp.IsReloadNeeded(true);
-            }
-        }
-        private static void TrashBacketReloadNeeded()
-        {
-            TrashBacket trashapp = GetTrashBacketWindow();
-            trashapp?.ReloadTrashBacket();
-        }
         public static void WindowReloadNeeded(string directoryName)
         {
             MainWindow directionFolder = GetMainWindow(directoryName);
@@ -686,6 +582,19 @@ namespace WPFFrameworkApp
             mainfolder.NoteApp.Visibility = Visibility.Hidden;
             mainfolder.MusicApp.Visibility = Visibility.Collapsed;
             mainfolder.MailApp.Visibility = Visibility.Collapsed;
+        }
+        private static void MusicAppReloadNeeded()
+        {
+            GenMusicApp musicapp = GetMusicAppWindow();
+            if (musicapp != null)
+            {
+                musicapp.IsReloadNeeded(true);
+            }
+        }
+        private static void TrashBacketReloadNeeded()
+        {
+            TrashBacket trashapp = GetTrashBacketWindow();
+            trashapp?.ReloadTrashBacket();
         }
         #endregion
 
@@ -713,6 +622,16 @@ namespace WPFFrameworkApp
         #endregion
 
         #region SetSettings functions
+        public static void SetSettingsForAllMenu(dynamic menu, string[] fontsettings)
+        {
+            menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
+            menu.BorderThickness = new Thickness(0);
+            menu.FontFamily = new FontFamily(fontsettings[10]);
+            menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[11]));
+            menu.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+            menu.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+            menu.FontSize = Convert.ToDouble(fontsettings[14]);
+        }
         private static void SetWindowSettings(MainWindow window)
         {
             string[] colors = File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
@@ -726,22 +645,30 @@ namespace WPFFrameworkApp
             catch (Exception)
             {
                 MessageBox.Show("An error occured while configuring desktop. \nDefault settings will be used.", "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Information);
-                window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MAIN_DESK_COl));
-                window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FOL_DESK_COL));
-                window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.SAFARI_COL));
-                window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MENU_COL));
 
-                window.FontFamily = new FontFamily(Defaults.FONT);
-                window.menu.FontFamily = new FontFamily(Defaults.FONT);
-                window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FONT_COL));
-                window.FontWeight = FontWeights.Regular;
-                window.FontStyle = FontStyles.Normal;
-                window.FontSize = float.Parse(Defaults.FONT_SIZE);
+                SetDefaultsForBackgroundColor(window);
+                SetDefaultForFonts(window);
+                SetSettingsDefault();
 
                 fontcolor[1] = Defaults.FONT_COL;
-
-                SetSettingsDefault();
             }
+        }
+        private static void SetDefaultsForBackgroundColor(MainWindow window)
+        {
+            window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MAIN_DESK_COl));
+            window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FOL_DESK_COL));
+            window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.SAFARI_COL));
+            window.trashApp.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.SAFARI_COL));
+            window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MENU_COL));
+        }
+        private static void SetDefaultForFonts(MainWindow window)
+        {
+            window.FontFamily = new FontFamily(Defaults.FONT);
+            window.menu.FontFamily = new FontFamily(Defaults.FONT);
+            window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FONT_COL));
+            window.FontWeight = FontWeights.Regular;
+            window.FontStyle = FontStyles.Normal;
+            window.FontSize = float.Parse(Defaults.FONT_SIZE);
         }
         private static void SetSettingsDefault()
         {
@@ -777,13 +704,13 @@ namespace WPFFrameworkApp
             window.trashContextMenu.BorderThickness = new Thickness(0);
 
             SetColorOfMenuItems(window, menucolor);
-            SetBorderThicknessOfMenuItems(window, 0);
+            SetBorderThicknessOfMenuItems(window, new Thickness(0));
         }
         private static void SetMenuFontSettings(MainWindow window, string[] fonts)
         {
-            ForAllMenu(window.menu, fonts);
-            ForAllMenu(window.mainContextMenu, fonts);
-            ForAllMenu(window.trashContextMenu, fonts);
+            SetSettingsForAllMenu(window.menu, fonts);
+            SetSettingsForAllMenu(window.mainContextMenu, fonts);
+            SetSettingsForAllMenu(window.trashContextMenu, fonts);
         }
         private static void SetColorOfMenuItems(MainWindow window, SolidColorBrush menucolor)
         {
@@ -807,27 +734,27 @@ namespace WPFFrameworkApp
             window.menuitem8.Background = menucolor;
             window.menuitem9.Background = menucolor;
         }
-        private static void SetBorderThicknessOfMenuItems(MainWindow window, short thickness)
+        private static void SetBorderThicknessOfMenuItems(MainWindow window, Thickness borderthickness)
         {
             // main desktop contexmenu's items
-            window.itemmenu1.BorderThickness = new Thickness(thickness);
-            window.itemmenu2.BorderThickness = new Thickness(thickness);
-            window.itemmenu3.BorderThickness = new Thickness(thickness);
+            window.itemmenu1.BorderThickness = borderthickness;
+            window.itemmenu2.BorderThickness = borderthickness;
+            window.itemmenu3.BorderThickness = borderthickness;
 
             // trash backet contexmenu's items
-            window.trashitem1.BorderThickness = new Thickness(thickness);
-            window.trashitem2.BorderThickness = new Thickness(thickness);
+            window.trashitem1.BorderThickness = borderthickness;
+            window.trashitem2.BorderThickness = borderthickness;
 
             // main menubar's items
-            window.menuitem1.BorderThickness = new Thickness(thickness);
-            window.menuitem2.BorderThickness = new Thickness(thickness);
-            window.menuitem3.BorderThickness = new Thickness(thickness);
-            window.menuitem4.BorderThickness = new Thickness(thickness);
-            window.menuitem5.BorderThickness = new Thickness(thickness);
-            window.menuitem6.BorderThickness = new Thickness(thickness);
-            window.menuitem7.BorderThickness = new Thickness(thickness);
-            window.menuitem8.BorderThickness = new Thickness(thickness);
-            window.menuitem9.BorderThickness = new Thickness(thickness);
+            window.menuitem1.BorderThickness = borderthickness;
+            window.menuitem2.BorderThickness = borderthickness;
+            window.menuitem3.BorderThickness = borderthickness;
+            window.menuitem4.BorderThickness = borderthickness;
+            window.menuitem5.BorderThickness = borderthickness;
+            window.menuitem6.BorderThickness = borderthickness;
+            window.menuitem7.BorderThickness = borderthickness;
+            window.menuitem8.BorderThickness = borderthickness;
+            window.menuitem9.BorderThickness = borderthickness;
         }
         #endregion
 
@@ -839,49 +766,10 @@ namespace WPFFrameworkApp
             string currentdesktop = Path.GetDirectoryName(filepath);
             string filename = Path.GetFileName(filepath);
             ContextMenu contextMenu = new ContextMenu();
-            MenuItem renameItem = new MenuItem
-            {
-                Header = "Rename",
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                BorderThickness = new Thickness(0),
-                Icon = new Image
-                {
-                    Source = new BitmapImage(new Uri(ImagePaths.RENM_IMG, UriKind.RelativeOrAbsolute)),
-                }
-            };
-
-            MenuItem moveitem = new MenuItem
-            {
-                Header = "Move",
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                BorderThickness = new Thickness(0),
-                Icon = new Image
-                {
-                    Source = new BitmapImage(new Uri(ImagePaths.NMOVE_IMG, UriKind.RelativeOrAbsolute)),
-                }
-            };
-
-            MenuItem copyitem = new MenuItem
-            {
-                Header = "Copy",
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                BorderThickness = new Thickness(0),
-                Icon = new Image
-                {
-                    Source = new BitmapImage(new Uri(copyicon, UriKind.RelativeOrAbsolute)),
-                }
-            };
-
-            MenuItem deleteitem = new MenuItem
-            {
-                Header = "Delete",
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                BorderThickness = new Thickness(0),
-                Icon = new Image
-                {
-                    Source = new BitmapImage(new Uri(deleteicon, UriKind.RelativeOrAbsolute)),
-                }
-            };
+            MenuItem renameItem = CreateMenuItemForContextMenu("Rename", color, ImagePaths.RENM_IMG);
+            MenuItem moveitem = CreateMenuItemForContextMenu("Move", color, ImagePaths.NMOVE_IMG);
+            MenuItem copyitem = CreateMenuItemForContextMenu("Copy", color, copyicon);
+            MenuItem deleteitem = CreateMenuItemForContextMenu("Delete", color, deleteicon);
 
             renameItem.Click += (sender, e) =>
             {
@@ -910,34 +798,10 @@ namespace WPFFrameworkApp
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(moveitem);
             contextMenu.Items.Add(copyitem);
-
-            if (imageicon == ImagePaths.WAV_IMG || imageicon == ImagePaths.MP3_IMG)
-            {
-                MenuItem addtogenmuic = new MenuItem
-                {
-                    Header = "Add to GenMusic",
-                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                    BorderThickness = new Thickness(0),
-                    Icon = new Image
-                    {
-                        Source = new BitmapImage(new Uri(ImagePaths.SADD_IMG, UriKind.RelativeOrAbsolute)),
-                    }
-                };
-
-                addtogenmuic.Click += (sender, e) =>
-                {
-                    MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
-                    ReloadDesktop(window, currentdesktop);
-                    GenMusicApp genmusicapp = GetMusicAppWindow();
-                    genmusicapp?.IsReloadNeeded(true);
-                };
-
-                contextMenu.Items.Add(addtogenmuic);
-            }
-
+            if (imageicon == ImagePaths.WAV_IMG || imageicon == ImagePaths.MP3_IMG) AddIfSound(contextMenu, color, window, currentdesktop, filename);
             contextMenu.Items.Add(deleteitem);
 
-            contextMenu = MakeContextMenuSettings(contextMenu, fontsettings);
+            SetSettingsForAllMenu(contextMenu, fontsettings);
 
             return contextMenu;
         }
@@ -945,73 +809,33 @@ namespace WPFFrameworkApp
         {
             string color = GetColorSettingsFromCcol()[3];
             ContextMenu contextMenu = new ContextMenu();
-            MenuItem renameItem = new MenuItem
-            {
-                Header = "Rename",
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                BorderThickness = new Thickness(0),
-                Icon = new Image
-                {
-                    Source = new BitmapImage(new Uri(ImagePaths.RENM_IMG, UriKind.RelativeOrAbsolute)),
-                }
-            };
+            MenuItem renameItem = CreateMenuItemForContextMenu("Rename", color, ImagePaths.RENM_IMG);
+            MenuItem deleteitem = CreateMenuItemForContextMenu("Delete", color, ImagePaths.FDEL_IMG);
 
-            MenuItem deleteitem = new MenuItem
-            {
-                Header = "Delete",
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
-                BorderThickness = new Thickness(0),
-                Icon = new Image
-                {
-                    Source = new BitmapImage(new Uri(ImagePaths.FDEL_IMG, UriKind.RelativeOrAbsolute)),
-                }
-            };
+            renameItem.Click += (sender, e) => AddRenameFolderListener(window, desktopPath, filename);
 
-            renameItem.Click += (sender, e) =>
-            {
-                string newfilename = InputDialog.ShowInputDialog("Enter the new name:", "Rename Folder", ImagePaths.FOLDER_IMG);
-                if (string.IsNullOrEmpty(newfilename) == false)
-                {
-                    if (newfilename == HiddenFolders.HAUD_FOL || newfilename == HiddenFolders.HTRSH_FOL)
-                    {
-                        ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as same as hidden folders.");
-                        return;
-                    }
-                    try
-                    {
-                        Directory.Move(Path.Combine(desktopPath, filename), Path.Combine(desktopPath, newfilename));
-                        ReloadDesktop(window, desktopPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
-                    }
-                }
-                else ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as null, ", Configs.CDESK, " or ", MainItems.MAIN_WIN);
-            };
-
-            deleteitem.Click += (sender, e) =>
-            {
-                if (MessageBox.Show($"Are you sure to delete {filename} folder?", "Folder Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        Directory.Delete(Path.Combine(desktopPath, filename));
-                        ReloadDesktop(window, desktopPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
-                    }
-                }
-            };
+            deleteitem.Click += (sender, e) => AddDeleteFolderListener(window, desktopPath, filename);
 
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(deleteitem);
 
-            contextMenu = MakeContextMenuSettings(contextMenu, GetFontSettingsFromCfont());
+            SetSettingsForAllMenu(contextMenu, GetFontSettingsFromCfont());
 
             return contextMenu;
+        }
+        private static MenuItem CreateMenuItemForContextMenu(string header, string color, string icon)
+        {
+            return new MenuItem
+            {
+                Header = header,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
+                BorderThickness = new Thickness(0),
+                Icon = new Image
+                {
+                    Source = new BitmapImage(new Uri(icon, UriKind.RelativeOrAbsolute)),
+                }
+            };
+            
         }
         #endregion
 
@@ -1038,7 +862,132 @@ namespace WPFFrameworkApp
         }
         #endregion
 
+        #region Rename file functions
+        public static void RenameFile_Wanted(string filepath, string ImagePath, string icon = ImagePaths.RENM_IMG)
+        {
+            string filename = Path.GetFileName(filepath);
+            string currentDesktop = Path.GetDirectoryName(filepath);
+
+            string input = InputDialog.ShowInputDialog("Enter the new name:", "Rename File", ImagePath, icon);
+            if (CheckInputIsNull(input)) return;
+
+            string newfilename = input.ToLower();
+            string pathToDirection = Path.Combine(currentDesktop, newfilename);
+
+            if (CheckNewTXTFilenameIsAllowed(filename, newfilename) == false) return;
+            if (CheckNewRTFFilenameIsAllowed(filename, newfilename) == false) return;
+            if (CheckNewWAVFilenameIsAllowed(filename, newfilename) == false) return;
+            if (CheckNewMP3FilenameIsAllowed(filename, newfilename) == false) return;
+            if (CheckNewEXEFilenameIsAllowed(filename, newfilename) == false) return;
+
+            MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
+        }
+        private static bool CheckNewTXTFilenameIsAllowed(string filename, string newfilename)
+        {
+            if (filename.EndsWith(SupportedFiles.TXT))
+            {
+                if (newfilename.EndsWith(SupportedFiles.TXT) == false && newfilename.EndsWith(SupportedFiles.RTF) == false) // TXT to RTF is supported
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename", filename, " as a non-TXT file except RTF file");
+                    return false; // not allowed
+                }
+                return true; // allowed
+            }
+            return true; // not a txt file
+        }
+        private static bool CheckNewRTFFilenameIsAllowed(string filename, string newfilename)
+        {
+            if (filename.EndsWith(SupportedFiles.RTF))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.RTF) == false)
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-RTF file");
+                    return false; // not allowed
+                }
+                return true; // allowed
+            }
+            return true; // not a rtf file
+        }
+        private static bool CheckNewWAVFilenameIsAllowed(string filename, string newfilename)
+        {
+            if (filename.EndsWith(SupportedFiles.WAV))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.WAV) == false)
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-WAV file");
+                    return false; // not allowed
+                }
+                return true;
+            }
+            return true;
+        }
+        private static bool CheckNewMP3FilenameIsAllowed(string filename, string newfilename)
+        {
+            if (filename.EndsWith(SupportedFiles.MP3))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.MP3) == false)
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-MP3 file");
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private static bool CheckNewEXEFilenameIsAllowed(string filename, string newfilename)
+        {
+            if (filename.EndsWith(SupportedFiles.EXE))
+            {
+                if (IsRenameAllowed(filename, newfilename, SupportedFiles.EXE) == false)
+                {
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-EXE file");
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+        private static bool CheckNewFolderNameIsAllowed(string newfoldername)
+        {
+            if (string.IsNullOrEmpty(newfoldername))
+            {
+                ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as null"); // not allowed
+                return false;
+            }
+            if (newfoldername == HiddenFolders.HTRSH_FOL || newfoldername == HiddenFolders.HAUD_FOL)
+            {
+                ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as same as hidden folders.");
+                return false; // not allowed
+            }
+            if (newfoldername == Configs.CDESK || newfoldername == Configs.C_CONFIGS || newfoldername == MainItems.MAIN_WIN)
+            {
+                ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as ", Configs.CDESK, ", ", Configs.C_CONFIGS, " or ", MainItems.MAIN_WIN);
+                return false;
+            }
+            return true; // allowed
+        }
+        private static bool IsRenameAllowed(string filename, string newfilename, string checkfor) => filename.EndsWith(checkfor) && newfilename.EndsWith(checkfor);
+        #endregion
+
         #region unclassified private functions
+        private static string GetDirectoryName(string directoryPath)
+        {
+            string[] parts = directoryPath.Split(Path.DirectorySeparatorChar);
+            if (parts.Length > 0)
+            {
+                return parts[parts.Length - 1];
+            }
+            return string.Empty;
+        }
+        private static bool CheckInputIsNull(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                ErrorMessage(Errors.PRMS_ERR, "You can not rename your file as null");
+                return true;
+            }
+            return false;
+        }
         private static void CloseAllGenMusicApps()
         {
             foreach (Window window in Application.Current.Windows)
@@ -1049,14 +998,50 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        private static string GetDirectoryName(string directoryPath)
+        private static void AddIfSound(ContextMenu contextMenu, string color, MainWindow window, string currentdesktop, string filename)
         {
-            string[] parts = directoryPath.Split(Path.DirectorySeparatorChar);
-            if (parts.Length > 0)
+            MenuItem addtogenmuic = CreateMenuItemForContextMenu("Add to GenMusic", color, ImagePaths.SADD_IMG);
+
+            addtogenmuic.Click += (sender, e) =>
             {
-                return parts[parts.Length - 1];
+                MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
+                ReloadDesktop(window, currentdesktop);
+                GenMusicApp genmusicapp = GetMusicAppWindow();
+                genmusicapp?.IsReloadNeeded(true);
+            };
+
+            contextMenu.Items.Add(addtogenmuic);
+        }
+        private static void AddRenameFolderListener(MainWindow window, string desktopPath, string filename)
+        {
+            string newfilename = InputDialog.ShowInputDialog("Enter the new name:", "Rename Folder", ImagePaths.FOLDER_IMG);
+            if (CheckNewFolderNameIsAllowed(newfilename))
+            {
+                try
+                {
+                    Directory.Move(Path.Combine(desktopPath, filename), Path.Combine(desktopPath, newfilename));
+                    ReloadDesktop(window, desktopPath);
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
+                }
             }
-            return string.Empty;
+        }
+        private static void AddDeleteFolderListener(MainWindow window, string desktopPath, string filename)
+        {
+            if (MessageBox.Show($"Are you sure to delete {filename} folder?", "Folder Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    Directory.Delete(Path.Combine(desktopPath, filename));
+                    ReloadDesktop(window, desktopPath);
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
+                }
+            }
         }
         #endregion
     }

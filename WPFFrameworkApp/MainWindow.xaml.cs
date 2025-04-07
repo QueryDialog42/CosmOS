@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace WPFFrameworkApp
 {
@@ -15,14 +15,10 @@ namespace WPFFrameworkApp
         public MainWindow()
         {
             InitializeComponent();
-            if (TempPath == null) CheckConfig();
+            if (TempPath == null) CheckConfigurationIsRight();
             try
             {
-                currentDesktop = TempPath.Trim();
-                CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
-                MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
-                TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
-                if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+                StartUp();
             } catch (Exception)
             {
                 // user tried to open without path
@@ -31,53 +27,7 @@ namespace WPFFrameworkApp
         }
 
         #region Configuration functions
-        private void CheckConfig()
-        {
-            string ConfigFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
-            string ConfigFileText = Path.Combine(ConfigFolder, Configs.CPATH);
-            if (Directory.Exists(ConfigFolder) == false)
-            {
-                MessageBox.Show($"{Configs.C_CONFIGS} folder not found. Will be created after path is entered.", "Configuration Proccess", MessageBoxButton.OK, MessageBoxImage.Warning);
-                TempPath = ConfigurePath(ConfigFileText);
-                return;
-            }
-            if (File.Exists(ConfigFileText) == false)
-            {
-                if (MessageBox.Show($"{Configs.CPATH} could not find. Resetting path needed.", "Path could not find", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
-                    TempPath = ConfigurePath(ConfigFileText);
-                else Environment.Exit(0);
-            }
-            if (File.Exists(Path.Combine(ConfigFolder, Configs.CCOL)) == false)
-            {
-                MessageBox.Show($"{Configs.CCOL} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
-                using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CCOL)))
-                {
-                    CreateColorConfig(writer);
-                }
-            }
-            if (File.Exists(Path.Combine(ConfigFolder, Configs.CFONT)) == false)
-            {
-                MessageBox.Show($"{Configs.CFONT} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
-                CreateFontConfig(ConfigFolder);
-            }
-
-            try
-            {
-                TempPath = File.ReadAllText(ConfigFileText);
-                if (Directory.Exists(TempPath) == false)
-                {
-                    if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
-                        TempPath = ConfigurePath(ConfigFileText);
-                    else Environment.Exit(0);
-                }
-            }
-            catch (Exception ex)
-            {
-                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
-                Environment.Exit(0);
-            }
-        }
-        private string ConfigurePath(string ConfigFileText)
+        private string ConfigurePath(string CDesktopFile)
         {
             string input = InputDialog.ShowInputDialog("Please enter " + Configs.CDESK + " path", "Path Needed");
             //Resumes until valid path is entered
@@ -91,9 +41,9 @@ namespace WPFFrameworkApp
                     {
                         try
                         {
-                            string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
-                            Directory.CreateDirectory(configFolder); // create the folder that contains all the configuration datas
-                            CreateConfigFiles(ConfigFileText, input, configFolder);
+                            string C_CONFIGS = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
+                            Directory.CreateDirectory(C_CONFIGS); // create the folder that contains all the configuration datas
+                            CreateConfigFiles(CDesktopFile, input, C_CONFIGS);
                             CreateHiddenDirectories(input); // create the hidden folders
                             return input;
                         }
@@ -118,21 +68,59 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        private void CreateConfigFiles(string ConfigFileText, string input, string configFolder)
+        private bool CheckConfigDirectory(string C_CONFIGS, string CDesktopFile)
+        {
+            if (Directory.Exists(C_CONFIGS) == false)
+            {
+                MessageBox.Show($"{Configs.C_CONFIGS} folder not found. Will be created after path is entered.", "Configuration Proccess", MessageBoxButton.OK, MessageBoxImage.Warning);
+                TempPath = ConfigurePath(CDesktopFile);
+                return true; // configuration proccess will stop
+            }
+            return false; // configuration proccess will not stop
+        }
+        private void StartUp()
+        {
+            currentDesktop = TempPath.Trim();
+            CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
+            MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
+            TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
+            if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+        }
+        private void CheckConfigurationIsRight()
+        {
+            string C_CONFIGS = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
+            string CDesktopFile = Path.Combine(C_CONFIGS, Configs.CPATH);
+
+            if (CheckConfigDirectory(C_CONFIGS, CDesktopFile)) return;
+            CheckCDesktopPathFile(CDesktopFile);
+            CheckCcolorFile(C_CONFIGS);
+            CheckCfontFile(C_CONFIGS);
+
+            try
+            {
+                TryReadCDesktopPath(CDesktopFile);
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
+                Environment.Exit(0);
+            }
+        }
+        private void CreateConfigFiles(string CDesktopFile, string input, string C_CONFIGS)
         {
             // C path
-            using (StreamWriter writer = new StreamWriter(File.Create(ConfigFileText)))
+            using (StreamWriter writer = new StreamWriter(File.Create(CDesktopFile)))
             {
                 writer.WriteLineAsync(input);
             }
             //C desktop colors
-            using (StreamWriter writer = new StreamWriter(Path.Combine(configFolder, Configs.CCOL)))
+            using (StreamWriter writer = new StreamWriter(Path.Combine(C_CONFIGS, Configs.CCOL)))
             {
                 CreateColorConfig(writer);
             }
 
             // C fonts
-            CreateFontConfig(configFolder);
+            CreateFontConfig(C_CONFIGS);
         }
         private void CreateColorConfig(StreamWriter writer)
         {
@@ -141,9 +129,9 @@ namespace WPFFrameworkApp
             writer.WriteLineAsync(Defaults.SAFARI_COL);
             writer.WriteLineAsync(Defaults.MENU_COL);
         }
-        private void CreateFontConfig(string ConfigFolder)
+        private void CreateFontConfig(string C_CONFIGS)
         {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(ConfigFolder, Configs.CFONT)))
+            using (StreamWriter writer = new StreamWriter(Path.Combine(C_CONFIGS, Configs.CFONT)))
             {
                 // desktop default font
                 WriteDefaultFonts(writer);
@@ -155,15 +143,6 @@ namespace WPFFrameworkApp
                 WriteDefaultFonts(writer);
             }
         }
-        private void CreateHiddenDirectories(string desktopPath)
-        {
-            string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);
-            string musicpath = Path.Combine(desktopPath, HiddenFolders.HAUD_FOL);
-            Directory.CreateDirectory(musicpath);
-            Directory.CreateDirectory(trashpath);
-            new DirectoryInfo(musicpath) { Attributes = FileAttributes.Hidden }; // set the .audio$ folder hidden
-            new DirectoryInfo(trashpath) { Attributes = FileAttributes.Hidden }; // set the .trash$ folder hidden
-        }
         private void WriteDefaultFonts(StreamWriter writer)
         {
             writer.WriteLineAsync(Defaults.FONT);
@@ -172,6 +151,77 @@ namespace WPFFrameworkApp
             writer.WriteLineAsync(Defaults.FONT_STYLE);
             writer.WriteLineAsync(Defaults.FONT_SIZE);
         }
+        private void CreateHiddenDirectories(string desktopPath)
+        {
+            string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);
+            string musicpath = Path.Combine(desktopPath, HiddenFolders.HAUD_FOL);
+            CreateHiddenFolderOf(trashpath);
+            CreateHiddenFolderOf(musicpath);
+
+        }
+        private void CheckCDesktopPathFile(string CDesktopFile)
+        {
+            if (File.Exists(CDesktopFile) == false)
+            {
+                if (MessageBox.Show($"{Configs.CPATH} could not find. Resetting path needed.", "Path could not find", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    TempPath = ConfigurePath(CDesktopFile);
+                }
+                else Environment.Exit(0);
+            }
+        }
+        private void CheckCcolorFile(string C_CONFIGS)
+        {
+            if (File.Exists(Path.Combine(C_CONFIGS, Configs.CCOL)) == false)
+            {
+                MessageBox.Show($"{Configs.CCOL} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
+                using (StreamWriter writer = new StreamWriter(Path.Combine(C_CONFIGS, Configs.CCOL)))
+                {
+                    CreateColorConfig(writer);
+                }
+            }
+        }
+        private void CheckCfontFile(string C_CONFIGS)
+        {
+            if (File.Exists(Path.Combine(C_CONFIGS, Configs.CFONT)) == false)
+            {
+                MessageBox.Show($"{Configs.CFONT} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
+                CreateFontConfig(C_CONFIGS);
+            }
+        }
+        private void TryReadCDesktopPath(string CDesktopFile)
+        {
+            TempPath = File.ReadAllText(CDesktopFile);
+            if (Directory.Exists(TempPath) == false)
+            {
+                if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                {
+                    TempPath = ConfigurePath(CDesktopFile);
+                }   
+                else Environment.Exit(0);
+            }
+            else CheckHiddenFolders(TempPath);
+        }
+        private void CheckHiddenFolders(string CDesktopPath)
+        {
+            CDesktopPath = CDesktopPath.Trim();
+            CheckExist(Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL), HiddenFolders.HAUD_FOL);
+            CheckExist(Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL), HiddenFolders.HTRSH_FOL);
+        }
+        private void CreateHiddenFolderOf(string path)
+        {
+            Directory.CreateDirectory(path);
+            new DirectoryInfo(path) { Attributes = FileAttributes.Hidden };
+        }
+        private void CheckExist(string path, string foldername)
+        {
+            if (Directory.Exists(path) == false)
+            {
+                MessageBox.Show($"{foldername} folder not found. Creating.", "Hidden folder not found", MessageBoxButton.OK, MessageBoxImage.Information);
+                CreateHiddenFolderOf(path);
+            }
+        }
+
         #endregion
 
         #region Desktop MenuItem Option functions

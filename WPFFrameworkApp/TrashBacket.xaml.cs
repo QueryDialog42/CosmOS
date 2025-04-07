@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace WPFFrameworkApp
 {
@@ -16,7 +16,7 @@ namespace WPFFrameworkApp
         {
             InitializeComponent();
             ReloadTrashBacket();
-            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             Show();
         }
 

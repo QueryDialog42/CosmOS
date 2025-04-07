@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
+using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace WPFFrameworkApp
 {
@@ -15,7 +17,8 @@ namespace WPFFrameworkApp
         public TXTNote()
         {
             InitializeComponent();
-            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            RoutineLogics.SetSettingsForAllMenu(fileMenubar, RoutineLogics.GetFontSettingsFromCfont());
+            PaintAllMenuItem();
             Show();
         }
 
@@ -68,6 +71,24 @@ namespace WPFFrameworkApp
             filter = null;
         }
         #endregion
-        
+
+        #region Unclassified private functions
+        private void PaintAllMenuItem()
+        {
+            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
+            string color = colors[3]; // menu background color
+            MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
+            foreach(MenuItem item in items)
+            {
+                PaintMenuItem(item, color);
+            }
+        }
+        private void PaintMenuItem(MenuItem menuitem, string color)
+        {
+            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+            menuitem.BorderThickness = new Thickness(0);
+        }
+        #endregion
+
     }
 }

@@ -50,7 +50,7 @@
                         <Image Source="/NoteImages/rename.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator  />
+                <Separator />
                 <MenuItem x:Name="menuitem7" Header="_About GencOS" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/paperplane2.png"/>

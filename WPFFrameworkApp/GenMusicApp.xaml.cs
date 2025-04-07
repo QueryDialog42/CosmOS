@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Windows.Media;
-using System.Windows.Threading;
 using System.Windows.Input;
 using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 namespace WPFFrameworkApp
@@ -28,7 +28,7 @@ namespace WPFFrameworkApp
         public GenMusicApp()
         {
             InitializeComponent();
-            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             ReloadMusicApp();
             Show();
         }
@@ -60,11 +60,6 @@ namespace WPFFrameworkApp
             }
             ShowCurrentMusic();
         }
-        private void ReloadDesktopNeeded(object sender, RoutedEventArgs e)
-        {
-            IsReloadNeeded(false);
-            ReloadMusicApp();
-        }
         public void IsReloadNeeded(bool yesOrNo)
         {
             reloadNeeded.Visibility = yesOrNo ? Visibility.Visible : Visibility.Collapsed;
@@ -83,6 +78,11 @@ namespace WPFFrameworkApp
                 musicPanel1.Visibility = Visibility.Visible;
                 musicPanel2.Visibility = Visibility.Visible;
             }
+        }
+        private void ReloadDesktopNeeded(object sender, RoutedEventArgs e)
+        {
+            IsReloadNeeded(false);
+            ReloadMusicApp();
         }
         #endregion
 
@@ -313,6 +313,10 @@ namespace WPFFrameworkApp
         #endregion
 
         #region MediaPlayer functions
+        public void InitializeMediaController(object sender, EventArgs e)
+        {
+            InitializeSliderLogics();
+        }
         private void InitializeMediaPlayer(string itemname)
         {
             try
@@ -338,10 +342,7 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, itemname ?? "null MediaPlayer", "\n", ex.Message);
             }
         }
-        public void InitializeMediaController(object sender, EventArgs e)
-        {
-            InitializeSliderLogics();
-        }
+
         #endregion
 
         #region Slider functions

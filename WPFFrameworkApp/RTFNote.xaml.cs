@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Documents;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Forms;
 using System.ComponentModel;
-using System.IO;
+using System.Windows.Documents;
 
 namespace WPFFrameworkApp
 {
@@ -19,7 +19,8 @@ namespace WPFFrameworkApp
         public RTFNote()
         {
             InitializeComponent();
-            RoutineLogics.ForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            PaintAllMenuItem();
             Show();
         }
 
@@ -163,6 +164,24 @@ namespace WPFFrameworkApp
             currentDesktopForNote = null;
             windowForNote = null;
             filter = null;
+        }
+        #endregion
+
+        #region Unclassified private functions
+        private void PaintAllMenuItem()
+        {
+            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
+            string color = colors[3]; // menu background color
+            System.Windows.Controls.MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
+            foreach (System.Windows.Controls.MenuItem item in items)
+            {
+                PaintMenuItem(item, color);
+            }
+        }
+        private void PaintMenuItem(System.Windows.Controls.MenuItem menuitem, string color)
+        {
+            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+            menuitem.BorderThickness = new Thickness(0);
         }
         #endregion
     }

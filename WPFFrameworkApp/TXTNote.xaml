@@ -11,14 +11,14 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" x:Name="fileMenu">
+        <Menu Grid.Row="0" x:Name="fileMenubar">
             <MenuItem Header="_File">
-                <MenuItem Header="_New Note" Click="NewNote">
+                <MenuItem x:Name="filemenu" Header="_New Note" Click="NewNote">
                     <MenuItem.Icon>
                         <Image Source="NoteImages/noteadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Open Note" Click="OpenNote">
+                <MenuItem x:Name="openmenu" Header="_Open Note" Click="OpenNote">
                     <MenuItem.Icon>
                         <Image Source="NoteImages/noteopen.png" />
                     </MenuItem.Icon>
@@ -28,7 +28,7 @@
                         <Image Source="NoteImages/Save.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Save _As" Click="SaveAsNote">
+                <MenuItem x:Name="saveasmenu" Header="Save _As" Click="SaveAsNote">
                     <MenuItem.Icon>
                         <Image Source="NoteImages/Saveas.png" />
                     </MenuItem.Icon>
@@ -54,7 +54,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="About GenNote" Click="AboutGennotePage_Wanted">
+                <MenuItem x:Name="aboutmenu" Header="About GenNote" Click="AboutGennotePage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/gennote.png" />
                     </MenuItem.Icon>

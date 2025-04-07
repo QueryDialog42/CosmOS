@@ -16,13 +16,7 @@ namespace WPFFrameworkApp
             InitializeComponent();
         }
 
-        public static string ShowInputDialog(
-            string message,
-            string title,
-            string ImagePath = ImagePaths.QST_IMG,
-            string WindowIconPath = ImagePaths.LOGO_IMG,
-            string OKOption = "OK",
-            string CancelOption = "Cancel")
+        public static string ShowInputDialog(string message, string title, string ImagePath = ImagePaths.QST_IMG, string WindowIconPath = ImagePaths.LOGO_IMG, string OKOption = "OK", string CancelOption = "Cancel")
         {
             InputDialog inputdialog = new InputDialog
             {
@@ -37,14 +31,12 @@ namespace WPFFrameworkApp
             inputdialog.ShowDialog();
             return inputdialog.UserInput;
         }
-
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             UserInput = Input.Text.Replace("\"", "");
             Result = true;
             Close();
         }
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             UserInput = null;
