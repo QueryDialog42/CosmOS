@@ -18,12 +18,8 @@ namespace WPFFrameworkApp
 
         public static string ShowInputDialog(string message, string title, string ImagePath = ImagePaths.QST_IMG, string WindowIconPath = ImagePaths.LOGO_IMG, string OKOption = "OK", string CancelOption = "Cancel")
         {
-            InputDialog inputdialog = new InputDialog
-            {
-                Title = title,
-                Icon = new BitmapImage(new Uri(WindowIconPath, UriKind.RelativeOrAbsolute)),
-                SizeToContent = SizeToContent.WidthAndHeight, // frame.pack() in java
-            };
+            InputDialog inputdialog = CreateInputDialog(title, WindowIconPath);
+
             inputdialog.Message.Text = message;
             inputdialog.ImageIcon.Source = new BitmapImage(new Uri(ImagePath, UriKind.RelativeOrAbsolute));
             inputdialog.OKButton.Content = OKOption;
@@ -42,6 +38,15 @@ namespace WPFFrameworkApp
             UserInput = null;
             Result = false;
             Close();
+        }
+        private static InputDialog CreateInputDialog(string title, string WindowIconPath)
+        {
+            return new InputDialog
+            {
+                Title = title,
+                Icon = new BitmapImage(new Uri(WindowIconPath, UriKind.RelativeOrAbsolute)),
+                SizeToContent = SizeToContent.WidthAndHeight, // frame.pack() in java
+            };
         }
     }
 }

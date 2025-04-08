@@ -25,14 +25,8 @@ namespace WPFFrameworkApp
             };
             foreach (string option in options) 
             {
-                Button button = new Button
-                {
-                    Content = option,
-                    Width = double.NaN, // auto width for button
-                    Padding = new Thickness(3),
-                    Margin = new Thickness(5, 0, 5, 0),
-                    Background = Brushes.Transparent
-                };
+                Button button = CreateOptionButtons(option);
+
                 dialog.QueryMessage.Text = message;
                 dialog.ButtonPanel.Children.Add(button);
                 dialog.ImageIcon.Source = new BitmapImage(new Uri(Image, UriKind.RelativeOrAbsolute));
@@ -45,6 +39,17 @@ namespace WPFFrameworkApp
             }
             dialog.ShowDialog();
             return dialog.SelectedOption;
+        }
+        private static Button CreateOptionButtons(string option)
+        {
+            return new Button
+            {
+                Content = option,
+                Width = double.NaN, // auto width for button
+                Padding = new Thickness(3),
+                Margin = new Thickness(5, 0, 5, 0),
+                Background = Brushes.Transparent
+            };
         }
     }
 }
