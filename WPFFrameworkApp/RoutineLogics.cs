@@ -236,10 +236,7 @@ namespace WPFFrameworkApp
             Button app = CreateButton(filename);
             TextBlock appname = CreateTextBlock(filename, fontSettings, 0);
             Image image = CreateImage();
-            StackPanel stackpanel = new StackPanel
-            {
-                Orientation = Orientation.Vertical
-            };
+            StackPanel stackpanel = new StackPanel { Orientation = Orientation.Vertical };
             Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
 
             window.desktop.Children.Add(app);
@@ -256,22 +253,27 @@ namespace WPFFrameworkApp
                         currentDesktopForNote = desktopPath,
                         Title = filename
                     };
-                    using (StreamReader reader = new StreamReader(Path.Combine(desktopPath, filename)))
-                    {
-                        StringBuilder stringbuilder = new StringBuilder();
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            stringbuilder.AppendLine(line);
-                        }
-                        noteapp.note.Text = stringbuilder.ToString();
-                    }
+                    
+                    noteapp.note.Text = ReadTXTFile(Path.Combine(desktopPath, filename));
                 }
                 catch (Exception ex)
                 {
                     ErrorMessage("TXT" + Errors.READ_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
                 }
             };
+        }
+        private static string ReadTXTFile(string filepath)
+        {
+            using (StreamReader reader = new StreamReader(filepath))
+            {
+                StringBuilder stringbuilder = new StringBuilder();
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    stringbuilder.AppendLine(line);
+                }
+                return stringbuilder.ToString();
+            }
         }
         private static void InitRTFFile(MainWindow window, string desktopPath, string filename, string[] fontsettings)
         {
