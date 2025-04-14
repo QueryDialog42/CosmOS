@@ -19,7 +19,7 @@
         <Image x:Name="ImageIcon" Width="50" Grid.RowSpan="2" />
 
         <TextBlock x:Name="QueryMessage" Grid.Row="0" Grid.Column="1"/>
-        
+
         <StackPanel x:Name="ButtonPanel" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" />
     </Grid>
 </Window>

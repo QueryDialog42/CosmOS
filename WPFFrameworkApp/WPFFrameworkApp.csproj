@@ -112,6 +112,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PNGWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="QueryDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +134,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PNGWindow.xaml.cs">
+      <DependentUpon>PNGWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="QueryDialog.xaml.cs">
       <DependentUpon>QueryDialog.xaml</DependentUpon>
     </Compile>
@@ -306,6 +313,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DesktopImages\font.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\addpicture.png" />
+    <Resource Include="DesktopImages\delpicture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\normalpicture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Picture96x96.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\copypict.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\JPGpic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

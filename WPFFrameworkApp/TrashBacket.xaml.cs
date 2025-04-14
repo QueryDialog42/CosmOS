@@ -63,7 +63,17 @@ namespace WPFFrameworkApp
                     RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.WAV_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.WAV_IMG);
                 }
-                trashPanel.Children.Add(app);
+                else if (trashname.EndsWith(SupportedFiles.PNG))
+                {
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.PNG_IMG);
+                    AddListener(app, trash, trashname, options, ImagePaths.PNG_IMG);
+                }
+                else if (trashname.EndsWith(SupportedFiles.JPG))
+                {
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.JPG_IMG);
+                    AddListener(app, trash, trashname, options, ImagePaths.JPG_IMG);
+                }
+                    trashPanel.Children.Add(app);
             }
         }
         #endregion

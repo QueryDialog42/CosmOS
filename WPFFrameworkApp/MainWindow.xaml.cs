@@ -232,8 +232,8 @@ namespace WPFFrameworkApp
         #region Desktop MenuItem Option functions
         private static void ImportFile(MainWindow window, string desktopPath)
         {
-            RoutineLogics.MoveAnythingWithQuery("Import File", $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}",
-                null, desktopPath, desktopPath, 4);
+            string filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}|PNG Files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG Files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
+            RoutineLogics.MoveAnythingWithQuery("Import File", filter, null, desktopPath, desktopPath, 4);
             RoutineLogics.ReloadDesktop(window, desktopPath);
         }
         private void NewFolder(object sender, RoutedEventArgs e)

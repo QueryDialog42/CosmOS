@@ -391,6 +391,45 @@ namespace WPFFrameworkApp
                 }
             };
         }
+        private static void InitPictureFile(MainWindow window, string desktopPath, string filepath, string fileimage, string filename, string[] fontsettings)
+        {
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
+            Appearence(image, stackpanel, app, appname, fileimage);
+
+            window.desktop.Children.Add(app);
+
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, filepath, fileimage);
+
+            app.Click += (s, e) =>
+            {
+                BitmapImage icon = new BitmapImage(new Uri(ImagePaths.PNG_IMG, UriKind.RelativeOrAbsolute));
+                BitmapImage pictureImage = new BitmapImage(new Uri(filepath, UriKind.RelativeOrAbsolute));
+
+                pictureImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
+                pictureImage.Freeze();
+                icon.Freeze();
+
+                PNGWindow pictureApp = new PNGWindow
+                {
+                    Title = filename,
+                    Icon = icon,
+                    window = window,
+                    desktopPath = desktopPath,
+                    MaxHeight = SystemParameters.PrimaryScreenHeight * 0.8, // %80 of main screen height
+                    MaxWidth = SystemParameters.PrimaryScreenWidth * 0.9, // %90 of main screen width
+                    MinHeight = 200,
+                    MinWidth = 200,
+                };
+                pictureApp.PicMain.Source = pictureImage;
+                pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
+            };
+        }
         private static void InitFolder(MainWindow window, string desktopPath, string filename, string[] fontsettings)
         {
             Button app = CreateButton(filename);
@@ -548,6 +587,8 @@ namespace WPFFrameworkApp
                     else if (filename.EndsWith(SupportedFiles.WAV)) InitAudioFile(window, file, ImagePaths.WAV_IMG, fontsettings);
                     else if (filename.EndsWith(SupportedFiles.MP3)) InitAudioFile(window, file, ImagePaths.MP3_IMG, fontsettings);
                     else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, desktopPath, file, filename, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.PNG)) InitPictureFile(window, desktopPath, file, ImagePaths.PNG_IMG, filename, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.JPG)) InitPictureFile(window, desktopPath, file, ImagePaths.JPG_IMG, filename, fontsettings);
                     else
                     {
                         ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS);
@@ -767,6 +808,7 @@ namespace WPFFrameworkApp
             string color = GetColorSettingsFromCcol()[3];
             string currentdesktop = Path.GetDirectoryName(filepath);
             string filename = Path.GetFileName(filepath);
+
             ContextMenu contextMenu = new ContextMenu();
             MenuItem renameItem = CreateMenuItemForContextMenu("Rename", color, ImagePaths.RENM_IMG);
             MenuItem moveitem = CreateMenuItemForContextMenu("Move", color, ImagePaths.NMOVE_IMG);
@@ -877,10 +919,12 @@ namespace WPFFrameworkApp
             string pathToDirection = Path.Combine(currentDesktop, newfilename);
 
             if (CheckNewTXTFilenameIsAllowed(filename, newfilename) == false) return;
-            if (CheckNewRTFFilenameIsAllowed(filename, newfilename) == false) return;
-            if (CheckNewWAVFilenameIsAllowed(filename, newfilename) == false) return;
-            if (CheckNewMP3FilenameIsAllowed(filename, newfilename) == false) return;
-            if (CheckNewEXEFilenameIsAllowed(filename, newfilename) == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.RTF, "non-RTF") == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.WAV, "non-WAV") == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.MP3, "non-MP3") == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.EXE, "non-EXE") == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.PNG, "non-PNG") == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.JPG, "non-JPG") == false) return;
 
             MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
         }
@@ -897,57 +941,18 @@ namespace WPFFrameworkApp
             }
             return true; // not a txt file
         }
-        private static bool CheckNewRTFFilenameIsAllowed(string filename, string newfilename)
+        private static bool CheckNewFilenameIsAllowed(string filename, string newfilename, string checkFor, string non_file)
         {
-            if (filename.EndsWith(SupportedFiles.RTF))
+            if (filename.EndsWith(checkFor))
             {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.RTF) == false)
+                if (IsRenameAllowed(filename, newfilename, checkFor) == false)
                 {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-RTF file");
+                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, $" as a {non_file} file");
                     return false; // not allowed
                 }
                 return true; // allowed
             }
             return true; // not a rtf file
-        }
-        private static bool CheckNewWAVFilenameIsAllowed(string filename, string newfilename)
-        {
-            if (filename.EndsWith(SupportedFiles.WAV))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.WAV) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-WAV file");
-                    return false; // not allowed
-                }
-                return true;
-            }
-            return true;
-        }
-        private static bool CheckNewMP3FilenameIsAllowed(string filename, string newfilename)
-        {
-            if (filename.EndsWith(SupportedFiles.MP3))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.MP3) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-MP3 file");
-                    return false;
-                }
-                return true;
-            }
-            return true;
-        }
-        private static bool CheckNewEXEFilenameIsAllowed(string filename, string newfilename)
-        {
-            if (filename.EndsWith(SupportedFiles.EXE))
-            {
-                if (IsRenameAllowed(filename, newfilename, SupportedFiles.EXE) == false)
-                {
-                    ErrorMessage(Errors.PRMS_ERR, "You can not rename ", filename, " as a non-EXE file");
-                    return false;
-                }
-                return true;
-            }
-            return true;
         }
         private static bool CheckNewFolderNameIsAllowed(string newfoldername)
         {

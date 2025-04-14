@@ -52,6 +52,11 @@
         public const string QST_IMG = "DesktopImages/question2.png";
         public const string FDEL_IMG = "DesktopImages/folderdelete2.png";
         public const string DELEXE_IMG = "DesktopImages/deleteexe.png";
+        public const string PNG_IMG = "DesktopImages/Picture96x96.png";
+        public const string JPG_IMG = "DesktopImages/JPGpic.png";
+        public const string COPYPIC = "DesktopImages/copypict.png";
+        public const string DELPNG_IMG = "DesktopImages/delpicture.png";
+        public const string ADDPNG_IMG = "DesktopImages/addpicture.png";
         public const string NOTE_IMG = "NoteImages/gennote.png";
         public const string NADD_IMG = "NoteImages/noteadd.png";
         public const string NDEL_IMG = "NoteImages/notedelete.png";
@@ -86,6 +91,8 @@
         public const string WAV = ".wav";
         public const string MP3 = ".mp3";
         public const string EXE = ".exe";
+        public const string PNG = ".png";
+        public const string JPG = ".jpg";
     }
 
     public struct Versions
@@ -93,7 +100,7 @@
         public const string NOTE_VRS = "GenNote v1.4.8";
         public const string MUSIC_VRS = "GenMusic v1.6.6";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v2.0.5";
+        public const string GOS_VRS = "GencOS v2.0.7";
     }
 
     public struct MainItems

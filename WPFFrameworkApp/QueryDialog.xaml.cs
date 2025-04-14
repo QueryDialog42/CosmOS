@@ -48,7 +48,7 @@ namespace WPFFrameworkApp
                 Width = double.NaN, // auto width for button
                 Padding = new Thickness(3),
                 Margin = new Thickness(5, 0, 5, 0),
-                Background = Brushes.Transparent
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#dbdbdb")),
             };
         }
     }
