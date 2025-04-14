@@ -19,8 +19,8 @@ namespace WPFFrameworkApp
     {
         public static string currentAudio;
         public static bool isPaused = true;
-        public static MediaPlayer mediaPlayer;
         public static DispatcherTimer time;
+        public static MediaPlayer mediaPlayer;
         public Dictionary<ListBoxItem, TextBlock> datacontent; // to store items' TextBlock in order to get filename
         public string musicfilter = $"WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}";
 
@@ -28,7 +28,7 @@ namespace WPFFrameworkApp
         public GenMusicApp()
         {
             InitializeComponent();
-            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            SetMenuStyles();
             ReloadMusicApp();
             Show();
         }
@@ -216,6 +216,14 @@ namespace WPFFrameworkApp
             ListBoxItem item = new ListBoxItem { Content = itempanel };
             listbox.Items.Add(item); // supported audios
             datacontent.Add(item, textblock);
+        }
+        private void SetMenuStyles()
+        {
+            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            MenuItem[] menuItems = {AudioItem, AItem1, AItem2, AItem3, AItem4, AItem5, AItem6};
+            SolidColorBrush color = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
+
+            foreach (MenuItem item in menuItems) item.Background = color;
         }
         #endregion
 

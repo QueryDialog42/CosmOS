@@ -12,11 +12,14 @@ namespace WPFFrameworkApp
     /// </summary>
     public partial class TrashBacket : Window
     {
+        private string[] colors = RoutineLogics.GetColorSettingsFromCcol();
+
         public TrashBacket()
         {
             InitializeComponent();
+            SetMenuStyles();
+            SetDesktopStyle();
             ReloadTrashBacket();
-            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             Show();
         }
 
@@ -140,6 +143,22 @@ namespace WPFFrameworkApp
         private void TrashBacketReload_Wanted(object sender, RoutedEventArgs e)
         {
             ReloadTrashBacket();
+        }
+        #endregion
+
+        #region TrashBacket style functions
+        private void SetMenuStyles()
+        {
+
+            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            SolidColorBrush menuColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
+            MenuItem[] menuitems = { TItem1, TItem2, TItem3};
+
+            foreach (MenuItem item in menuitems) item.Background = menuColor;
+        }
+        private void SetDesktopStyle()
+        {
+            trashPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0])); ;
         }
         #endregion
     }

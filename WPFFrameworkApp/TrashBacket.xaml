@@ -13,17 +13,17 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" x:Name="fileMenu">
             <MenuItem Header="_Trash">
-                <MenuItem Header="_Empty Trash" Click="EmptyTrash">
+                <MenuItem x:Name="TItem1" Header="_Empty Trash" BorderThickness="0" Click="EmptyTrash">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/trashempty.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Rescue All" Click="RescueAll">
+                <MenuItem x:Name="TItem2" Header="_Rescue All" BorderThickness="0" Click="RescueAll">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/rescueme.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Reload TrashBacket" Click="TrashBacketReload_Wanted">
+                <MenuItem x:Name="TItem3" Header="_Reload TrashBacket" BorderThickness="0" Click="TrashBacketReload_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/refresh.png" />
                     </MenuItem.Icon>

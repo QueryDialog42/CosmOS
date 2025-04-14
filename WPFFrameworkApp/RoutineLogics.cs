@@ -18,9 +18,9 @@ namespace WPFFrameworkApp
         public static string configFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
         private static string[] fontcolor = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
 
-        public static string desktopFontcolor = GetFontColor(fontcolor, 0);
-        public static string folderFontcolor = GetFontColor(fontcolor, 1); 
         public static string menuFontColor = GetFontColor(fontcolor, 2);
+        public static string folderFontcolor = GetFontColor(fontcolor, 1);
+        public static string desktopFontcolor = GetFontColor(fontcolor, 0);
 
         #region File Movement functions
         public static void MoveAnythingWithQuery(string title, string filter, string selectedFileName, string initialDirectory, string currentDesktop, short toWhere)

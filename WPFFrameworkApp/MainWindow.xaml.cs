@@ -7,23 +7,19 @@ namespace WPFFrameworkApp
 {
     public partial class MainWindow : Window
     {
-        public static string CDesktopPath; // C_DESKTOP folder path
-        public static string TempPath; // Temporary path to store currentDesktop path
-        public static string MusicAppPath;
-        public static string TrashPath;
         public string currentDesktop; // path to unique desktop
+
+        public static string TempPath; // Temporary path to store currentDesktop path
+        public static string TrashPath;
+        public static string MusicAppPath;
+        public static string CDesktopPath; // C_DESKTOP folder path
+
         public MainWindow()
         {
             InitializeComponent();
             if (TempPath == null) CheckConfigurationIsRight();
-            try
-            {
-                StartUp();
-            } catch (Exception)
-            {
-                // user tried to open without path
-                MessageBox.Show("Window opened without C_DESKTOP path.\nMinimal operation system will be used", "GencOS without path", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+
+            StartUp();
         }
 
         #region Configuration functions
@@ -80,11 +76,18 @@ namespace WPFFrameworkApp
         }
         private void StartUp()
         {
-            currentDesktop = TempPath.Trim();
-            CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
-            MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
-            TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
-            if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+            try
+            {
+                currentDesktop = TempPath.Trim();
+                CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
+                MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
+                TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
+                if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("GencOS is opened without C_DESKTOP path. Minimal operation system will be used.", "GencOS Without Path", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
         private void CheckConfigurationIsRight()
         {
@@ -92,19 +95,13 @@ namespace WPFFrameworkApp
             string CDesktopFile = Path.Combine(C_CONFIGS, Configs.CPATH);
 
             if (CheckConfigDirectory(C_CONFIGS, CDesktopFile)) return;
+
             CheckCDesktopPathFile(CDesktopFile);
             CheckCcolorFile(C_CONFIGS);
             CheckCfontFile(C_CONFIGS);
-
-            try
-            {
-                TryReadCDesktopPath(CDesktopFile);
-            }
-            catch (Exception ex)
-            {
-                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
-                Environment.Exit(0);
-            }
+            
+            TryReadCDesktopPath(CDesktopFile);
+            
         }
         private void CreateConfigFiles(string CDesktopFile, string input, string C_CONFIGS)
         {
@@ -191,16 +188,24 @@ namespace WPFFrameworkApp
         }
         private void TryReadCDesktopPath(string CDesktopFile)
         {
-            TempPath = File.ReadAllText(CDesktopFile);
-            if (Directory.Exists(TempPath) == false)
+            try
             {
-                if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                TempPath = File.ReadAllText(CDesktopFile);
+                if (Directory.Exists(TempPath) == false)
                 {
-                    TempPath = ConfigurePath(CDesktopFile);
-                }   
-                else Environment.Exit(0);
+                    if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                    {
+                        TempPath = ConfigurePath(CDesktopFile);
+                    }
+                    else Environment.Exit(0);
+                }
+                else CheckHiddenFolders(TempPath);
             }
-            else CheckHiddenFolders(TempPath);
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage(Errors.READ_ERR, Errors.READ_ERR_MSG, "the path from ", Configs.CPATH, "\n", ex.Message);
+                Environment.Exit(0);
+            }
         }
         private void CheckHiddenFolders(string CDesktopPath)
         {

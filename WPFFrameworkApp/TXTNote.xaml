@@ -12,7 +12,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" x:Name="fileMenubar">
-            <MenuItem Header="_File">
+            <MenuItem Header="_File" Height="20">
                 <MenuItem x:Name="filemenu" Header="_New Note" Click="NewNote">
                     <MenuItem.Icon>
                         <Image Source="NoteImages/noteadd.png" />
