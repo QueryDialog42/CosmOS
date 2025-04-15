@@ -1,0 +1,42 @@
+﻿<Window x:Class="WPFFrameworkApp.InfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFFrameworkApp" ResizeMode="NoResize"
+        mc:Ignorable="d" Title="File Details" Icon="/DesktopImages/information.png"
+        Height="165" Width="500" Background="DarkGray">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Image x:Name="logoimage" Grid.Row="0" Grid.Column="0" Grid.RowSpan="5" Margin="10, 10, 10, 10"/>
+        
+        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="15" Text="Name:" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="15" Text="Type:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="15" Text="Size:" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="15" Text="Location:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="15" Text="Last Created:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" FontSize="15" Text="Last Modified:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="6" Grid.Column="1" FontSize="15" Text="Last Access:" VerticalAlignment="Center"/>
+        
+        <TextBlock x:Name="nameInfo" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+        <TextBlock x:Name="typeInfo" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0" />
+        <TextBlock x:Name="sizeInfo" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+        <TextBlock x:Name="locInfo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+        <TextBlock x:Name="LastCreatedInfo" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+        <TextBlock x:Name="LastModifiedInfo" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+        <TextBlock x:Name="LastAccessInfo" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+    </Grid>
+</Window>

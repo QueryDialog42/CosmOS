@@ -820,6 +820,7 @@ namespace WPFFrameworkApp
             MenuItem moveitem = CreateMenuItemForContextMenu("Move", color, ImagePaths.NMOVE_IMG);
             MenuItem copyitem = CreateMenuItemForContextMenu("Copy", color, copyicon);
             MenuItem deleteitem = CreateMenuItemForContextMenu("Delete", color, deleteicon);
+            MenuItem moreinfo = CreateMenuItemForContextMenu("Details", color, ImagePaths.INFO_IMG);
 
             renameItem.Click += (sender, e) =>
             {
@@ -844,12 +845,17 @@ namespace WPFFrameworkApp
                     ReloadDesktop(window, currentdesktop);
                 }
             };
+            moreinfo.Click += (sender, e) =>
+            {
+                setInfoWindow(new InfoWindow(), new FileInfo(filepath), imageicon);
+            };
 
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(moveitem);
             contextMenu.Items.Add(copyitem);
             if (imageicon == ImagePaths.WAV_IMG || imageicon == ImagePaths.MP3_IMG) AddIfSound(contextMenu, color, window, currentdesktop, filename);
             contextMenu.Items.Add(deleteitem);
+            contextMenu.Items.Add(moreinfo);
 
             SetSettingsForAllMenu(contextMenu, fontsettings);
 
@@ -861,13 +867,15 @@ namespace WPFFrameworkApp
             ContextMenu contextMenu = new ContextMenu();
             MenuItem renameItem = CreateMenuItemForContextMenu("Rename", color, ImagePaths.RENM_IMG);
             MenuItem deleteitem = CreateMenuItemForContextMenu("Delete", color, ImagePaths.FDEL_IMG);
+            MenuItem folderInfo = CreateMenuItemForContextMenu("Details", color, ImagePaths.INFO_IMG);
 
             renameItem.Click += (sender, e) => AddRenameFolderListener(window, desktopPath, filename);
-
             deleteitem.Click += (sender, e) => AddDeleteFolderListener(window, desktopPath, filename);
+            folderInfo.Click += (sender, e) => setFolderInfoWindow(Path.Combine(desktopPath, filename));
 
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(deleteitem);
+            contextMenu.Items.Add(folderInfo);
 
             SetSettingsForAllMenu(contextMenu, GetFontSettingsFromCfont());
 
@@ -886,6 +894,48 @@ namespace WPFFrameworkApp
                 }
             };
             
+        }
+        private static string setExtensionString(string extension)
+        {
+            switch (extension)
+            {
+                case SupportedFiles.TXT: return $"Text File ({SupportedFiles.TXT})";
+                case SupportedFiles.RTF: return $"Rich Text File ({SupportedFiles.RTF})";
+                case SupportedFiles.WAV: return $"Waveform Audio File ({SupportedFiles.WAV})";
+                case SupportedFiles.MP3: return $"MPEG-1 Audio Layer 3 Audio File ({SupportedFiles.MP3})";
+                case SupportedFiles.EXE: return $"Executable File ({SupportedFiles.EXE})";
+                case SupportedFiles.PNG: return $"Portable Network Graphics File ({SupportedFiles.PNG})";
+                case SupportedFiles.JPG: return $"JPEG Image File ({SupportedFiles.JPG})";
+                default: return "Unknown File (?.?)";
+            }
+        }
+        private static void setInfoWindow (InfoWindow infowindow, FileInfo fileInfo, string imageicon)
+        {
+            infowindow.nameInfo.Text = fileInfo.Name.Substring(0, fileInfo.Name.Length - 4); // get only name
+            infowindow.typeInfo.Text = setExtensionString(fileInfo.Extension);
+            infowindow.sizeInfo.Text = $"{fileInfo.Length / 1024} KB";
+            infowindow.locInfo.Text = fileInfo.FullName;
+            infowindow.LastCreatedInfo.Text = fileInfo.CreationTime.ToString();
+            infowindow.LastModifiedInfo.Text = fileInfo.LastWriteTime.ToString();
+            infowindow.LastAccessInfo.Text = fileInfo.LastAccessTime.ToString();
+            infowindow.SizeToContent = SizeToContent.Width;
+            infowindow.logoimage.Source = new BitmapImage(new Uri(imageicon, UriKind.RelativeOrAbsolute));
+        }
+        private static void setFolderInfoWindow(string directoryPath)
+        {
+            
+            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+            InfoWindow infowindow = new InfoWindow { Title = "Directory Details" };
+
+            infowindow.logoimage.Source = new BitmapImage(new Uri(ImagePaths.FOLDER_IMG, UriKind.RelativeOrAbsolute));
+            infowindow.nameInfo.Text = directoryInfo.Name;
+            infowindow.typeInfo.Text = "Directory";
+            infowindow.sizeInfo.Text = $"{directoryInfo.GetFiles().Length} files";
+            infowindow.locInfo.Text = directoryInfo.FullName;
+            infowindow.LastCreatedInfo.Text = directoryInfo.CreationTime.ToString();
+            infowindow.LastModifiedInfo.Text = directoryInfo.LastWriteTime.ToString();
+            infowindow.LastAccessInfo.Text = directoryInfo.LastAccessTime.ToString();
+            infowindow.SizeToContent = SizeToContent.Width;
         }
         #endregion
 

@@ -57,6 +57,7 @@
         public const string COPYPIC = "DesktopImages/copypict.png";
         public const string DELPNG_IMG = "DesktopImages/delpicture.png";
         public const string ADDPNG_IMG = "DesktopImages/addpicture.png";
+        public const string INFO_IMG = "DesktopImages/information.png";
         public const string NOTE_IMG = "NoteImages/gennote.png";
         public const string NADD_IMG = "NoteImages/noteadd.png";
         public const string NDEL_IMG = "NoteImages/notedelete.png";
@@ -100,7 +101,7 @@
         public const string NOTE_VRS = "GenNote v1.4.8";
         public const string MUSIC_VRS = "GenMusic v1.6.6";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v2.0.9";
+        public const string GOS_VRS = "GencOS v2.1.0";
     }
 
     public struct MainItems

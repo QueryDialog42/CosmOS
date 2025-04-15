@@ -77,6 +77,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="InfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +108,9 @@
     </Compile>
     <Compile Include="GenMusicApp.xaml.cs">
       <DependentUpon>GenMusicApp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InfoWindow.xaml.cs">
+      <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="InputDialog.xaml.cs">
       <DependentUpon>InputDialog.xaml</DependentUpon>
@@ -329,6 +336,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DesktopImages\JPGpic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\information.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
