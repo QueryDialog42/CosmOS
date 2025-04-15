@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
+using System.Windows.Forms;
 
 namespace WPFFrameworkApp
 {
@@ -30,10 +30,13 @@ namespace WPFFrameworkApp
         private static string selectedMenuFontStyle;
         private static float selectedMenuFontSize;
 
+        private SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
+
         public FontSettings()
         {
             InitializeComponent();
             ApplyAllFontSettings();
+            SetStyles();
             Show();
         }
 
@@ -331,6 +334,16 @@ namespace WPFFrameworkApp
                 System.Windows.MessageBox.Show("An error occured while configuring menu font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 SetFontSettingsDefaults();
             }
+        }
+        #endregion
+
+        #region MenuStyle functions
+        private void SetStyles()
+        {
+            RoutineLogics.SetSettingsForAllMenu(fontmenu, RoutineLogics.GetFontSettingsFromCfont());
+            System.Windows.Controls.MenuItem[] items = { FItem1, FItem2, FItem3};
+
+            foreach (System.Windows.Controls.MenuItem item in items) item.Background = menucolor;
         }
         #endregion
     }

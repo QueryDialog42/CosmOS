@@ -13,12 +13,8 @@ namespace WPFFrameworkApp
         public ColorSettings()
         {
             InitializeComponent();
-            string[] colors = File.ReadAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL));
-
-            mainDesktopColor.Text = colors[0];
-            folderDesktopColor.Text = colors[1];
-            safariColor.Text = colors[2];
-            menuColor.Text = colors[3];
+            SetFontPreviewStyles();
+            SetStyles();
             Show();
         }
 
@@ -87,6 +83,26 @@ namespace WPFFrameworkApp
                     textblock.Text = $"#{hexcolor & 0x00FFFFFF:X6}"; // only RGB, X6 = hexadecimal with 6 digits
                 }
             }
+        }
+        #endregion
+
+        #region Panel Style functions
+        private void SetStyles()
+        {
+            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
+            RoutineLogics.SetSettingsForAllMenu(colorMenu, RoutineLogics.GetFontSettingsFromCfont());
+            MenuItem[] items = { CItem1, CItem2, CItem3 };
+
+            foreach (MenuItem item in items) item.Background = menucolor;
+        }
+        private void SetFontPreviewStyles()
+        {
+            string[] colors = File.ReadAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL));
+
+            mainDesktopColor.Text = colors[0];
+            folderDesktopColor.Text = colors[1];
+            safariColor.Text = colors[2];
+            menuColor.Text = colors[3];
         }
         #endregion
     }

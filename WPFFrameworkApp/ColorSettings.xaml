@@ -18,19 +18,19 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="DarkGray">
+        <Menu x:Name="colorMenu" Grid.Row="0" Grid.ColumnSpan="2" Background="DarkGray">
             <MenuItem Header="Result" Height="20">
-                <MenuItem Header="Apply Changes" Click="ApplyChanges_Clicked">
+                <MenuItem x:Name="CItem1" Header="Apply Changes" BorderThickness="0" Click="ApplyChanges_Clicked">
                     <MenuItem.Icon>
                         <Image Source="/NoteImages/Save.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Quit without saving" Click="CancelChanges_Clicked">
+                <MenuItem x:Name="CItem2" Header="Quit without saving" BorderThickness="0" Click="CancelChanges_Clicked">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/Quit.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Restore default settings" Click="RestoreDefaults_Wanted">
+                <MenuItem x:Name="CItem3" Header="Restore default settings" BorderThickness="0" Click="RestoreDefaults_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/restore.png"/>
                     </MenuItem.Icon>
