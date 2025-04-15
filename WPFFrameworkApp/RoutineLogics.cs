@@ -409,13 +409,9 @@ namespace WPFFrameworkApp
             app.Click += (s, e) =>
             {
                 BitmapImage icon = new BitmapImage(new Uri(ImagePaths.PNG_IMG, UriKind.RelativeOrAbsolute));
-                BitmapImage pictureImage = new BitmapImage(new Uri(filepath, UriKind.RelativeOrAbsolute));
+                icon.Freeze(); 
 
-                pictureImage.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
-                pictureImage.Freeze();
-                icon.Freeze();
-
-                PNGWindow pictureApp = new PNGWindow
+                PicWindow pictureApp = new PicWindow
                 {
                     Title = filename,
                     Icon = icon,
@@ -426,9 +422,19 @@ namespace WPFFrameworkApp
                     MinHeight = 200,
                     MinWidth = 200,
                 };
-                pictureApp.PicMain.Source = pictureImage;
+                pictureApp.PicMain.Source = SetBitmapImage(filepath);
                 pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
             };
+        }
+        private static BitmapImage SetBitmapImage(string imagepath)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
+            bitmap.UriSource = new Uri(imagepath, UriKind.RelativeOrAbsolute);
+            bitmap.EndInit();
+            bitmap.Freeze(); // Make the image thread-safe
+            return bitmap;
         }
         private static void InitFolder(MainWindow window, string desktopPath, string filename, string[] fontsettings)
         {

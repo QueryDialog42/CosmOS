@@ -112,7 +112,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PNGWindow.xaml">
+    <Page Include="PicWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,8 +134,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PNGWindow.xaml.cs">
-      <DependentUpon>PNGWindow.xaml</DependentUpon>
+    <Compile Include="PicWindow.xaml.cs">
+      <DependentUpon>PicWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="QueryDialog.xaml.cs">
       <DependentUpon>QueryDialog.xaml</DependentUpon>

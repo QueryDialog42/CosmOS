@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.ComponentModel;
 using System.Windows.Controls;
 
 namespace WPFFrameworkApp
@@ -8,14 +9,14 @@ namespace WPFFrameworkApp
     /// <summary>
     /// PNGWindow.xaml etkileşim mantığı
     /// </summary>
-    public partial class PNGWindow : Window
+    public partial class PicWindow : Window
     {
         public MainWindow window;
         public string desktopPath;
         private SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
         private string filter = $"PNG files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
 
-        public PNGWindow()
+        public PicWindow()
         {
             InitializeComponent();
             SetStyles();
@@ -68,9 +69,9 @@ namespace WPFFrameworkApp
             string[] options = { "Ok", "Cancel" };
             if (MessageBox.Show($"Are you sure you want to delete {Title}", "Delete Picture", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                Close();
                 RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, MainWindow.TrashPath);
                 RoutineLogics.ReloadDesktop(window, desktopPath);
+                Close();
             }
         }
     }
