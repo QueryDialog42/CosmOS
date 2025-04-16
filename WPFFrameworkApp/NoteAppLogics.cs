@@ -71,7 +71,7 @@ namespace WPFFrameworkApp
                     {
                         writer.WriteLine(noteapp.note.Text);
                     }
-                    RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                    RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -114,7 +114,7 @@ namespace WPFFrameworkApp
                     {
                         textrange.Save(filestream, DataFormats.Rtf);
                     }
-                    RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                    RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -127,14 +127,14 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
             noteapp.Close();
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
 
         }
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
             noteapp.Close();
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
 
         }
         public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
@@ -145,7 +145,7 @@ namespace WPFFrameworkApp
 
                 RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
                 noteapp.Close();
-                RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+                RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
             }
         }
         #endregion

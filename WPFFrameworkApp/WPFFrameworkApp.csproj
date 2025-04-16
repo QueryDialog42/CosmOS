@@ -109,6 +109,7 @@
     <Compile Include="GenMusicApp.xaml.cs">
       <DependentUpon>GenMusicApp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces.cs" />
     <Compile Include="InfoWindow.xaml.cs">
       <DependentUpon>InfoWindow.xaml</DependentUpon>
     </Compile>

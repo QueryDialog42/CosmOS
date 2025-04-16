@@ -565,7 +565,7 @@ namespace WPFFrameworkApp
         #endregion
 
         #region Window Reload functions
-        public static void ReloadDesktop(MainWindow window, string desktopPath)
+        public static void ReloadWindow(MainWindow window, string desktopPath)
         {
             window.desktop.Children.Clear();
             window.folderdesktop.Children.Clear();
@@ -613,7 +613,7 @@ namespace WPFFrameworkApp
         public static void WindowReloadNeeded(string directoryName)
         {
             MainWindow directionFolder = GetMainWindow(directoryName);
-            if (directionFolder != null && directoryName != null) ReloadDesktop(directionFolder, directoryName);
+            if (directionFolder != null && directoryName != null) ReloadWindow(directionFolder, directoryName);
         }
         public static void ReloadNeededForEveryWindow()
         {
@@ -643,7 +643,7 @@ namespace WPFFrameworkApp
         private static void TrashBacketReloadNeeded()
         {
             TrashBacket trashapp = GetTrashBacketWindow();
-            trashapp?.ReloadTrashBacket();
+            trashapp?.ReloadWindow();
         }
         #endregion
 
@@ -825,24 +825,24 @@ namespace WPFFrameworkApp
             renameItem.Click += (sender, e) =>
             {
                 RenameFile_Wanted(filepath, imageicon);
-                ReloadDesktop(window, currentdesktop);
+                ReloadWindow(window, currentdesktop);
             };
             copyitem.Click += (sender, e) =>
             {
                 CopyAnythingWithQuery("Copy File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop);
-                ReloadDesktop(window, currentdesktop);
+                ReloadWindow(window, currentdesktop);
             };
             moveitem.Click += (sender, e) =>
             {
                 MoveAnythingWithQuery("Move File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop, 1);
-                ReloadDesktop(window, currentdesktop);
+                ReloadWindow(window, currentdesktop);
             };
             deleteitem.Click += (sender, e) =>
             {
                 if (MessageBox.Show($"Are you sure to delete {filename}?", "Delete File", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
-                    ReloadDesktop(window, currentdesktop);
+                    ReloadWindow(window, currentdesktop);
                 }
             };
             moreinfo.Click += (sender, e) =>
@@ -939,29 +939,6 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region unclassified public functions
-        public static void ErrorMessage(string errtitle, params string[] errmessage)
-        {
-            StringBuilder stringbuilder = new StringBuilder();
-            foreach (string str in errmessage)
-            {
-                stringbuilder.Append(str);
-            }
-            MessageBox.Show(stringbuilder.ToString(), errtitle, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        public static void ShowAboutWindow(string title, string image, string icon, string version, string message)
-        {
-            AboutWindow aboutwindow = new AboutWindow
-            {
-                Title = title
-            };
-            aboutwindow.WhatAbout.Source = new BitmapImage(new Uri(image, UriKind.RelativeOrAbsolute)); ;
-            aboutwindow.Icon = new BitmapImage(new Uri(icon, UriKind.RelativeOrAbsolute));
-            aboutwindow.Version.Text = version;
-            aboutwindow.AboutMessage.Text = message;
-        }
-        #endregion
-
         #region Rename file functions
         public static void RenameFile_Wanted(string filepath, string ImagePath, string icon = ImagePaths.RENM_IMG)
         {
@@ -1032,7 +1009,30 @@ namespace WPFFrameworkApp
         private static bool IsRenameAllowed(string filename, string newfilename, string checkfor) => filename.EndsWith(checkfor) && newfilename.EndsWith(checkfor);
         #endregion
 
-        #region unclassified private functions
+        #region Unclassified public functions
+        public static void ErrorMessage(string errtitle, params string[] errmessage)
+        {
+            StringBuilder stringbuilder = new StringBuilder();
+            foreach (string str in errmessage)
+            {
+                stringbuilder.Append(str);
+            }
+            MessageBox.Show(stringbuilder.ToString(), errtitle, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        public static void ShowAboutWindow(string title, string image, string icon, string version, string message)
+        {
+            AboutWindow aboutwindow = new AboutWindow
+            {
+                Title = title
+            };
+            aboutwindow.WhatAbout.Source = new BitmapImage(new Uri(image, UriKind.RelativeOrAbsolute)); ;
+            aboutwindow.Icon = new BitmapImage(new Uri(icon, UriKind.RelativeOrAbsolute));
+            aboutwindow.Version.Text = version;
+            aboutwindow.AboutMessage.Text = message;
+        }
+        #endregion
+
+        #region Unclassified private functions
         private static string GetDirectoryName(string directoryPath)
         {
             string[] parts = directoryPath.Split(Path.DirectorySeparatorChar);
@@ -1068,7 +1068,7 @@ namespace WPFFrameworkApp
             addtogenmuic.Click += (sender, e) =>
             {
                 MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
-                ReloadDesktop(window, currentdesktop);
+                ReloadWindow(window, currentdesktop);
                 GenMusicApp genmusicapp = GetMusicAppWindow();
                 genmusicapp?.IsReloadNeeded(true);
             };
@@ -1083,7 +1083,7 @@ namespace WPFFrameworkApp
                 try
                 {
                     Directory.Move(Path.Combine(desktopPath, filename), Path.Combine(desktopPath, newfilename));
-                    ReloadDesktop(window, desktopPath);
+                    ReloadWindow(window, desktopPath);
                 }
                 catch (Exception ex)
                 {
@@ -1098,7 +1098,7 @@ namespace WPFFrameworkApp
                 try
                 {
                     Directory.Delete(Path.Combine(desktopPath, filename));
-                    ReloadDesktop(window, desktopPath);
+                    ReloadWindow(window, desktopPath);
                 }
                 catch (Exception ex)
                 {

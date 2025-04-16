@@ -35,7 +35,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Desktop" Height="20">
-                <MenuItem x:Name="menuitem4" Header="_Reload Desktop" Click="ReloadDesktop_Wanted">
+                <MenuItem x:Name="menuitem4" Header="_Reload Desktop" Click="ReloadWindow_Wanted">
                     <MenuItem.Icon>
                         <Image Source="DesktopImages/refresh.png" />
                     </MenuItem.Icon>
@@ -83,7 +83,7 @@
                             <Image Source="/DesktopImages/newfolder.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadDesktop_Wanted">
+                    <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadWindow_Wanted">
                         <MenuItem.Icon>
                             <Image Source="/DesktopImages/refresh.png"/>
                         </MenuItem.Icon>
@@ -100,7 +100,7 @@
             </Button>
             
             <!--only when reload desktop needed-->
-            <Button x:Name="reloadNeed" Height="35" Background="#4a4a4a" Foreground="White" BorderThickness="0" Visibility="Collapsed" Click="ReloadDesktop_Wanted">
+            <Button x:Name="reloadNeed" Height="35" Background="#4a4a4a" Foreground="White" BorderThickness="0" Visibility="Collapsed" Click="ReloadWindow_Wanted">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
                     <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>

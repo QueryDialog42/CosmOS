@@ -15,48 +15,48 @@
             </Grid.RowDefinitions>
             <Menu Grid.Row="0" x:Name="fileMenu">
                 <MenuItem Header="_File" Height="20">
-                    <MenuItem x:Name="filemenu" Header="_New Note" Click="NewNote">
+                    <MenuItem x:Name="filemenu" Header="_New Note" Click="NewFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/noteadd.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="openmenu" Header="_Open Note" Click="OpenNote">
+                    <MenuItem x:Name="openmenu" Header="_Open Note" Click="OpenFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/noteopen.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="save" Header="_Save" Click="SaveNote">
+                    <MenuItem x:Name="save" Header="_Save" Click="SaveFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/Save.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="saveasmenu" Header="Save _As" Click="SaveAsNote">
+                    <MenuItem x:Name="saveasmenu" Header="Save _As" Click="SaveAsFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/Saveas.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="copy" Header="_Copy" Click="CopyNote">
+                    <MenuItem x:Name="copy" Header="_Copy" Click="CopyFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/notecopy.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="move" Header="_Move" Click="MoveNote">
+                    <MenuItem x:Name="move" Header="_Move" Click="MoveFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/move.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem  x:Name="rename" Header="_Rename" Click="RenameNote">
+                    <MenuItem  x:Name="rename" Header="_Rename" Click="RenameFile">
                         <MenuItem.Icon>
                             <Image Source="/NoteImages/rename.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="delete" Header="_Delete" Click="DeleteNote">
+                    <MenuItem x:Name="delete" Header="_Delete" Click="DeleteFile">
                         <MenuItem.Icon>
                             <Image Source="NoteImages/notedelete.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem x:Name="aboutmenu" Header="About GenNote" Click="AboutGennotePage_Wanted">
+                    <MenuItem x:Name="aboutmenu" Header="About GenNote" Click="AboutPage">
                         <MenuItem.Icon>
                             <Image Source="/NoteImages/gennote.png" />
                         </MenuItem.Icon>
@@ -64,7 +64,7 @@
                 </MenuItem>
             </Menu>
             <ToolBar Grid.Row="1">
-                <Button x:Name="saveButton" Width="23" Height="23" Click="SaveNote" ToolTip="Save">
+                <Button x:Name="saveButton" Width="23" Height="23" Click="SaveFile" ToolTip="Save">
                     <Image Source="NoteImages/Save.png"/>
                 </Button>
                 <Separator />

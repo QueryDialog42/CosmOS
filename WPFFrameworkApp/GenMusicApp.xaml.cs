@@ -15,7 +15,7 @@ namespace WPFFrameworkApp
     /// <summary>
     /// GenMusicApp.xaml etkileşim mantığı
     /// </summary>
-    public partial class GenMusicApp : Window
+    public partial class GenMusicApp : Window, IWindow
     {
         public static string currentAudio;
         public static bool isPaused = true;
@@ -29,12 +29,12 @@ namespace WPFFrameworkApp
         {
             InitializeComponent();
             SetMenuStyles();
-            ReloadMusicApp();
+            ReloadWindow();
             Show();
         }
 
         #region Reload Operation functions
-        public void ReloadMusicApp()
+        public void ReloadWindow()
         {
             datacontent = new Dictionary<ListBoxItem, TextBlock>(); // to restore item and its textblock
             listbox.Items.Clear();
@@ -82,7 +82,7 @@ namespace WPFFrameworkApp
         private void ReloadDesktopNeeded(object sender, RoutedEventArgs e)
         {
             IsReloadNeeded(false);
-            ReloadMusicApp();
+            ReloadWindow();
         }
         #endregion
 
@@ -258,7 +258,7 @@ namespace WPFFrameworkApp
         private void MoveAudio(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Audio", musicfilter, null, MainWindow.MusicAppPath, MainWindow.MusicAppPath, 1);
-            ReloadMusicApp();
+            ReloadWindow();
         }
         private void CopyAudio(object sender, RoutedEventArgs e)
         {
@@ -267,11 +267,11 @@ namespace WPFFrameworkApp
         private void DeleteAudio(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Delete Audio", musicfilter, null, MainWindow.MusicAppPath, MainWindow.TrashPath, 3);
-            ReloadMusicApp();
+            ReloadWindow();
         }
-        private void ReloadMusicApp_Wanted(object sender, RoutedEventArgs e)
+        private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
-            ReloadMusicApp();
+            ReloadWindow();
         }
         private void AboutGenmusicPage_Wanted(object sender, RoutedEventArgs e)
         {

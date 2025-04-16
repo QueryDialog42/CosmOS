@@ -82,7 +82,7 @@ namespace WPFFrameworkApp
                 CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
-                if (currentDesktop != null) RoutineLogics.ReloadDesktop(this, currentDesktop);
+                if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop);
             }
             catch (Exception)
             {
@@ -234,7 +234,7 @@ namespace WPFFrameworkApp
         {
             string filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}|PNG Files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG Files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
             RoutineLogics.MoveAnythingWithQuery("Import File", filter, null, desktopPath, desktopPath, 4);
-            RoutineLogics.ReloadDesktop(window, desktopPath);
+            RoutineLogics.ReloadWindow(window, desktopPath);
         }
         private void NewFolder(object sender, RoutedEventArgs e)
         {
@@ -247,7 +247,7 @@ namespace WPFFrameworkApp
                     if (Directory.Exists(folderpath) == false)
                     {
                         Directory.CreateDirectory(folderpath);
-                        RoutineLogics.ReloadDesktop(this, currentDesktop);
+                        RoutineLogics.ReloadWindow(this, currentDesktop);
                     }
                     else RoutineLogics.ErrorMessage(Errors.CRT_ERR, foldername, " already exists.");
                 }
@@ -310,9 +310,9 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.ShowAboutWindow("About GencOS", ImagePaths.HLOGO_IMG, ImagePaths.LOGO_IMG, Versions.GOS_VRS, Messages.ABT_DFLT_MSG);
         }
-        private void ReloadDesktop_Wanted(object sender, RoutedEventArgs e)
+        private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ReloadDesktop(this, currentDesktop);
+            RoutineLogics.ReloadWindow(this, currentDesktop);
         }
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {

@@ -10,7 +10,7 @@ namespace WPFFrameworkApp
     /// <summary>
     /// TrashBacket.xaml etkileşim mantığı
     /// </summary>
-    public partial class TrashBacket : Window
+    public partial class TrashBacket : Window, IWindow
     {
         private string[] colors = RoutineLogics.GetColorSettingsFromCcol();
 
@@ -19,12 +19,12 @@ namespace WPFFrameworkApp
             InitializeComponent();
             SetMenuStyles();
             SetDesktopStyle();
-            ReloadTrashBacket();
+            ReloadWindow();
             Show();
         }
 
         #region Reload Operation functions
-        public void ReloadTrashBacket()
+        public void ReloadWindow()
         {
             trashPanel.Children.Clear();
             string[] options = { "Shred", "Rescue" };
@@ -73,7 +73,7 @@ namespace WPFFrameworkApp
                     RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.JPG_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.JPG_IMG);
                 }
-                    trashPanel.Children.Add(app);
+                trashPanel.Children.Add(app);
             }
         }
         #endregion
@@ -100,11 +100,11 @@ namespace WPFFrameworkApp
                     {
                         case 0:
                             File.Delete(trash); // delete selected
-                            ReloadTrashBacket();
+                            ReloadWindow();
                             break;
                         case 1:
                             RoutineLogics.MoveAnythingWithoutQuery(MainWindow.TrashPath, trashname, Path.Combine(MainWindow.CDesktopPath, trashname)); // rescue selected
-                            ReloadTrashBacket();
+                            ReloadWindow();
                             break;
                     }
                 }
@@ -152,7 +152,7 @@ namespace WPFFrameworkApp
         }
         private void TrashBacketReload_Wanted(object sender, RoutedEventArgs e)
         {
-            ReloadTrashBacket();
+            ReloadWindow();
         }
         #endregion
 

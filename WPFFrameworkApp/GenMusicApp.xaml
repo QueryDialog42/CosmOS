@@ -40,7 +40,7 @@
                         <Image Source="/MusicImages/sounddelete.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="AItem5" Header="_Reload GenMusic" Background="#2b2b2b" Click="ReloadMusicApp_Wanted" BorderThickness="0">
+                <MenuItem x:Name="AItem5" Header="_Reload GenMusic" Background="#2b2b2b" Click="ReloadWindow_Wanted" BorderThickness="0">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/refresh.png" />
                     </MenuItem.Icon>

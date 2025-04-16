@@ -10,7 +10,7 @@ namespace WPFFrameworkApp
     /// <summary>
     /// RTFNote.xaml etkileşim mantığı
     /// </summary>
-    public partial class RTFNote : Window
+    public partial class RTFNote : Window, IFile
     {
         public string currentDesktopForNote;
         public MainWindow windowForNote;
@@ -25,41 +25,41 @@ namespace WPFFrameworkApp
         }
 
         #region RTFnote menuitems functions
-        private void NewNote(object sender, RoutedEventArgs e)
+        public void NewFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.NewNote_Wanted(windowForNote, currentDesktopForNote);
         }
-        private void OpenNote(object sender, RoutedEventArgs e)
+        public void OpenFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.OpenNote_Wanted(windowForNote, currentDesktopForNote);
         }
-        private void SaveNote(object sender, RoutedEventArgs e)
+        public void SaveFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.RTFSaveNote_Wanted(currentDesktopForNote, this);
         }
-        private void SaveAsNote(object sender, RoutedEventArgs e)
+        public void SaveAsFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.RTFSaveAsNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
-        private void CopyNote(object sender, RoutedEventArgs e)
+        public void CopyFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.CopyNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
         }
-        private void MoveNote(object sender, RoutedEventArgs e)
+        public void MoveFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
         }
-        private void RenameNote(object sender, RoutedEventArgs e)
+        public void RenameFile(object sender, RoutedEventArgs e)
         {
             RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.NADD_IMG, ImagePaths.NADD_IMG);
-            RoutineLogics.ReloadDesktop(windowForNote, currentDesktopForNote);
+            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
             Close();
         }
-        private void DeleteNote(object sender, RoutedEventArgs e)
+        public void DeleteFile(object sender, RoutedEventArgs e)
         {
             NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
-        private void AboutGennotePage_Wanted(object sender, RoutedEventArgs e)
+        public void AboutPage(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
         }
@@ -167,7 +167,7 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region Unclassified private functions
+        #region MenuStyle functions
         private void PaintAllMenuItem()
         {
             string[] colors = RoutineLogics.GetColorSettingsFromCcol();
