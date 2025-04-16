@@ -1,0 +1,78 @@
+﻿<Window x:Class="WPFFrameworkApp.PicMovie"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFFrameworkApp"
+        mc:Ignorable="d" Background="#182157" Icon="/DesktopImages/picmovie.png"
+        Title="PicMovie" Height="450" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="picVideoMenu" Grid.Row="0">
+            <MenuItem x:Name="PVItem1" Header="PicVideo File" Height="20">
+                <MenuItem x:Name="PVItem2" Header="Add PicVideo" BorderThickness="0" Click="AddPicVideo_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/addpicture.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="PVItem3" Header="Move PicVideo" BorderThickness="0" Click="MovePicVideo_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/move.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="PVItem4" Header="Copy PicVideo" BorderThickness="0" Click="CopyPicVideo_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/copypict.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="PVItem5" Header="Rename PicVideo" BorderThickness="0" Click="RenamePicVideo_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/rename.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="PVItem6" Header="Delete PicVideo" BorderThickness="0" Click="DeletePicVideo_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/delpicture.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="PVItem7" Header="Reload PicMovie" BorderThickness="0" Click="ReloadWindow_Wanted" >
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/refresh.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem x:Name="PVItem8" Header="About PicMovie" Click="AboutPage_Wanted">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/picmovie.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+            
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <WrapPanel x:Name="picMovieDesktop" />
+        </ScrollViewer>
+        
+
+        <StackPanel x:Name="timeControl" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Slider x:Name="slider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Visible" IsSnapToTickEnabled="false"/>
+            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" Visibility="Visible" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
+        </StackPanel>
+        <StackPanel x:Name="videoPanel1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Visible">
+            <Button x:Name="startButton" Content="start" Width="50" Background="#262d59" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" />
+            <Button x:Name="stopButton" Content="stop" Width="50" Background="#262d59" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" />
+            <Button x:Name="restartButton" Content="Restart" Width="50" Background="#262d59" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" />
+        </StackPanel>
+        <StackPanel x:Name="videoPanel2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Visible">
+            <Button x:Name="back" Content="5s Back" Width="57" Background="#262d59" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" />
+            <Button x:Name="front" Content="5s Front" Width="57" Background="#262d59" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -12,6 +12,7 @@ namespace WPFFrameworkApp
         public static string TempPath; // Temporary path to store currentDesktop path
         public static string TrashPath;
         public static string MusicAppPath;
+        public static string PicVideoPath;
         public static string CDesktopPath; // C_DESKTOP folder path
 
         public MainWindow()
@@ -81,6 +82,7 @@ namespace WPFFrameworkApp
                 currentDesktop = TempPath.Trim();
                 CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
+                PicVideoPath = Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop);
             }
@@ -212,6 +214,7 @@ namespace WPFFrameworkApp
             CDesktopPath = CDesktopPath.Trim();
             CheckExist(Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL), HiddenFolders.HAUD_FOL);
             CheckExist(Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL), HiddenFolders.HTRSH_FOL);
+            CheckExist(Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL), HiddenFolders.HPV_FOL);
         }
         private void CreateHiddenFolderOf(string path)
         {
@@ -378,6 +381,24 @@ namespace WPFFrameworkApp
         {
             NoteAppLogics.NewNote_Wanted(this, currentDesktop);
         }
+        private void MusicAppStart(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsMusicAppOpen() == false)
+            {
+                new GenMusicApp();
+            }
+        }
+        private void PicMovieApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsPicMovieOpen() == false)
+            {
+                new PicMovie
+                {
+                    window = this,
+                    desktopPath = currentDesktop,
+                };
+            }
+        }
         private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
         {
             if (RoutineLogics.IsMailAppOpen() == false)
@@ -390,13 +411,6 @@ namespace WPFFrameworkApp
             if (RoutineLogics.IsTrashBacketOpen() == false)
             {
                 new TrashBacket();
-            }
-        }
-        private void MusicAppStart(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsMusicAppOpen() == false)
-            {
-                new GenMusicApp();
             }
         }
         #endregion

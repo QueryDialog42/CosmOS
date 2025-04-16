@@ -23,7 +23,7 @@ namespace WPFFrameworkApp
         public static string desktopFontcolor = GetFontColor(fontcolor, 0);
 
         #region File Movement functions
-        public static void MoveAnythingWithQuery(string title, string filter, string selectedFileName, string initialDirectory, string currentDesktop, short toWhere)
+        public static void MoveAnythingWithQuery(string title, string filter, string selectedFileName, string initialDirectory, string currentDesktop, byte toWhere)
         {
             switch (toWhere)
             {
@@ -41,6 +41,9 @@ namespace WPFFrameworkApp
                 case 4:
                     MoveCertainWindow(title, filter, initialDirectory, currentDesktop, MainWindow.CDesktopPath);
                     WindowReloadNeeded(MainWindow.CDesktopPath);
+                    break;
+                case 5:
+                    MoveCertainWindow(title, filter, initialDirectory, currentDesktop, MainWindow.PicVideoPath);
                     break;
             }
         }
@@ -152,23 +155,23 @@ namespace WPFFrameworkApp
         #endregion
 
         #region App Creation functions
-        public static Button CreateButton(string filename)
+        public static Button CreateButton(string filename, byte extrasize = 0)
         {
             return new Button()
             {
-                Width = 80,
-                Height = 80,
+                Width = 80 + extrasize,
+                Height = 80 + extrasize,
                 Background = Brushes.Transparent,
                 BorderBrush = Brushes.Transparent,
                 ToolTip = filename
             };
         }
-        public static Image CreateImage()
+        public static Image CreateImage(byte extrasize = 0)
         {
             return new Image
             {
-                Width = 60, // Set desired width
-                Height = 60, // Set desired height
+                Width = 60 + extrasize, // Set desired width
+                Height = 60 + extrasize, // Set desired height
             };
         }
         public static TextBlock CreateTextBlock(string filename, string[] fontsettings, short which)
@@ -182,7 +185,7 @@ namespace WPFFrameworkApp
         }
         public static void Appearence(Image image, StackPanel stackpanel, Button app, TextBlock appname, string logo)
         {
-            BitmapImage bitmap = new BitmapImage(new Uri(logo, UriKind.RelativeOrAbsolute));
+            BitmapImage bitmap = setBitmapImage(logo);
             bitmap.Freeze();
             image.Source = bitmap;
 
@@ -408,25 +411,13 @@ namespace WPFFrameworkApp
 
             app.Click += (s, e) =>
             {
-                BitmapImage icon = new BitmapImage(new Uri(ImagePaths.PNG_IMG, UriKind.RelativeOrAbsolute));
-                icon.Freeze(); 
+                PicWindow pictureApp = OpenPicWindow(window, filename, desktopPath);
 
-                PicWindow pictureApp = new PicWindow
-                {
-                    Title = filename,
-                    Icon = icon,
-                    window = window,
-                    desktopPath = desktopPath,
-                    MaxHeight = SystemParameters.PrimaryScreenHeight * 0.8, // %80 of main screen height
-                    MaxWidth = SystemParameters.PrimaryScreenWidth * 0.9, // %90 of main screen width
-                    MinHeight = 200,
-                    MinWidth = 200,
-                };
-                pictureApp.PicMain.Source = SetBitmapImage(filepath);
+                pictureApp.PicMain.Source = setBitmapImage(filepath);
                 pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
             };
         }
-        private static BitmapImage SetBitmapImage(string imagepath)
+        public static BitmapImage setBitmapImage(string imagepath)
         {
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -434,7 +425,27 @@ namespace WPFFrameworkApp
             bitmap.UriSource = new Uri(imagepath, UriKind.RelativeOrAbsolute);
             bitmap.EndInit();
             bitmap.Freeze(); // Make the image thread-safe
+
             return bitmap;
+        }
+        public static PicWindow OpenPicWindow(MainWindow window, string filename, string desktopPath)
+        {
+            BitmapImage icon = new BitmapImage(new Uri(filename.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG, UriKind.RelativeOrAbsolute));
+            icon.Freeze();
+
+            PicWindow pictureApp = new PicWindow
+            {
+                Title = filename,
+                Icon = icon,
+                window = window,
+                desktopPath = desktopPath,
+                MaxHeight = SystemParameters.PrimaryScreenHeight * 0.8, // %80 of main screen height
+                MaxWidth = SystemParameters.PrimaryScreenWidth * 0.9, // %90 of main screen width
+                MinHeight = 200,
+                MinWidth = 200,
+            };
+
+            return pictureApp;
         }
         private static void InitFolder(MainWindow window, string desktopPath, string filename, string[] fontsettings)
         {
@@ -492,6 +503,18 @@ namespace WPFFrameworkApp
             foreach (Window window in Application.Current.Windows)
             {
                 if (window is GenMailApp)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsPicMovieOpen()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is PicWindow)
                 {
                     window.Activate();
                     return true;
@@ -573,7 +596,7 @@ namespace WPFFrameworkApp
             try
             {
                 string[] fontsettings = GetFontSettingsFromCfont();
-                string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL };
+                string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
                 IEnumerable<string> files = Directory.EnumerateFileSystemEntries(desktopPath);
                 foreach (string file in files)
                 {
@@ -631,6 +654,7 @@ namespace WPFFrameworkApp
             mainfolder.NoteApp.Visibility = Visibility.Hidden;
             mainfolder.MusicApp.Visibility = Visibility.Collapsed;
             mainfolder.MailApp.Visibility = Visibility.Collapsed;
+            mainfolder.PicMovie.Visibility = Visibility.Collapsed;
         }
         private static void MusicAppReloadNeeded()
         {
@@ -737,6 +761,7 @@ namespace WPFFrameworkApp
                 window.NoteApp.Visibility = Visibility.Visible;
                 window.MusicApp.Visibility = Visibility.Visible;
                 window.MailApp.Visibility = Visibility.Visible;
+                window.PicMovie.Visibility = Visibility.Visible;    
             }
         }
         private static void SetBackgroundSettings(MainWindow window, string[] colors)

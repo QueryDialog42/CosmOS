@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="90" />
         </Grid.ColumnDefinitions>
-        <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+        <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0">
             <MenuItem Header="_New" Height="20">
                 <MenuItem x:Name="menuitem1" Header="_Import File" Click="ImportFile_Wanted" >
                     <MenuItem.Icon >
@@ -105,6 +105,10 @@
                     <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
                     <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                 </StackPanel>
+            </Button>
+
+            <Button x:Name="PicMovie" Height="55" Width="55" Margin="10, 5, 0, 0" Background="Transparent" BorderBrush="Transparent" Click="PicMovieApp_Clicked">
+                <Image Source="/DesktopImages/picmovie.png"/>
             </Button>
             
             <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">

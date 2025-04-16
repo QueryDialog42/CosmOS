@@ -58,6 +58,8 @@
         public const string DELPNG_IMG = "DesktopImages/delpicture.png";
         public const string ADDPNG_IMG = "DesktopImages/addpicture.png";
         public const string INFO_IMG = "DesktopImages/information.png";
+        public const string MP4_IMG = "DesktopImages/Videoicon.png";
+        public const string PVAPP_IMG = "DesktopImages/picmovie.png";
         public const string NOTE_IMG = "NoteImages/gennote.png";
         public const string NADD_IMG = "NoteImages/noteadd.png";
         public const string NDEL_IMG = "NoteImages/notedelete.png";
@@ -73,6 +75,7 @@
     public struct HiddenFolders
     {
         public const string HAUD_FOL = ".audios$";
+        public const string HPV_FOL = ".picsvids$";
         public const string HTRSH_FOL = ".trash$";
     }
 
@@ -94,6 +97,7 @@
         public const string EXE = ".exe";
         public const string PNG = ".png";
         public const string JPG = ".jpg";
+        public const string MP4 = ".mp4";
     }
 
     public struct Versions
@@ -101,7 +105,8 @@
         public const string NOTE_VRS = "GenNote v1.4.8";
         public const string MUSIC_VRS = "GenMusic v1.6.6";
         public const string MAIL_VRS = "GenMail v0.0.1";
-        public const string GOS_VRS = "GencOS v2.1.1";
+        public const string PICMOV_VRS = "GenMovie v0.0.1"; 
+        public const string GOS_VRS = "GencOS v2.1.2";
     }
 
     public struct MainItems
@@ -119,11 +124,20 @@
         public const string MAIN_DESK_COl = "LightGray";
         public const string FOL_DESK_COL = "#9c9268";
         public const string SAFARI_COL = "#5c5c5c";
-        public const string MENU_COL = "White";
+        public const string MENU_COL = "#f7f7f7";
         public const string FONT = "Arial";
         public const string FONT_COL = "Black";
         public const string FONT_WEIGHT = "Regular";
         public const string FONT_STYLE = "Normal";
         public const string FONT_SIZE = "12";
+    }
+
+    public struct AppTitles
+    {
+        public const string APP_WIN = "GencOS";
+        public const string APP_NOTE = "GenNote";
+        public const string APP_MUSIC = "GenMusic";
+        public const string APP_MAIL = "GenMail";
+        public const string APP_PICMOV = "GenMovie";
     }
 }

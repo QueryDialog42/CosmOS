@@ -120,6 +120,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PicMovie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PicWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -142,6 +146,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PicMovie.xaml.cs">
+      <DependentUpon>PicMovie.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PicWindow.xaml.cs">
       <DependentUpon>PicWindow.xaml</DependentUpon>
     </Compile>
@@ -340,6 +347,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DesktopImages\information.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\picmovie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Videoicon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
