@@ -32,23 +32,18 @@
                         <Image Source="/DesktopImages/copypict.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="PVItem5" Header="Rename PicVideo" BorderThickness="0" Click="RenamePicVideo_Wanted">
-                    <MenuItem.Icon>
-                        <Image Source="/NoteImages/rename.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="PVItem6" Header="Delete PicVideo" BorderThickness="0" Click="DeletePicVideo_Wanted">
+                <MenuItem x:Name="PVItem5" Header="Delete PicVideo" BorderThickness="0" Click="DeletePicVideo_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/delpicture.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="PVItem7" Header="Reload PicMovie" BorderThickness="0" Click="ReloadWindow_Wanted" >
+                <MenuItem x:Name="PVItem6" Header="Reload PicMovie" BorderThickness="0" Click="ReloadWindow_Wanted" >
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="PVItem8" Header="About PicMovie" Click="AboutPage_Wanted">
+                <MenuItem x:Name="PVItem7" Header="About PicMovie" Click="AboutPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="/DesktopImages/picmovie.png"/>
                     </MenuItem.Icon>

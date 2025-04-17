@@ -100,21 +100,11 @@ namespace WPFFrameworkApp
             RoutineLogics.ReloadWindow(window, desktopPath);
             ReloadWindow();
         }
-        private void RenamePicVideo_Wanted(object sender, RoutedEventArgs e)
-        {
-            RoutineLogics.RenameFile_Wanted(Path.Combine(MainWindow.PicVideoPath, Title), ImagePaths.PNG_IMG);
-            RoutineLogics.ReloadWindow(window, desktopPath);
-            ReloadWindow();
-        }
         private void DeletePicVideo_Wanted(object sender, RoutedEventArgs e)
         {
-            string[] options = { "Ok", "Cancel" };
-            if (MessageBox.Show($"Are you sure you want to delete {Title}", "Delete Picture/Video", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                RoutineLogics.MoveAnythingWithoutQuery(MainWindow.PicVideoPath, Title, MainWindow.TrashPath);
-                RoutineLogics.ReloadWindow(window, desktopPath);
-                ReloadWindow();
-            }
+            RoutineLogics.MoveAnythingWithQuery("Delete PicVideo", picVideoFilter, null, MainWindow.PicVideoPath, desktopPath, 3);
+            RoutineLogics.ReloadWindow(window, desktopPath);
+            ReloadWindow();
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
@@ -133,7 +123,7 @@ namespace WPFFrameworkApp
 
             RoutineLogics.SetSettingsForAllMenu(picVideoMenu, fontsettings);
 
-            MenuItem[] items = { PVItem1, PVItem2, PVItem3, PVItem4, PVItem5, PVItem6, PVItem7, PVItem8};
+            MenuItem[] items = { PVItem1, PVItem2, PVItem3, PVItem4, PVItem5, PVItem6, PVItem7 };
 
             foreach (MenuItem item in items) item.Background = menucolor;
         }

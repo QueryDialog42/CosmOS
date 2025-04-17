@@ -24,6 +24,16 @@ namespace WPFFrameworkApp
             Show();
         }
 
+        #region Panel style functions
+        private void SetStyles()
+        {
+            RoutineLogics.SetSettingsForAllMenu(PictureMenu, RoutineLogics.GetFontSettingsFromCfont());
+            MenuItem[] items = { PItem1, PItem2, PItem3, PItem4, PItem5, PItem6 };
+
+            foreach (MenuItem item in items) item.Background = menucolor;
+        }
+        #endregion
+
         #region Picture menuitem options functions
         private void PictureAdd_Wanted(object sender, RoutedEventArgs e)
         {
@@ -70,7 +80,7 @@ namespace WPFFrameworkApp
                 case 2: RoutineLogics.MoveAnythingWithQuery("Move Picture", filter, Title, desktopPath, desktopPath, 1); break;
                 case 3: RoutineLogics.CopyAnythingWithQuery("Copy Picture", filter, Title, desktopPath, desktopPath); break;
                 case 4: RoutineLogics.RenameFile_Wanted(Path.Combine(desktopPath, Title), Title.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG); break;
-                case 5: RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, MainWindow.TrashPath); break;
+                case 5: RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, Path.Combine(MainWindow.TrashPath, Title)); break;
             }
             RoutineLogics.ReloadWindow(window, desktopPath);
         }
@@ -83,16 +93,6 @@ namespace WPFFrameworkApp
             }
 
             if (which != 1) Close();
-        }
-        #endregion
-
-        #region Panel style functions
-        private void SetStyles()
-        {
-            RoutineLogics.SetSettingsForAllMenu(PictureMenu, RoutineLogics.GetFontSettingsFromCfont());
-            MenuItem[] items = { PItem1, PItem2, PItem3, PItem4, PItem5, PItem6 };
-
-            foreach (MenuItem item in items) item.Background = menucolor;
         }
         #endregion
     }

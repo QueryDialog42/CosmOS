@@ -23,6 +23,45 @@ namespace WPFFrameworkApp
             StartUp();
         }
 
+        #region App Clicked functions
+        private void NoteApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            NoteAppLogics.NewNote_Wanted(this, currentDesktop);
+        }
+        private void MusicAppStart(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsMusicAppOpen() == false)
+            {
+                new GenMusicApp();
+            }
+        }
+        private void PicMovieApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsPicMovieOpen() == false)
+            {
+                new PicMovie
+                {
+                    window = this,
+                    desktopPath = currentDesktop,
+                };
+            }
+        }
+        private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsMailAppOpen() == false)
+            {
+                new GenMailApp();
+            }
+        }
+        private void OpenTrashBacket(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsTrashBacketOpen() == false)
+            {
+                new TrashBacket();
+            }
+        }
+        #endregion
+
         #region Configuration functions
         private string ConfigurePath(string CDesktopFile)
         {
@@ -192,7 +231,8 @@ namespace WPFFrameworkApp
         {
             try
             {
-                TempPath = File.ReadAllText(CDesktopFile);
+                TempPath = File.ReadAllText(CDesktopFile).Trim();
+                
                 if (Directory.Exists(TempPath) == false)
                 {
                     if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
@@ -229,7 +269,6 @@ namespace WPFFrameworkApp
                 CreateHiddenFolderOf(path);
             }
         }
-
         #endregion
 
         #region Desktop MenuItem Option functions
@@ -372,45 +411,6 @@ namespace WPFFrameworkApp
                     }
                 }
                 RoutineLogics.WindowReloadNeeded(CDesktopPath);
-            }
-        }
-        #endregion
-
-        #region App Clicked functions
-        private void NoteApp_Clicked(object sender, RoutedEventArgs e)
-        {
-            NoteAppLogics.NewNote_Wanted(this, currentDesktop);
-        }
-        private void MusicAppStart(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsMusicAppOpen() == false)
-            {
-                new GenMusicApp();
-            }
-        }
-        private void PicMovieApp_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsPicMovieOpen() == false)
-            {
-                new PicMovie
-                {
-                    window = this,
-                    desktopPath = currentDesktop,
-                };
-            }
-        }
-        private void GenMailApp_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsMailAppOpen() == false)
-            {
-                new GenMailApp();
-            }
-        }
-        private void OpenTrashBacket(object sender, RoutedEventArgs e)
-        {
-            if (RoutineLogics.IsTrashBacketOpen() == false)
-            {
-                new TrashBacket();
             }
         }
         #endregion

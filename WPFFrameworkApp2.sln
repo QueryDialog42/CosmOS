@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFFrameworkApp", "WPFFrameworkApp\WPFFrameworkApp.csproj", "{C8BA5EFE-E29D-4FAD-B521-BF939F76E90A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFFrameworkApp2", "WPFFrameworkApp2\WPFFrameworkApp2.csproj", "{850AA9F5-202E-ADFC-93C1-91554D78E249}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C8BA5EFE-E29D-4FAD-B521-BF939F76E90A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8BA5EFE-E29D-4FAD-B521-BF939F76E90A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8BA5EFE-E29D-4FAD-B521-BF939F76E90A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8BA5EFE-E29D-4FAD-B521-BF939F76E90A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{850AA9F5-202E-ADFC-93C1-91554D78E249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{850AA9F5-202E-ADFC-93C1-91554D78E249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{850AA9F5-202E-ADFC-93C1-91554D78E249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{850AA9F5-202E-ADFC-93C1-91554D78E249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

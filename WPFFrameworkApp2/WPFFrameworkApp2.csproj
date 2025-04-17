@@ -1,0 +1,177 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\textfile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\gennote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\Saveas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\move.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\newfolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\folderdelete2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\noteopen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\notecopy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\notedelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\noteadd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\question2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\warning1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\paperplane2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\fontitalic1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\fontunderline1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\fontbold1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\colors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\rtffile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\fontup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\fontdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Genmusic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\trashempty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\trashfull.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\sound128x128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\exepenguin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\folder2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\importfile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\soundwav.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MusicImages\sounddelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MusicImages\soundadd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MusicImages\soundbutcopy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Mail128x128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\rescueme.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\soundwav48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\soundmp348x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\paperplane128x128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\genmusic32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\clearstyle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NoteImages\rename.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Quit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\restore.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\deleteexe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\font.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\addpicture.png" />
+    <Resource Include="DesktopImages\delpicture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\normalpicture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Picture96x96.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\copypict.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\JPGpic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\information.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\picmovie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\Videoicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+  </ItemGroup>
+</Project>

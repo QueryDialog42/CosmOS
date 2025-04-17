@@ -24,44 +24,30 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        #region RTFnote menuitems functions
-        public void NewFile(object sender, RoutedEventArgs e)
+        #region OnClosing functions
+        protected override void OnClosing(CancelEventArgs e)
         {
-            NoteAppLogics.NewNote_Wanted(windowForNote, currentDesktopForNote);
+            currentDesktopForNote = null;
+            windowForNote = null;
+            filter = null;
         }
-        public void OpenFile(object sender, RoutedEventArgs e)
+        #endregion
+
+        #region MenuStyle functions
+        private void PaintAllMenuItem()
         {
-            NoteAppLogics.OpenNote_Wanted(windowForNote, currentDesktopForNote);
+            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
+            string color = colors[3]; // menu background color
+            System.Windows.Controls.MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
+            foreach (System.Windows.Controls.MenuItem item in items)
+            {
+                PaintMenuItem(item, color);
+            }
         }
-        public void SaveFile(object sender, RoutedEventArgs e)
+        private void PaintMenuItem(System.Windows.Controls.MenuItem menuitem, string color)
         {
-            NoteAppLogics.RTFSaveNote_Wanted(currentDesktopForNote, this);
-        }
-        public void SaveAsFile(object sender, RoutedEventArgs e)
-        {
-            NoteAppLogics.RTFSaveAsNote_Wanted(windowForNote, currentDesktopForNote, this);
-        }
-        public void CopyFile(object sender, RoutedEventArgs e)
-        {
-            NoteAppLogics.CopyNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
-        }
-        public void MoveFile(object sender, RoutedEventArgs e)
-        {
-            NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
-        }
-        public void RenameFile(object sender, RoutedEventArgs e)
-        {
-            RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.NADD_IMG, ImagePaths.NADD_IMG);
-            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
-            Close();
-        }
-        public void DeleteFile(object sender, RoutedEventArgs e)
-        {
-            NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
-        }
-        public void AboutPage(object sender, RoutedEventArgs e)
-        {
-            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
+            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+            menuitem.BorderThickness = new Thickness(0);
         }
         #endregion
 
@@ -84,7 +70,7 @@ namespace WPFFrameworkApp
         private void MakeItalic(object sender, RoutedEventArgs e)
         {
             TextSelection selection = RichNote.Selection;
-            if (selection.IsEmpty == false) 
+            if (selection.IsEmpty == false)
             {
                 TextRange textrange = new TextRange(selection.Start, selection.End);
                 textrange.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
@@ -158,30 +144,44 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region OnClosing functions
-        protected override void OnClosing(CancelEventArgs e)
+        #region RTFnote menuitems functions
+        public void NewFile(object sender, RoutedEventArgs e)
         {
-            currentDesktopForNote = null;
-            windowForNote = null;
-            filter = null;
+            NoteAppLogics.NewNote_Wanted(windowForNote, currentDesktopForNote);
         }
-        #endregion
-
-        #region MenuStyle functions
-        private void PaintAllMenuItem()
+        public void OpenFile(object sender, RoutedEventArgs e)
         {
-            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
-            string color = colors[3]; // menu background color
-            System.Windows.Controls.MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
-            foreach (System.Windows.Controls.MenuItem item in items)
-            {
-                PaintMenuItem(item, color);
-            }
+            NoteAppLogics.OpenNote_Wanted(windowForNote, currentDesktopForNote);
         }
-        private void PaintMenuItem(System.Windows.Controls.MenuItem menuitem, string color)
+        public void SaveFile(object sender, RoutedEventArgs e)
         {
-            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
-            menuitem.BorderThickness = new Thickness(0);
+            NoteAppLogics.RTFSaveNote_Wanted(currentDesktopForNote, this);
+        }
+        public void SaveAsFile(object sender, RoutedEventArgs e)
+        {
+            NoteAppLogics.RTFSaveAsNote_Wanted(windowForNote, currentDesktopForNote, this);
+        }
+        public void CopyFile(object sender, RoutedEventArgs e)
+        {
+            NoteAppLogics.CopyNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
+        }
+        public void MoveFile(object sender, RoutedEventArgs e)
+        {
+            NoteAppLogics.MoveNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
+        }
+        public void RenameFile(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.RTF_IMG);
+            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+            Close();
+        }
+        public void DeleteFile(object sender, RoutedEventArgs e)
+        {
+            NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
+        }
+        public void AboutPage(object sender, RoutedEventArgs e)
+        {
+            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
         }
         #endregion
     }

@@ -22,6 +22,33 @@ namespace WPFFrameworkApp
             Show();
         }
 
+        #region OnClosing functions
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            currentDesktopForNote = null;
+            windowForNote = null;
+            filter = null;
+        }
+        #endregion
+
+        #region MenuStyle functions
+        private void PaintAllMenuItem()
+        {
+            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
+            string color = colors[3]; // menu background color
+            MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
+            foreach(MenuItem item in items)
+            {
+                PaintMenuItem(item, color);
+            }
+        }
+        private void PaintMenuItem(MenuItem menuitem, string color)
+        {
+            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+            menuitem.BorderThickness = new Thickness(0);
+        }
+        #endregion
+
         #region TXTnote menuitems functions
         public void NewFile(object sender, RoutedEventArgs e)
         {
@@ -49,7 +76,7 @@ namespace WPFFrameworkApp
         }
         public void RenameFile(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.NADD_IMG);
+            RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.TXT_IMG);
             RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
             Close();
         }
@@ -60,33 +87,6 @@ namespace WPFFrameworkApp
         public void AboutPage(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
-        }
-        #endregion
-
-        #region OnClosing functions
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            currentDesktopForNote = null;
-            windowForNote = null;
-            filter = null;
-        }
-        #endregion
-
-        #region MenuStyle functions
-        private void PaintAllMenuItem()
-        {
-            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
-            string color = colors[3]; // menu background color
-            MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
-            foreach(MenuItem item in items)
-            {
-                PaintMenuItem(item, color);
-            }
-        }
-        private void PaintMenuItem(MenuItem menuitem, string color)
-        {
-            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
-            menuitem.BorderThickness = new Thickness(0);
         }
         #endregion
 

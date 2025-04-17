@@ -106,7 +106,7 @@
         public const string MUSIC_VRS = "GenMusic v1.6.6";
         public const string MAIL_VRS = "GenMail v0.0.1";
         public const string PICMOV_VRS = "GenMovie v0.0.1"; 
-        public const string GOS_VRS = "GencOS v2.1.2";
+        public const string GOS_VRS = "GencOS v2.2.0";
     }
 
     public struct MainItems
