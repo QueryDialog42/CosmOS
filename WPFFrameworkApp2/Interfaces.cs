@@ -19,4 +19,13 @@ namespace WPFFrameworkApp
     {
         void ReloadWindow();
     }
+
+    public interface IControlable
+    {
+        void Play(object sender, RoutedEventArgs e);
+        void Pause(object sender, RoutedEventArgs e);
+        void Restart(object sender, RoutedEventArgs e);
+        void Back(object sender, RoutedEventArgs e);
+        void Forward(object sender, RoutedEventArgs e);
+    }
 }

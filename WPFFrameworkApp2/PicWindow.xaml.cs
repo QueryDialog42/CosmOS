@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Controls;
 
 namespace WPFFrameworkApp
@@ -14,7 +13,6 @@ namespace WPFFrameworkApp
         public PicMovie picmovie;
         public string desktopPath;
         public bool isInPicFolder;
-        private SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
         private string filter = $"PNG files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
 
         public PicWindow()
@@ -27,10 +25,8 @@ namespace WPFFrameworkApp
         #region Panel style functions
         private void SetStyles()
         {
-            RoutineLogics.SetSettingsForAllMenu(PictureMenu, RoutineLogics.GetFontSettingsFromCfont());
             MenuItem[] items = { PItem1, PItem2, PItem3, PItem4, PItem5, PItem6 };
-
-            foreach (MenuItem item in items) item.Background = menucolor;
+            RoutineLogics.SetWindowStyles(PictureMenu, items);
         }
         #endregion
 

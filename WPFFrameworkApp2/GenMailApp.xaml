@@ -8,20 +8,40 @@
         Title="GenMailApp" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="20" />
+        <RowDefinition Height="Auto"/>
+        <!-- Başlık için -->
+        <RowDefinition Height="*"/>
+        <!-- İçerik alanı için -->
+        <RowDefinition Height="Auto"/>
+        <!-- Düğmeler için -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="3" Grid.Column="3"/>
-        <TextBlock Text="merhaba" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <!-- Başlık -->
+        <TextBlock Text="GenMailApp" FontSize="35" HorizontalAlignment="Center" Grid.Row="0" Margin="0,10,0,0"/>
+
+        <!-- Gönderen E-posta -->
+        <TextBlock Text="From Email:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,10,0,0"/>
+        <TextBox Name="FromEmailTextBox" Grid.Row="1" Margin="158,10,20,0" VerticalAlignment="Top" Height="35" />
+
+        <!-- Alıcı E-posta -->
+        <TextBlock Text="Email:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,50,0,0"/>
+        <TextBox Name="EmailTextBox" Grid.Row="1" Margin="158,50,20,0" VerticalAlignment="Top" Height="35" />
+
+        <!-- Konu -->
+        <TextBlock Text="Topic:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,90,0,0"/>
+        <TextBox Name="TopicTextBox" Grid.Row="1" Margin="158,90,20,0" VerticalAlignment="Top" Height="35" />
+
+        <!-- Açıklama -->
+        <TextBlock Text="Explanation:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,130,0,0"/>
+        <TextBox Name="ExplanationTextBox" Grid.Row="1" Margin="158,141,20,10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+        <!-- Düğmeler -->
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,10">
+            <Button Name="SendButton" Content="Send" Width="75" Margin="5" Click="SendButton_Click" Height="22" />
+            <Button Name="CancelButton" Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click" Height="21" />
+        </StackPanel>
     </Grid>
 </Window>

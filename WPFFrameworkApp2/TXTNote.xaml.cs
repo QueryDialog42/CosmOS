@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Windows;
-using System.Windows.Media;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -17,8 +16,7 @@ namespace WPFFrameworkApp
         public TXTNote()
         {
             InitializeComponent();
-            RoutineLogics.SetSettingsForAllMenu(fileMenubar, RoutineLogics.GetFontSettingsFromCfont());
-            PaintAllMenuItem();
+            StartUp();
             Show();
         }
 
@@ -32,20 +30,10 @@ namespace WPFFrameworkApp
         #endregion
 
         #region MenuStyle functions
-        private void PaintAllMenuItem()
+        private void StartUp()
         {
-            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
-            string color = colors[3]; // menu background color
             MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
-            foreach(MenuItem item in items)
-            {
-                PaintMenuItem(item, color);
-            }
-        }
-        private void PaintMenuItem(MenuItem menuitem, string color)
-        {
-            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
-            menuitem.BorderThickness = new Thickness(0);
+            RoutineLogics.SetWindowStyles(fileMenubar, items);
         }
         #endregion
 

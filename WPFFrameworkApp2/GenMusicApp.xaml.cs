@@ -15,7 +15,7 @@ namespace WPFFrameworkApp
     /// <summary>
     /// GenMusicApp.xaml etkileşim mantığı
     /// </summary>
-    public partial class GenMusicApp : Window, IWindow
+    public partial class GenMusicApp : Window, IWindow, IControlable
     {
         public static string currentAudio;
         public static bool isPaused = true;
@@ -38,7 +38,7 @@ namespace WPFFrameworkApp
         {
             slider.Value += 1.035; // 1 second front
             totaltime -= 1.035;
-            remainedTime.Text = TimeFormat();
+            remainedTime.Text = RoutineLogics.TimeFormat(totaltime);
             if (totaltime <= 0)
             {
                 time.Stop();
@@ -49,7 +49,7 @@ namespace WPFFrameworkApp
         {
             mediaPlayer.Position = TimeSpan.FromSeconds(slider.Value);
             totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
-            remainedTime.Text = TimeFormat();
+            remainedTime.Text = RoutineLogics.TimeFormat(totaltime);
         }
         private void InitializeSliderLogics()
         {
@@ -59,7 +59,7 @@ namespace WPFFrameworkApp
                 slider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds; // get the total seconds of media player
                 slider.Value = mediaPlayer.Position.TotalSeconds; // get the current second of media player
                 totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
-                remainedTime.Text = TimeFormat(); // minutes:seconds
+                remainedTime.Text = RoutineLogics.TimeFormat(totaltime); // minutes:seconds
                 if (time == null)
                 {
                     time = new DispatcherTimer();
@@ -77,19 +77,12 @@ namespace WPFFrameworkApp
                 IsReloadNeeded(true);
             }
         }
-        private string TimeFormat()
-        {
-            int minutes = (int)(totaltime / 60);
-            int seconds = (int)(totaltime % 60);
-
-            return string.Format("{0:00}:{1:00}", minutes, seconds);
-        }
         private void AdjustMusicPosition(int seconds)
         {
             mediaPlayer.Position = mediaPlayer.Position.Add(TimeSpan.FromSeconds(seconds));
             slider.Value = mediaPlayer.Position.TotalSeconds;
             totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
-            remainedTime.Text = TimeFormat();
+            remainedTime.Text = RoutineLogics.TimeFormat(totaltime);
         }
 
         #endregion
@@ -250,16 +243,13 @@ namespace WPFFrameworkApp
         }
         private void SetMenuStyles()
         {
-            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
             MenuItem[] menuItems = { AudioItem, AItem1, AItem2, AItem3, AItem4, AItem5, AItem6 };
-            SolidColorBrush color = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
-
-            foreach (MenuItem item in menuItems) item.Background = color;
+            RoutineLogics.SetWindowStyles(fileMenu, menuItems);
         }
         #endregion
 
         #region Music Movement functions
-        private void PlayMusic(object sender, RoutedEventArgs e)
+        public void Play(object sender, RoutedEventArgs e)
         {
             SetDisableStyle(startButton);
             SetEnableStyle(stopButton);
@@ -267,7 +257,7 @@ namespace WPFFrameworkApp
             mediaPlayer.Play();
             time.Start();
         }
-        private void StopMusic(object sender, RoutedEventArgs e)
+        public void Pause(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -282,7 +272,7 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, "null Audio. It may be deleted. Please reload the main desktop.");
             }
         }
-        private void RestartMusic(object sender, RoutedEventArgs e)
+        public void Restart(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -299,11 +289,11 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, "null Audio. It may be deleted. Please reload the main desktop.");
             }
         }
-        private void MusicBack(object sender, RoutedEventArgs e)
+        public void Back(object sender, RoutedEventArgs e)
         {
             AdjustMusicPosition(-5);
         }
-        private void MusicFront(object sender, RoutedEventArgs e)
+        public void Forward(object sender, RoutedEventArgs e)
         {
             AdjustMusicPosition(5);
         }

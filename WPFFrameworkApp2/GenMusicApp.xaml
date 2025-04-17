@@ -63,13 +63,13 @@
             <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" Visibility="Collapsed" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel1" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-            <Button x:Name="startButton" Content="start" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="PlayMusic"/>
-            <Button x:Name="stopButton" Content="stop" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="StopMusic"/>
-            <Button x:Name="restartButton" Content="Restart" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" Click="RestartMusic"/>
+            <Button x:Name="startButton" Content="start" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="Play"/>
+            <Button x:Name="stopButton" Content="stop" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="Pause"/>
+            <Button x:Name="restartButton" Content="Restart" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" Click="Restart"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-            <Button x:Name="back" Content="5s Back" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="MusicBack"/>
-            <Button x:Name="front" Content="5s Front" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="MusicFront"/>
+            <Button x:Name="back" Content="5s Back" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="Back"/>
+            <Button x:Name="front" Content="5s Front" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="Forward"/>
         </StackPanel>
         <Button x:Name="reloadNeeded" Grid.Row="3" Grid.ColumnSpan="2" Width="180" HorizontalAlignment="Center" Visibility="Collapsed" Background="#262626" BorderThickness="0" Foreground="white" Click="ReloadDesktopNeeded">
             <StackPanel Orientation="Horizontal">

@@ -8,7 +8,19 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="DesktopImages\movieadd.png" />
+    <None Remove="DesktopImages\moviebutcopy.png" />
+    <None Remove="DesktopImages\Rotate.png" />
+    <None Remove="DesktopImages\videodelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\moviebutcopy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DesktopImages\movieadd.png" />
+    <Resource Include="DesktopImages\Rotate.png" />
     <Resource Include="DesktopImages\textfile.png" />
+    <Resource Include="DesktopImages\videodelete.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="NoteImages\gennote.png" />

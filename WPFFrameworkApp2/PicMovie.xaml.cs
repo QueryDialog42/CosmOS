@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
+using WPFFrameworkApp2;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Collections.Generic;
@@ -35,6 +37,14 @@ namespace WPFFrameworkApp
                 if (picvideo.EndsWith(SupportedFiles.PNG) || picvideo.EndsWith(SupportedFiles.JPG)) InitPictureForPicMovie(picvideo);
                 else if (picvideo.EndsWith(SupportedFiles.MP4)) InitVideoForPicMovie(picvideo);
             }
+        }
+        #endregion
+
+        #region MenuStyles functions
+        private void setStyles()
+        {
+            MenuItem[] items = { PVItem1, PVItem2, PVItem3, PVItem4, PVItem5, PVItem6, PVItem7 };
+            RoutineLogics.SetWindowStyles(picVideoMenu, items);
         }
         #endregion
 
@@ -78,7 +88,17 @@ namespace WPFFrameworkApp
             RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.MP4_IMG);
 
             picMovieDesktop.Children.Add(app);
-        } // not finished
+
+            app.Click += (sender, e) =>
+            {
+                var videoWindow = new VideoWindow 
+                {
+                    Title = filename,
+                    desktopPath = MainWindow.PicVideoPath
+                };
+                videoWindow.videoPlayer.Source = new Uri(filepath);
+            };
+        }
         #endregion
 
         #region PicMovie menuitem options functions
@@ -113,19 +133,6 @@ namespace WPFFrameworkApp
         private void AboutPage_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.ShowAboutWindow(AppTitles.APP_PICMOV, ImagePaths.PVAPP_IMG, ImagePaths.PVAPP_IMG, Versions.PICMOV_VRS, Messages.ABT_DFLT_MSG);
-        }
-        #endregion
-
-        #region MenuStyles functions
-        private void setStyles()
-        {
-            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
-
-            RoutineLogics.SetSettingsForAllMenu(picVideoMenu, fontsettings);
-
-            MenuItem[] items = { PVItem1, PVItem2, PVItem3, PVItem4, PVItem5, PVItem6, PVItem7 };
-
-            foreach (MenuItem item in items) item.Background = menucolor;
         }
         #endregion
     }

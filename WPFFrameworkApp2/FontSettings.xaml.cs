@@ -340,10 +340,8 @@ namespace WPFFrameworkApp
         #region MenuStyle functions
         private void SetStyles()
         {
-            RoutineLogics.SetSettingsForAllMenu(fontmenu, RoutineLogics.GetFontSettingsFromCfont());
-            System.Windows.Controls.MenuItem[] items = { FItem1, FItem2, FItem3};
-
-            foreach (System.Windows.Controls.MenuItem item in items) item.Background = menucolor;
+            System.Windows.Controls.MenuItem[] items = { FItem1, FItem2, FItem3 };
+            RoutineLogics.SetWindowStyles(fontmenu, items);
         }
         #endregion
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using Microsoft.Win32;
+using WPFFrameworkApp2;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Controls;
@@ -63,7 +64,7 @@ namespace WPFFrameworkApp
         {
             foreach (Window window in Application.Current.Windows)
             {
-                if (window is PicWindow)
+                if (window is PicMovie)
                 {
                     window.Activate();
                     return true;
@@ -144,6 +145,8 @@ namespace WPFFrameworkApp
             contextMenu.Items.Add(moveitem);
             contextMenu.Items.Add(copyitem);
             if (imageicon == ImagePaths.WAV_IMG || imageicon == ImagePaths.MP3_IMG) AddIfSound(contextMenu, color, window, currentdesktop, filename);
+            else if (imageicon == ImagePaths.PNG_IMG || imageicon == ImagePaths.JPG_IMG) AddIfPicVideo(contextMenu, color, window, currentdesktop, filename, ImagePaths.ADDPIC_IMG);
+            else if (imageicon == ImagePaths.MP4_IMG) AddIfPicVideo(contextMenu, color, window, currentdesktop, filename, ImagePaths.ADDMP4_IMG);
             contextMenu.Items.Add(deleteitem);
             contextMenu.Items.Add(moreinfo);
 
@@ -196,6 +199,7 @@ namespace WPFFrameworkApp
                 case SupportedFiles.EXE: return $"Executable File ({SupportedFiles.EXE})";
                 case SupportedFiles.PNG: return $"Portable Network Graphics File ({SupportedFiles.PNG})";
                 case SupportedFiles.JPG: return $"JPEG Image File ({SupportedFiles.JPG})";
+                case SupportedFiles.MP4: return $"MPEG-4 Video File ({SupportedFiles.MP4})";
                 default: return "Unknown File (?.?)";
             }
         }
@@ -230,6 +234,17 @@ namespace WPFFrameworkApp
         #endregion
 
         #region GetWindow functions
+        public static PicMovie GetPicMovieWindow()
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window is PicMovie)
+                {
+                    return (PicMovie)window;
+                }
+            }
+            return null;
+        }
         private static GenMusicApp GetMusicAppWindow()
         {
             foreach (Window window in Application.Current.Windows)
@@ -265,6 +280,17 @@ namespace WPFFrameworkApp
                 }
             }
             return null;
+        }
+        #endregion
+
+        #region Style functions
+        public static void SetWindowStyles(dynamic menu, MenuItem[] menuitems)
+        {
+            string[] fontsettings = GetFontSettingsFromCfont();
+            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
+            SetSettingsForAllMenu(menu, fontsettings);
+
+            foreach (MenuItem item in menuitems) item.Background = menucolor;
         }
         #endregion
 
@@ -450,6 +476,7 @@ namespace WPFFrameworkApp
             if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.EXE, "non-EXE") == false) return;
             if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.PNG, "non-PNG") == false) return;
             if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.JPG, "non-JPG") == false) return;
+            if (CheckNewFilenameIsAllowed(filename, newfilename, SupportedFiles.MP4, "non-MP4") == false) return;
 
             MoveAnythingWithoutQuery(currentDesktop, filename, pathToDirection); // if this function works, then no error occured
         }
@@ -764,6 +791,26 @@ namespace WPFFrameworkApp
                 pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
             };
         }
+        private static void InitMP4File(MainWindow window, string desktopPath, string filepath, string fileimage, string filename, string[] fontsettings)
+        {
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical
+            };
+            Appearence(image, stackpanel, app, appname, fileimage);
+            window.desktop.Children.Add(app);
+
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, filepath, fileimage);
+
+            app.Click += (sender, e) =>
+            {
+                var videoApp = new VideoWindow { Title = filename, desktopPath = desktopPath };
+                videoApp.videoPlayer.Source = new Uri(filepath);
+            };
+        }
         public static BitmapImage setBitmapImage(string imagepath)
         {
             BitmapImage bitmap = new BitmapImage();
@@ -851,6 +898,7 @@ namespace WPFFrameworkApp
                     else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, desktopPath, file, filename, fontsettings);
                     else if (filename.EndsWith(SupportedFiles.PNG)) InitPictureFile(window, desktopPath, file, ImagePaths.PNG_IMG, filename, fontsettings);
                     else if (filename.EndsWith(SupportedFiles.JPG)) InitPictureFile(window, desktopPath, file, ImagePaths.JPG_IMG, filename, fontsettings);
+                    else if (filename.EndsWith(SupportedFiles.MP4)) InitMP4File(window, desktopPath, file, ImagePaths.MP4_IMG, filename, fontsettings);
                     else
                     {
                         ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS);
@@ -1057,6 +1105,13 @@ namespace WPFFrameworkApp
             aboutwindow.Version.Text = version;
             aboutwindow.AboutMessage.Text = message;
         }
+        public static string TimeFormat(double totaltime)
+        {
+            int minutes = (int)(totaltime / 60);
+            int seconds = (int)(totaltime % 60);
+
+            return string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
         #endregion
 
         #region Unclassified private functions
@@ -1101,6 +1156,20 @@ namespace WPFFrameworkApp
             };
 
             contextMenu.Items.Add(addtogenmuic);
+        }
+        private static void AddIfPicVideo(ContextMenu contextMenu, string color, MainWindow window, string currentdesktop, string filename, string addfilemenuicon)
+        {
+            MenuItem addtopicmovie = CreateMenuItemForContextMenu("Add to PicMovie", color, addfilemenuicon);
+
+            addtopicmovie.Click += (sender, e) =>
+            {
+                MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.PicVideoPath, filename));
+                ReloadWindow(window, currentdesktop);
+                PicMovie picmovie = GetPicMovieWindow();
+                picmovie?.ReloadWindow();
+            };
+
+            contextMenu.Items.Add(addtopicmovie);
         }
         private static void AddRenameFolderListener(MainWindow window, string desktopPath, string filename)
         {

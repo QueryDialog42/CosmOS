@@ -1,0 +1,68 @@
+﻿<Window x:Class="WPFFrameworkApp2.VideoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFFrameworkApp2"
+        mc:Ignorable="d" Background="#1f1f1f" Icon="/DesktopImages/Videoicon.png"
+        MouseEnter="MouseEntered" MouseLeave="MouseLeaved"
+        Title="VideoWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="videoMenu" Grid.Row="0">
+            <MenuItem Header="Video" Height="20">
+                <MenuItem x:Name="VItem1" Header="Rename Video" BorderThickness="0" Click="RenameVideo">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/rename.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="VItem2" Header="Move Video" BorderThickness="0" Click="MoveVideo">
+                    <MenuItem.Icon>
+                        <Image Source="/NoteImages/move.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="VItem3" Header="Copy Video" BorderThickness="0" Click="CopyVideo">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/moviebutcopy.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="VItem4" Header="Delete Video" BorderThickness="0" Click="DeleteVideo">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/videodelete.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Edit" Height="20">
+                <MenuItem x:Name="VItem5" Header="Rotate" Click="RotateVideo" BorderThickness="0">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/Rotate.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
+        <StackPanel x:Name="timeControl" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Slider x:Name="videoSlider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/>
+            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
+        </StackPanel>
+        
+        <StackPanel x:Name="videoPanel1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="startButton" Content="start" Width="50" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 10, 2" Click="Play"/>
+            <Button x:Name="stopButton" Content="stop" Width="50" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 10, 2" Click="Pause"/>
+            <Button x:Name="restartButton" Content="Restart" Width="50" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 0, 2" Click="Restart"/>
+        </StackPanel>
+        <StackPanel x:Name="videoPanel2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button x:Name="back" Content="5s Back" Width="57" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 10, 2" Click="Back"/>
+            <Button x:Name="front" Content="5s Front" Width="57" Foreground="white" Background="Black" BorderThickness="0"  Margin="0, 2, 0, 2" Click="Forward" />
+        </StackPanel>
+        
+        <MediaElement x:Name="videoPlayer" Grid.Row="1" Grid.RowSpan="4" Panel.ZIndex="-1" LoadedBehavior="Manual" UnloadedBehavior="Manual" Stretch="Uniform" StretchDirection="Both" RenderTransformOrigin="0.5, 0.5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    </Grid>
+</Window>

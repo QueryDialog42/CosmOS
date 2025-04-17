@@ -19,8 +19,8 @@ namespace WPFFrameworkApp
         public RTFNote()
         {
             InitializeComponent();
-            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
-            PaintAllMenuItem();
+            RoutineLogics.SetSettingsForAllMenu(RTFfileMenu, RoutineLogics.GetFontSettingsFromCfont());
+            StartUp();
             Show();
         }
 
@@ -34,20 +34,10 @@ namespace WPFFrameworkApp
         #endregion
 
         #region MenuStyle functions
-        private void PaintAllMenuItem()
+        private void StartUp()
         {
-            string[] colors = RoutineLogics.GetColorSettingsFromCcol();
-            string color = colors[3]; // menu background color
             System.Windows.Controls.MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
-            foreach (System.Windows.Controls.MenuItem item in items)
-            {
-                PaintMenuItem(item, color);
-            }
-        }
-        private void PaintMenuItem(System.Windows.Controls.MenuItem menuitem, string color)
-        {
-            menuitem.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
-            menuitem.BorderThickness = new Thickness(0);
+            RoutineLogics.SetWindowStyles(RTFfileMenu, items);
         }
         #endregion
 

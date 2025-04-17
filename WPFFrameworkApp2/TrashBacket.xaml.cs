@@ -17,8 +17,8 @@ namespace WPFFrameworkApp
         public TrashBacket()
         {
             InitializeComponent();
-            SetMenuStyles();
             SetDesktopStyle();
+            SetMenuStyles();
             ReloadWindow();
             Show();
         }
@@ -72,6 +72,11 @@ namespace WPFFrameworkApp
                 {
                     RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.JPG_IMG);
                     AddListener(app, trash, trashname, options, ImagePaths.JPG_IMG);
+                }
+                else if (trashname.EndsWith(SupportedFiles.MP4))
+                {
+                    RoutineLogics.Appearence(image, stackpanel, app, appname, ImagePaths.MP4_IMG);
+                    AddListener(app, trash, trashname, options, ImagePaths.MP4_IMG);
                 }
                 trashPanel.Children.Add(app);
             }
@@ -159,12 +164,8 @@ namespace WPFFrameworkApp
         #region TrashBacket style functions
         private void SetMenuStyles()
         {
-
-            RoutineLogics.SetSettingsForAllMenu(fileMenu, RoutineLogics.GetFontSettingsFromCfont());
-            SolidColorBrush menuColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
-            MenuItem[] menuitems = { TItem1, TItem2, TItem3};
-
-            foreach (MenuItem item in menuitems) item.Background = menuColor;
+            MenuItem[] menuitems = { TItem1, TItem2, TItem3 };
+            RoutineLogics.SetWindowStyles(fileMenu, menuitems);
         }
         private void SetDesktopStyle()
         {

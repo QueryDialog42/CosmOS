@@ -89,11 +89,8 @@ namespace WPFFrameworkApp
         #region Panel Style functions
         private void SetStyles()
         {
-            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
-            RoutineLogics.SetSettingsForAllMenu(colorMenu, RoutineLogics.GetFontSettingsFromCfont());
             MenuItem[] items = { CItem1, CItem2, CItem3 };
-
-            foreach (MenuItem item in items) item.Background = menucolor;
+            RoutineLogics.SetWindowStyles(colorMenu, items);
         }
         private void SetFontPreviewStyles()
         {
