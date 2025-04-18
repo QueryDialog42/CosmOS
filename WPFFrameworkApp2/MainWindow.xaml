@@ -16,6 +16,16 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="90" />
         </Grid.ColumnDefinitions>
+
+        <ComboBox Grid.Row="0" 
+                  Grid.ColumnSpan="2" 
+                  x:Name="searchComboBox" 
+                  IsEditable="True" 
+                  IsTextSearchEnabled="True" 
+                  DisplayMemberPath="Tag" 
+                  Panel.ZIndex="1" Width="200" 
+                  HorizontalAlignment="Right" />
+
         <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0">
             <MenuItem Header="_New" Height="20">
                 <MenuItem x:Name="menuitem1" Header="_Import File" Click="ImportFile_Wanted" >

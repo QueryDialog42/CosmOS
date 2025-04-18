@@ -23,6 +23,139 @@ namespace WPFFrameworkApp
         public static string folderFontcolor = GetFontColor(fontcolor, 1);
         public static string desktopFontcolor = GetFontColor(fontcolor, 0);
 
+        #region Style functions
+        public static void SetWindowStyles(dynamic menu, dynamic[] menuitems)
+        {
+            string[] fontsettings = GetFontSettingsFromCfont();
+            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
+            SetSettingsForAllMenu(menu, fontsettings);
+
+            foreach (var item in menuitems)
+            {
+                item.Background = menucolor;
+                item.BorderThickness = new Thickness(0);
+            }
+        }
+        #endregion
+
+        #region Search functions
+        public static void AddEveryItemIntoSearch(ComboBox searchBox, string desktopPath)
+        {
+            searchBox.Items.Clear(); // clear the search box
+
+            AddAllFoldersIntoSearch(searchBox, desktopPath);
+            AddAllAppIntoSearch(searchBox, desktopPath);
+
+            var items = searchBox.Items.Cast<object>().ToArray();
+            SetWindowStyles(searchBox, items);
+        }
+        public static void AddAllFoldersIntoSearch(ComboBox searchBox, string folderPath)
+        {
+            IEnumerable<string> folders = Directory.EnumerateDirectories(folderPath);
+            string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
+            foreach (string folder in folders)
+            {
+                string foldername = Path.GetFileName(folder);
+                if (new DirectoryInfo(folder).GetDirectories().Length > 0) AddAllFoldersIntoSearch(searchBox, folder);
+                if (hiddenfolders.Contains(foldername) == false)
+                {
+                    Image imageicon = new Image
+                    {
+                        Source = new BitmapImage(new Uri(ImagePaths.FOLDER_IMG, UriKind.RelativeOrAbsolute)),
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Height = 20
+                    };
+
+                    TextBlock textblock = new TextBlock
+                    {
+                        Text = "   " + foldername,
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
+
+                    StackPanel stackpanel = new StackPanel { Orientation = Orientation.Horizontal };
+                    stackpanel.Children.Add(imageicon);
+                    stackpanel.Children.Add(textblock);
+
+                    ComboBoxItem comboBoxItem = new ComboBoxItem
+                    {
+                        Content = stackpanel,
+                        Tag = foldername
+                    };
+
+                    AddSearchBoxItemListeners(comboBoxItem, folder);
+                    searchBox.Items.Add(comboBoxItem);
+                }
+            }
+        }
+        public static void AddAllAppIntoSearch(ComboBox searchBox, string desktopPath)
+        {
+            IEnumerable<string> files = Directory.EnumerateFileSystemEntries(desktopPath);
+            foreach (string file in files)
+            {
+                if (file.EndsWith(HiddenFolders.HTRSH_FOL)) continue;
+
+                string image;
+                string filename = Path.GetFileName(file);
+                ComboBoxItem comboBoxItem = new ComboBoxItem();
+                switch (Path.GetExtension(file))
+                {
+                    case SupportedFiles.TXT: image = ImagePaths.TXT_IMG; break;
+                    case SupportedFiles.RTF: image = ImagePaths.RTF_IMG; break;
+                    case SupportedFiles.WAV: image = ImagePaths.WAV_IMG; break;
+                    case SupportedFiles.MP3: image = ImagePaths.MP3_IMG; break;
+                    case SupportedFiles.EXE: image = ImagePaths.EXE_IMG; break;
+                    case SupportedFiles.PNG: image = ImagePaths.PNG_IMG; break;
+                    case SupportedFiles.JPG: image = ImagePaths.JPG_IMG; break;
+                    case SupportedFiles.MP4: image = ImagePaths.MP4_IMG; break;
+                    default: AddAllAppIntoSearch(searchBox, file); continue;
+                }
+
+                Image imageicon = new Image
+                {
+                    Source = new BitmapImage(new Uri(image, UriKind.RelativeOrAbsolute)),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Height = 20
+                };
+
+                TextBlock textblock = new TextBlock
+                {
+                    Text = "   " + filename,
+                    VerticalAlignment = VerticalAlignment.Center,
+                };
+
+                StackPanel stackpanel = new StackPanel { Orientation = Orientation.Horizontal };
+                stackpanel.Children.Add(imageicon);
+                stackpanel.Children.Add(textblock);
+
+                comboBoxItem.Content = stackpanel;
+                comboBoxItem.Tag = filename;
+
+                AddSearchBoxItemListeners(comboBoxItem, file);
+
+                searchBox.Items.Add(comboBoxItem);
+            }
+        }
+        private static void AddSearchBoxItemListeners(ComboBoxItem item, string filepath)
+        {
+            string filename = item.Tag.ToString();
+            string desktopPath = Path.GetDirectoryName(filepath);
+            MainWindow window = GetMainWindow(desktopPath);
+
+            switch (Path.GetExtension(filename))
+            {
+                case SupportedFiles.TXT: item.PreviewMouseDown += (sender, e) => AddTextListener(window, desktopPath, filename); break;
+                case SupportedFiles.RTF: item.PreviewMouseDown += (sender, e) => AddRTFListener(window, desktopPath, filename); break;
+                case SupportedFiles.WAV: item.PreviewMouseDown += (sender, e) => AddAudioListener(filepath, filename); break;
+                case SupportedFiles.MP3: item.PreviewMouseDown += (sender, e) => AddAudioListener(filepath, filename); break;
+                case SupportedFiles.EXE: item.PreviewMouseDown += (sender, e) => AddEXEListener(filepath, filename); break;
+                case SupportedFiles.PNG: item.PreviewMouseDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
+                case SupportedFiles.JPG: item.PreviewMouseDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
+                case SupportedFiles.MP4: item.PreviewMouseDown += (sender, e) => AddMP4Listener(desktopPath, filename, filepath); break;
+                default: item.PreviewMouseDown += (sender, e) => AddFolderListener(desktopPath, filename); break;
+            }
+        }
+        #endregion
+
         #region IsOpen functions
         public static bool IsMusicAppOpen()
         {
@@ -256,7 +389,7 @@ namespace WPFFrameworkApp
             }
             return null;
         }
-        private static MainWindow GetMainWindow(string directoryPath)
+        public static MainWindow GetMainWindow(string directoryPath)
         {
             string title;
             if (directoryPath.EndsWith(Configs.CDESK)) title = MainItems.MAIN_WIN;
@@ -280,17 +413,6 @@ namespace WPFFrameworkApp
                 }
             }
             return null;
-        }
-        #endregion
-
-        #region Style functions
-        public static void SetWindowStyles(dynamic menu, MenuItem[] menuitems)
-        {
-            string[] fontsettings = GetFontSettingsFromCfont();
-            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
-            SetSettingsForAllMenu(menu, fontsettings);
-
-            foreach (MenuItem item in menuitems) item.Background = menucolor;
         }
         #endregion
 
@@ -620,24 +742,7 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(desktopPath, filename), ImagePaths.TXT_IMG);
 
-            app.Click += (sender, e) =>
-            {
-                try
-                {
-                    TXTNote noteapp = new TXTNote
-                    {
-                        windowForNote = window,
-                        currentDesktopForNote = desktopPath,
-                        Title = filename
-                    };
-
-                    noteapp.note.Text = ReadTXTFile(Path.Combine(desktopPath, filename));
-                }
-                catch (Exception ex)
-                {
-                    ErrorMessage("TXT" + Errors.READ_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
-                }
-            };
+            app.Click += (sender, e) => AddTextListener(window, desktopPath, filename);
         }
         private static string ReadTXTFile(string filepath)
         {
@@ -667,44 +772,7 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(desktopPath, filename), ImagePaths.RTF_IMG);
 
-            app.Click += (sender, e) =>
-            {
-                RTFNote noteapp = new RTFNote
-                {
-                    windowForNote = window,
-                    currentDesktopForNote = desktopPath,
-                    Title = filename
-                };
-                try
-                {
-                    using (StreamReader reader = new StreamReader(Path.Combine(desktopPath, filename)))
-                    {
-                        StringBuilder stringbuilder = new StringBuilder();
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            stringbuilder.Append(line);
-                        }
-                        TextRange textRange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
-
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            using (StreamWriter writer = new StreamWriter(memoryStream))
-                            {
-                                writer.Write(stringbuilder);
-                                writer.Flush();
-                                memoryStream.Position = 0; // Reset the stream position
-
-                                textRange.Load(memoryStream, DataFormats.Rtf);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ErrorMessage("RTF" + Errors.OPEN_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
-                }
-            };
+            app.Click += (sender, e) => AddRTFListener(window, desktopPath, filename);
         }
         private static void InitAudioFile(MainWindow window, string filepath, string fileimage, string[] fontsettings)
         {
@@ -723,15 +791,7 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, filepath, fileimage);
 
-            app.Click += (o, e) =>
-            {
-                CloseAllGenMusicApps();
-                GenMusicApp.mediaPlayer?.Close();
-                GenMusicApp.mediaPlayer = null;
-                GenMusicApp.isPaused = true;
-                GenMusicApp musicapp = new GenMusicApp();
-                musicapp.MusicAppButton_Clicked(filepath, filename);
-            };
+            app.Click += (o, e) => AddAudioListener(filepath, filename);
         }
         private static void InitEXEFile(MainWindow window, string desktopPath, string filepath, string filename, string[] fontsettings)
         {
@@ -748,25 +808,7 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.EXE_IMG, ImagePaths.DELEXE_IMG, filepath, ImagePaths.EXE_IMG);
 
-            app.Click += (s, e) =>
-            {
-                string[] options = { "Run", "Cancel" };
-                if (QueryDialog.ShowQueryDialog($"Are you sure you want to run {filename}?", "Executable File Run", options, ImagePaths.EXE_IMG) == 0)
-                {
-                    Process process = new Process();
-                    process.StartInfo.FileName = filepath;
-                    process.StartInfo.CreateNoWindow = true;
-                    try
-                    {
-                        process.Start();
-                        process.WaitForExit();
-                    }
-                    catch (Exception ex)
-                    {
-                        ErrorMessage(Errors.RUN_ERR, Errors.RUN_ERR_MSG, filename ?? "null File", "\n", ex.Message);
-                    }
-                }
-            };
+            app.Click += (s, e) => AddEXEListener(filepath, filename);
         }
         private static void InitPictureFile(MainWindow window, string desktopPath, string filepath, string fileimage, string filename, string[] fontsettings)
         {
@@ -783,13 +825,7 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, filepath, fileimage);
 
-            app.Click += (s, e) =>
-            {
-                PicWindow pictureApp = OpenPicWindow(window, filename, desktopPath);
-
-                pictureApp.PicMain.Source = setBitmapImage(filepath);
-                pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
-            };
+            app.Click += (s, e) => AddPictureListener(window, desktopPath, filename, filepath);
         }
         private static void InitMP4File(MainWindow window, string desktopPath, string filepath, string fileimage, string filename, string[] fontsettings)
         {
@@ -805,11 +841,7 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, filepath, fileimage);
 
-            app.Click += (sender, e) =>
-            {
-                var videoApp = new VideoWindow { Title = filename, desktopPath = desktopPath };
-                videoApp.videoPlayer.Source = new Uri(filepath);
-            };
+            app.Click += (sender, e) => AddMP4Listener(desktopPath, filename, filepath);
         }
         public static BitmapImage setBitmapImage(string imagepath)
         {
@@ -856,19 +888,123 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptionsForFolders(window, desktopPath, filename);
 
-            app.Click += (sender, e) =>
+            app.Click += (sender, e) => AddFolderListener(desktopPath, filename);
+        }
+        #endregion
+
+        #region App Listener functions
+        public static void AddTextListener(MainWindow window, string desktopPath, string filename)
+        {
+            try
             {
-                MainWindow.TempPath = Path.Combine(desktopPath, filename);
-                MainWindow newWindow = new MainWindow
+                TXTNote noteapp = new TXTNote
                 {
+                    windowForNote = window,
+                    currentDesktopForNote = desktopPath,
                     Title = filename
                 };
+
+                noteapp.note.Text = ReadTXTFile(Path.Combine(desktopPath, filename));
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage("TXT" + Errors.READ_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
+            }
+        }
+        public static void AddFolderListener(string desktopPath, string filename)
+        {
+            MainWindow.TempPath = Path.Combine(desktopPath, filename);
+            MainWindow newWindow = new MainWindow
+            {
+                Title = filename
             };
+        }
+        public static void AddRTFListener(MainWindow window, string desktopPath, string filename)
+        {
+            RTFNote noteapp = new RTFNote
+            {
+                windowForNote = window,
+                currentDesktopForNote = desktopPath,
+                Title = filename
+            };
+            try
+            {
+                using (StreamReader reader = new StreamReader(Path.Combine(desktopPath, filename)))
+                {
+                    StringBuilder stringbuilder = new StringBuilder();
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        stringbuilder.Append(line);
+                    }
+                    TextRange textRange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
+
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        using (StreamWriter writer = new StreamWriter(memoryStream))
+                        {
+                            writer.Write(stringbuilder);
+                            writer.Flush();
+                            memoryStream.Position = 0; // Reset the stream position
+
+                            textRange.Load(memoryStream, DataFormats.Rtf);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage("RTF" + Errors.OPEN_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
+            }
+        }
+        public static void AddAudioListener(string filepath, string filename)
+        {
+            CloseAllGenMusicApps();
+            GenMusicApp.mediaPlayer?.Close();
+            GenMusicApp.mediaPlayer = null;
+            GenMusicApp.isPaused = true;
+            GenMusicApp musicapp = new GenMusicApp();
+            musicapp.MusicAppButton_Clicked(filepath, filename);
+        }
+        public static void AddEXEListener(string filepath, string filename)
+        {
+            string[] options = { "Run", "Cancel" };
+            if (QueryDialog.ShowQueryDialog($"Are you sure you want to run {filename}?", "Executable File Run", options, ImagePaths.EXE_IMG) == 0)
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = filepath;
+                process.StartInfo.CreateNoWindow = true;
+                try
+                {
+                    process.Start();
+                    process.WaitForExit();
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage(Errors.RUN_ERR, Errors.RUN_ERR_MSG, filename ?? "null File", "\n", ex.Message);
+                }
+            }
+        }
+        public static void AddPictureListener(MainWindow window, string desktopPath, string filename, string filepath)
+        {
+            PicWindow pictureApp = OpenPicWindow(window, filename, desktopPath);
+
+            pictureApp.PicMain.Source = setBitmapImage(filepath);
+            pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
+        }
+        public static void AddMP4Listener(string desktopPath, string filename, string filepath)
+        {
+            var videoApp = new VideoWindow
+            {
+                Title = filename,
+                desktopPath = desktopPath
+            };
+            videoApp.videoPlayer.Source = new Uri(filepath);
         }
         #endregion
 
         #region Window Reload functions
-        public static void ReloadWindow(MainWindow window, string desktopPath)
+        public static void ReloadWindow(MainWindow window, string desktopPath, ComboBox searchBox = null)
         {
             window.desktop.Children.Clear();
             window.folderdesktop.Children.Clear();
@@ -890,21 +1026,22 @@ namespace WPFFrameworkApp
                             window.trashApp.Visibility = Visibility.Visible;
                             window.trashimage.Source = InitTrashBacket();
                         }
+                        continue;
                     }
-                    else if (filename.EndsWith(SupportedFiles.TXT)) InitTextFile(window, desktopPath, filename, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.RTF)) InitRTFFile(window, desktopPath, filename, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.WAV)) InitAudioFile(window, file, ImagePaths.WAV_IMG, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.MP3)) InitAudioFile(window, file, ImagePaths.MP3_IMG, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.EXE)) InitEXEFile(window, desktopPath, file, filename, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.PNG)) InitPictureFile(window, desktopPath, file, ImagePaths.PNG_IMG, filename, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.JPG)) InitPictureFile(window, desktopPath, file, ImagePaths.JPG_IMG, filename, fontsettings);
-                    else if (filename.EndsWith(SupportedFiles.MP4)) InitMP4File(window, desktopPath, file, ImagePaths.MP4_IMG, filename, fontsettings);
-                    else
+                    switch (Path.GetExtension(filename))
                     {
-                        ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS);
-                        File.Delete(file);
+                        case SupportedFiles.TXT: InitTextFile(window, desktopPath, filename, fontsettings); break;
+                        case SupportedFiles.RTF: InitRTFFile(window, desktopPath, filename, fontsettings); break;
+                        case SupportedFiles.WAV: InitAudioFile(window, file, ImagePaths.WAV_IMG, fontsettings); break;
+                        case SupportedFiles.MP3: InitAudioFile(window, file, ImagePaths.MP3_IMG, fontsettings); break;
+                        case SupportedFiles.EXE: InitEXEFile(window, desktopPath, file, filename, fontsettings); break;
+                        case SupportedFiles.PNG: InitPictureFile(window, desktopPath, file, ImagePaths.PNG_IMG, filename, fontsettings); break;
+                        case SupportedFiles.JPG: InitPictureFile(window, desktopPath, file, ImagePaths.JPG_IMG, filename, fontsettings); break;
+                        case SupportedFiles.MP4: InitMP4File(window, desktopPath, file, ImagePaths.MP4_IMG, filename, fontsettings); break;
+                        default: ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS); File.Delete(file); break;
                     }
                 }
+                if (searchBox != null) AddEveryItemIntoSearch(searchBox, desktopPath);
                 SetApplications(window);
                 window.Show();
             }

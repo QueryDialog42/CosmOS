@@ -71,7 +71,7 @@ namespace WPFFrameworkApp
                     {
                         writer.WriteLine(noteapp.note.Text);
                     }
-                    RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -114,7 +114,7 @@ namespace WPFFrameworkApp
                     {
                         textrange.Save(filestream, DataFormats.Rtf);
                     }
-                    RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -127,14 +127,14 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
             noteapp.Close();
-            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
 
         }
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
             noteapp.Close();
-            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+            if(windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
 
         }
         public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
@@ -145,7 +145,7 @@ namespace WPFFrameworkApp
 
                 RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
                 noteapp.Close();
-                RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
             }
         }
         #endregion
@@ -250,22 +250,29 @@ namespace WPFFrameworkApp
         }
         public static void ColorChange_Wanted(RichTextBox RichNote)
         {
-            System.Windows.Forms.ColorDialog colordialog = new System.Windows.Forms.ColorDialog();
-            if (colordialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (OperatingSystem.IsWindowsVersionAtLeast(6, 1))
             {
-                System.Drawing.Color selectedcolor = colordialog.Color;
-
-                // Convert to WPF Color
-                Color wpfcolor = Color.FromArgb(selectedcolor.A, selectedcolor.R, selectedcolor.G, selectedcolor.B);
-
-                TextSelection selection = RichNote.Selection;
-                if (selection.IsEmpty == false)
+                var colordialog = new System.Windows.Forms.ColorDialog();
+                if (colordialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextRange textRange = new TextRange(selection.Start, selection.End);
+                    System.Drawing.Color selectedcolor = colordialog.Color;
 
-                    // Apply the new foreground color to the selected text
-                    textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(wpfcolor));
+                    // Convert to WPF Color
+                    Color wpfcolor = Color.FromArgb(selectedcolor.A, selectedcolor.R, selectedcolor.G, selectedcolor.B);
+
+                    TextSelection selection = RichNote.Selection;
+                    if (selection.IsEmpty == false)
+                    {
+                        TextRange textRange = new TextRange(selection.Start, selection.End);
+
+                        // Apply the new foreground color to the selected text
+                        textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(wpfcolor));
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("This feature is only supported on Windows 6.1 or later.", "Unsupported Platform", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         #endregion

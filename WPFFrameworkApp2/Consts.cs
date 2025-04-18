@@ -58,6 +58,7 @@
         public const string SDEL_IMG = "MusicImages/sounddelete.png";
         public const string EMPT_IMG = "DesktopImages/trashempty.png";
         public const string ADDMP4_IMG = "DesktopImages/movieadd.png";
+        public const string UNKNOWN_IMG = "DesktopImages/unknown.png";
         public const string NEWFOL_IMG = "DesktopImages/newfolder.png";
         public const string LOGO_IMG = "DesktopImages/paperplane2.png";
         public const string MP3_IMG = "DesktopImages/sound128x128.png";
@@ -106,11 +107,11 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.2.5";
+        public const string GOS_VRS = "GencOS v2.2.7";
         public const string MAIL_VRS = "GenMail v0.0.5";
-        public const string NOTE_VRS = "GenNote v1.4.9";
-        public const string MUSIC_VRS = "GenMusic v1.6.7";
-        public const string PICMOV_VRS = "GenMovie v0.0.3";
+        public const string NOTE_VRS = "GenNote v1.5.0";
+        public const string MUSIC_VRS = "GenMusic v1.6.9";
+        public const string PICMOV_VRS = "GenMovie v0.0.5";
     }
 
     public struct MainItems

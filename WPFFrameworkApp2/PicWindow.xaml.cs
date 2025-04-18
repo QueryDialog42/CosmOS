@@ -63,10 +63,10 @@ namespace WPFFrameworkApp
                 case 2: RoutineLogics.MoveAnythingWithQuery("Move Picture", filter, Title, MainWindow.PicVideoPath, MainWindow.PicVideoPath, 1); break;
                 case 3: RoutineLogics.CopyAnythingWithQuery("Copy Picture", filter, Title, MainWindow.PicVideoPath, MainWindow.PicVideoPath); break;
                 case 4: RoutineLogics.RenameFile_Wanted(Path.Combine(MainWindow.PicVideoPath, Title), Title.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG); break;
-                case 5: RoutineLogics.MoveAnythingWithoutQuery(MainWindow.PicVideoPath, Title, MainWindow.TrashPath); break;
+                case 5: RoutineLogics.MoveAnythingWithoutQuery(MainWindow.PicVideoPath, Title, Path.Combine(MainWindow.TrashPath, Title)); break;
             }
-            RoutineLogics.ReloadWindow(window, desktopPath);
-            picmovie.ReloadWindow();
+            if (window != null) RoutineLogics.ReloadWindow(window, desktopPath);
+            picmovie?.ReloadWindow();
         }
         private void outOfPicVideosDo(byte which)
         {
@@ -78,7 +78,7 @@ namespace WPFFrameworkApp
                 case 4: RoutineLogics.RenameFile_Wanted(Path.Combine(desktopPath, Title), Title.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG); break;
                 case 5: RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, Path.Combine(MainWindow.TrashPath, Title)); break;
             }
-            RoutineLogics.ReloadWindow(window, desktopPath);
+            if (window != null) RoutineLogics.ReloadWindow(window, desktopPath);
         }
         private void switchOfPicMovieLogics(byte which)
         {
@@ -87,7 +87,6 @@ namespace WPFFrameworkApp
                 case true: inPicVideosDo(which); break;
                 case false: outOfPicVideosDo(which); break;
             }
-
             if (which != 1) Close();
         }
         #endregion

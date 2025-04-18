@@ -131,29 +131,29 @@ namespace WPFFrameworkApp2
         #region MenuItem option functions
         private void RenameVideo(object sender, RoutedEventArgs e)
         {
+            Close();
             RoutineLogics.RenameFile_Wanted(Path.Combine(desktopPath, Title), ImagePaths.MP4_IMG);
             RepeatedReload();
-            Close();
         }
         private void MoveVideo(object sender, RoutedEventArgs e)
         {
+            Close();
             RoutineLogics.MoveAnythingWithQuery("Move Video", filter, Title, desktopPath, desktopPath, 1);
             RepeatedReload();
-            Close();
         }
         private void CopyVideo(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.CopyAnythingWithQuery("Copy Video", filter, Title, desktopPath, desktopPath);
             Close();
+            RoutineLogics.CopyAnythingWithQuery("Copy Video", filter, Title, desktopPath, desktopPath);
         }
         private void DeleteVideo(object sender, RoutedEventArgs e)
         {
             string[] options = { "Ok", "Cancel" };
             if (MessageBox.Show($"Are you sure you want to delete {Title}", "Delete Video", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, MainWindow.TrashPath);
-                RepeatedReload();
                 Close();
+                RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, Path.Combine(MainWindow.TrashPath, Title));
+                RepeatedReload();
             }
         }
         private void RotateVideo(object sender, RoutedEventArgs e)
@@ -186,6 +186,8 @@ namespace WPFFrameworkApp2
         private void RepeatedReload()
         {
             RoutineLogics.GetPicMovieWindow()?.ReloadWindow();
+            MainWindow window = RoutineLogics.GetMainWindow(desktopPath);
+            if (window != null) RoutineLogics.ReloadWindow(window, desktopPath, window.searchComboBox);
         }
         private void StartUp()
         {

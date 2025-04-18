@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Windows.Documents;
+using System.Runtime.Versioning;
 
 namespace WPFFrameworkApp
 {
@@ -19,7 +20,6 @@ namespace WPFFrameworkApp
         public RTFNote()
         {
             InitializeComponent();
-            RoutineLogics.SetSettingsForAllMenu(RTFfileMenu, RoutineLogics.GetFontSettingsFromCfont());
             StartUp();
             Show();
         }

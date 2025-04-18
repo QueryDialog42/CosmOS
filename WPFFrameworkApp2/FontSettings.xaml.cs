@@ -30,8 +30,6 @@ namespace WPFFrameworkApp
         private static string selectedMenuFontStyle;
         private static float selectedMenuFontSize;
 
-        private SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
-
         public FontSettings()
         {
             InitializeComponent();

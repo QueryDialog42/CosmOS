@@ -2,6 +2,8 @@
 using System.IO;
 using System.Windows;
 using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace WPFFrameworkApp
 {
@@ -123,7 +125,7 @@ namespace WPFFrameworkApp
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
                 PicVideoPath = Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
-                if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop);
+                if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
             }
             catch (Exception)
             {
@@ -276,7 +278,9 @@ namespace WPFFrameworkApp
         {
             string filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}|PNG Files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG Files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
             RoutineLogics.MoveAnythingWithQuery("Import File", filter, null, desktopPath, desktopPath, 4);
-            RoutineLogics.ReloadWindow(window, desktopPath);
+
+            RoutineLogics.ReloadWindow(window, desktopPath, window.searchComboBox);
+
         }
         private void NewFolder(object sender, RoutedEventArgs e)
         {
@@ -289,7 +293,7 @@ namespace WPFFrameworkApp
                     if (Directory.Exists(folderpath) == false)
                     {
                         Directory.CreateDirectory(folderpath);
-                        RoutineLogics.ReloadWindow(this, currentDesktop);
+                        RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
                     }
                     else RoutineLogics.ErrorMessage(Errors.CRT_ERR, foldername, " already exists.");
                 }
@@ -354,7 +358,7 @@ namespace WPFFrameworkApp
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ReloadWindow(this, currentDesktop);
+            RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
         }
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {
