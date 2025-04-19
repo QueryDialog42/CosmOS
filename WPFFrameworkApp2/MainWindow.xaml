@@ -13,19 +13,22 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="90" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <ComboBox Grid.Row="0" 
-                  Grid.ColumnSpan="2" 
+                  Grid.ColumnSpan="2"
+                  Height="20"
                   x:Name="searchComboBox" 
                   IsEditable="True" 
                   IsTextSearchEnabled="True" 
                   DisplayMemberPath="Tag" 
                   Panel.ZIndex="1" Width="200" 
-                  HorizontalAlignment="Right" >
+                  HorizontalAlignment="Right"
+                  Background="Transparent">
         </ComboBox>
+
+        <Button x:Name="clockTime" Panel.ZIndex="1" BorderThickness="0" Background="Transparent" Width="150" Height="20" Click="CalendarApp_Wanted"/>
 
         <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0">
             <MenuItem Header="_New" Height="20">
@@ -81,72 +84,102 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <WrapPanel x:Name="desktop" Grid.Row="1" Grid.Column="0" Background="LightGray">
-            <WrapPanel.ContextMenu>
-                <ContextMenu x:Name="mainContextMenu" BorderThickness="0">
-                    <MenuItem x:Name="itemmenu1" Header="New File" BorderThickness="0" Click="NoteApp_Clicked">
-                        <MenuItem.Icon>
-                            <Image Source="/NoteImages/noteadd.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="itemmenu2" Header="New Folder" BorderThickness="0" Click="NewFolder">
-                        <MenuItem.Icon>
-                            <Image Source="/DesktopImages/newfolder.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadWindow_Wanted">
-                        <MenuItem.Icon>
-                            <Image Source="/DesktopImages/refresh.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </WrapPanel.ContextMenu>
-        </WrapPanel>
-        <StackPanel x:Name="safari" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c" Orientation="Horizontal">
-            <Button x:Name="NoteApp" Height="60" Width="60" ToolTip="GenNote" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
-                <Image Source="NoteImages/gennote.png" />
-            </Button>
-            <Button x:Name="MusicApp" Height="55" Width="55" ToolTip="GenMusic" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
-                <Image Source="DesktopImages/Genmusic.png"/>
-            </Button>
-            
-            <!--only when reload desktop needed-->
-            <Button x:Name="reloadNeed" Height="35" Background="#4a4a4a" Foreground="White" BorderThickness="0" Visibility="Collapsed" Click="ReloadWindow_Wanted">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
-                    <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
-                </StackPanel>
-            </Button>
+        
 
-            <Button x:Name="PicMovie" Height="55" Width="55" Margin="10, 5, 0, 0" Background="Transparent" BorderBrush="Transparent" Click="PicMovieApp_Clicked">
-                <Image Source="/DesktopImages/picmovie.png"/>
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                <WrapPanel x:Name="desktop" Grid.Column="0" Grid.ColumnSpan="2" Background="LightGray">
+                    <WrapPanel.ContextMenu>
+                        <ContextMenu x:Name="mainContextMenu" BorderThickness="0">
+                            <MenuItem x:Name="itemmenu1" Header="New File" BorderThickness="0" Click="NoteApp_Clicked">
+                                <MenuItem.Icon>
+                                    <Image Source="/NoteImages/noteadd.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem x:Name="itemmenu2" Header="New Folder" BorderThickness="0" Click="NewFolder">
+                                <MenuItem.Icon>
+                                    <Image Source="/DesktopImages/newfolder.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadWindow_Wanted">
+                                <MenuItem.Icon>
+                                    <Image Source="/DesktopImages/refresh.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </WrapPanel.ContextMenu>
+                </WrapPanel>
+            </ScrollViewer>
+
+            <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
+
+            <Expander x:Name="expander" Grid.Column="2" ExpandDirection="Left"
+                      Expanded="expander_Expanded"
+                      Collapsed="expander_Collapsed"
+                      BorderThickness="0">
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="folderdesktop" Background="#9c9268" Width="Auto" Orientation="Horizontal" />
+                </ScrollViewer>
+            </Expander>
+            
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="90" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel x:Name="safari" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c" Orientation="Horizontal">
+                <Button x:Name="NoteApp" Height="60" Width="60" ToolTip="GenNote" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
+                    <Image Source="NoteImages/gennote.png" />
+                </Button>
+                <Button x:Name="MusicApp" Height="55" Width="55" ToolTip="GenMusic" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
+                    <Image Source="DesktopImages/Genmusic.png"/>
+                </Button>
+
+                <!--only when reload desktop needed-->
+                <Button x:Name="reloadNeed" Height="35" Background="#4a4a4a" Foreground="White" BorderThickness="0" Visibility="Collapsed" Click="ReloadWindow_Wanted">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
+                        <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="PicMovie" Height="55" Width="55" Margin="10, 5, 0, 0" Background="Transparent" BorderBrush="Transparent" Click="PicMovieApp_Clicked">
+                    <Image Source="/DesktopImages/picmovie.png"/>
+                </Button>
+
+                <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
+                    <Image Source="/DesktopImages/Mail128x128.png"/>
+                </Button>
+            </StackPanel>
+
+            <Button x:Name="trashApp" Grid.Column="1" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="trashContextMenu" BorderThickness="0">
+                        <MenuItem x:Name="trashitem1" Header="Empty Trash" BorderThickness="0" Click="EmptyTrash_Wanted">
+                            <MenuItem.Icon>
+                                <Image Source="/DesktopImages/trashempty.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="trashitem2" Header="Rescue All" BorderThickness="0" Click="RescueTrashes_Wanted">
+                            <MenuItem.Icon>
+                                <Image Source="/DesktopImages/rescueme.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <Image x:Name="trashimage" Source="DesktopImages/trashempty.png"/>
             </Button>
             
-            <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
-                <Image Source="/DesktopImages/Mail128x128.png"/>
-            </Button>
-        </StackPanel>
+        </Grid>
         
-        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel x:Name="folderdesktop" Background="#9c9268" Orientation="Vertical" />
-        </ScrollViewer>
-        
-        <Button x:Name="trashApp" Grid.Row="2" Grid.Column="1" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
-            <Button.ContextMenu>
-                <ContextMenu x:Name="trashContextMenu" BorderThickness="0">
-                    <MenuItem x:Name="trashitem1" Header="Empty Trash" BorderThickness="0" Click="EmptyTrash_Wanted">
-                        <MenuItem.Icon>
-                            <Image Source="/DesktopImages/trashempty.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="trashitem2" Header="Rescue All" BorderThickness="0" Click="RescueTrashes_Wanted">
-                        <MenuItem.Icon>
-                            <Image Source="/DesktopImages/rescueme.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </Button.ContextMenu>
-            <Image x:Name="trashimage" Source="DesktopImages/trashempty.png"/>
-        </Button>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Converters;
 
 namespace WPFFrameworkApp
 {
@@ -222,6 +223,18 @@ namespace WPFFrameworkApp
             foreach (Window window in Application.Current.Windows)
             {
                 if (window is FontSettings)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static bool IsCalendarAppOpen()
+        {
+            foreach(Window window in Application.Current.Windows)
+            {
+                if (window is CalendarApp)
                 {
                     window.Activate();
                     return true;
@@ -459,6 +472,7 @@ namespace WPFFrameworkApp
                 SetBackgroundSettings(window, colors);
                 SetMenuFontSettings(window, fonts);
 
+                window.clockTime.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
             }
             catch (Exception)
             {
@@ -513,9 +527,12 @@ namespace WPFFrameworkApp
         {
             SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
             SolidColorBrush safaricolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
+            SolidColorBrush folderdesktopcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
 
             window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
-            window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
+            window.folderdesktop.Background = folderdesktopcolor;
+            window.expander.Background = folderdesktopcolor;
+            window.gridSplitter.Background = folderdesktopcolor;
             window.safari.Background = safaricolor;
             window.menu.Background = menucolor;
             window.trashApp.Background = safaricolor;

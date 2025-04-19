@@ -1,14 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
+using System.Windows.Threading;
+using System.Collections.Generic;
+using WPFFrameworkApp2;
 
 namespace WPFFrameworkApp
 {
     public partial class MainWindow : Window
     {
+        private DispatcherTimer clocktimer;
+
         public string currentDesktop; // path to unique desktop
 
         public static string TempPath; // Temporary path to store currentDesktop path
@@ -125,7 +128,10 @@ namespace WPFFrameworkApp
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
                 PicVideoPath = Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
+
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
+
+                SetTimeLogics();
             }
             catch (Exception)
             {
@@ -416,6 +422,56 @@ namespace WPFFrameworkApp
                 }
                 RoutineLogics.WindowReloadNeeded(CDesktopPath);
             }
+        }
+        private void CalendarApp_Wanted(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsCalendarAppOpen() == false)
+            {
+                new CalendarApp();
+            }
+        }
+        #endregion
+
+        #region Expander functions
+        private void expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            gridSplitter.Visibility = Visibility.Visible;
+            Grid.SetColumnSpan(desktop, 1);
+
+            Grid grid = (Grid)gridSplitter.Parent;
+            grid.ColumnDefinitions[2].Width = GridLength.Auto;
+        }
+        private void expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            gridSplitter.Visibility = Visibility.Collapsed;
+            Grid.SetColumnSpan(desktop, 2);
+
+            Grid grid = (Grid)gridSplitter.Parent;
+            grid.ColumnDefinitions[2].Width = new GridLength(23);
+        }
+        #endregion
+
+        #region Time functions
+        private void SetTimeLogics()
+        {
+            clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
+
+            clocktimer = new DispatcherTimer();
+            clocktimer.Interval = TimeSpan.FromSeconds(1);
+            clocktimer.Tick += UpdateTime;
+            clocktimer.Start();
+        }
+        private void UpdateTime(object sender, EventArgs e)
+        {
+            clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
+        }
+        #endregion
+
+        #region OnClosing functions
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            clocktimer.Stop();
+            clocktimer = null;
         }
         #endregion
     }
