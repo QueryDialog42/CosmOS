@@ -21,7 +21,6 @@ namespace WPFFrameworkApp
         public static bool isPaused = true;
         public static DispatcherTimer time;
         public static MediaPlayer mediaPlayer;
-        public Dictionary<ListBoxItem, TextBlock> datacontent; // to store items' TextBlock in order to get filename
         public string musicfilter = $"WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}";
 
         double totaltime;
@@ -97,7 +96,6 @@ namespace WPFFrameworkApp
         }
         private void ShredTempData()
         {
-            datacontent = null;
             musicfilter = null;
             totaltime = 0;
         }
@@ -204,7 +202,7 @@ namespace WPFFrameworkApp
             {
                 foreach (ListBoxItem item in listbox.Items)
                 {
-                    datacontent.TryGetValue(item, out TextBlock itemname);
+                    TextBlock itemname = item.Tag as TextBlock;
                     if (itemname.Text.Trim() == currentAudio)
                     {
                         item.Background = Brushes.Gray;
@@ -237,9 +235,9 @@ namespace WPFFrameworkApp
             itempanel.Children.Add(new Image { Source = bitmapImage });
             itempanel.Children.Add(textblock);
 
-            ListBoxItem item = new ListBoxItem { Content = itempanel };
+            ListBoxItem item = new ListBoxItem { Content = itempanel, Tag = textblock };
             listbox.Items.Add(item); // supported audios
-            datacontent.Add(item, textblock);
+            
         }
         private void SetMenuStyles()
         {
@@ -302,7 +300,6 @@ namespace WPFFrameworkApp
         #region Reload Operation functions
         public void ReloadWindow()
         {
-            datacontent = new Dictionary<ListBoxItem, TextBlock>(); // to restore item and its textblock
             listbox.Items.Clear();
             IEnumerable<string> musiclist = Directory.EnumerateFileSystemEntries(MainWindow.MusicAppPath);
             foreach (string music in musiclist)
@@ -384,7 +381,7 @@ namespace WPFFrameworkApp
             try
             {
                 ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
-                datacontent.TryGetValue(item, out TextBlock textblock); // get Textblock of selected item
+                TextBlock textblock = item.Tag as TextBlock;
                 string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
                 currentMusic.Text = itemname;
                 currentAudio = itemname;

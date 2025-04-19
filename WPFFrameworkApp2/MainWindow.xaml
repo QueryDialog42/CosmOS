@@ -24,7 +24,8 @@
                   IsTextSearchEnabled="True" 
                   DisplayMemberPath="Tag" 
                   Panel.ZIndex="1" Width="200" 
-                  HorizontalAlignment="Right" />
+                  HorizontalAlignment="Right" >
+        </ComboBox>
 
         <Menu x:Name="menu" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0">
             <MenuItem Header="_New" Height="20">
