@@ -137,31 +137,43 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel x:Name="safari" Grid.Column="0" Grid.ColumnSpan="2" Background="#5c5c5c" Orientation="Horizontal">
-                <Button x:Name="NoteApp" Height="60" Width="60" ToolTip="GenNote" Margin="10, 5, 0, 0" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Click="NoteApp_Clicked">
+                
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="55"/>
+                        <Setter Property="Height" Value="55" />
+                        <Setter Property="Margin" Value="10, 5, 0, 0" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Style>
+                </StackPanel.Resources>
+                
+                <Button x:Name="NoteApp" ToolTip="GenNote" Width="60" Height="60" Click="NoteApp_Clicked">
                     <Image Source="NoteImages/gennote.png" />
                 </Button>
-                <Button x:Name="MusicApp" Height="55" Width="55" ToolTip="GenMusic" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="MusicAppStart">
+                <Button x:Name="MusicApp" ToolTip="GenMusic" Click="MusicAppStart">
                     <Image Source="DesktopImages/Genmusic.png"/>
                 </Button>
 
                 <!--only when reload desktop needed-->
-                <Button x:Name="reloadNeed" Height="35" Background="#4a4a4a" Foreground="White" BorderThickness="0" Visibility="Collapsed" Click="ReloadWindow_Wanted">
+                <Button x:Name="reloadNeed" Width="190" Height="35" Background="#4a4a4a" Foreground="White" Visibility="Collapsed" Click="ReloadWindow_Wanted">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
                         <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="PicMovie" Height="55" Width="55" Margin="10, 5, 0, 0" Background="Transparent" BorderBrush="Transparent" Click="PicMovieApp_Clicked">
+                <Button x:Name="PicMovie" Height="48" Width="48" Click="PicMovieApp_Clicked">
                     <Image Source="/DesktopImages/picmovie.png"/>
                 </Button>
 
-                <Button x:Name="MailApp" Height="55" Width="55" Margin="10, 5, 0, 0"  Background="Transparent" BorderBrush="Transparent" Click="GenMailApp_Clicked">
+                <Button x:Name="MailApp" Click="GenMailApp_Clicked">
                     <Image Source="/DesktopImages/Mail128x128.png"/>
                 </Button>
             </StackPanel>
 
-            <Button x:Name="trashApp" Grid.Column="1" Background="#5c5c5c" BorderThickness="0" Click="OpenTrashBacket" Visibility="Collapsed">
+            <Button x:Name="trashApp" Grid.Column="1" Background="#5c5c5c" Click="OpenTrashBacket" BorderThickness="0" Visibility="Collapsed">
                 <Button.ContextMenu>
                     <ContextMenu x:Name="trashContextMenu" BorderThickness="0">
                         <MenuItem x:Name="trashitem1" Header="Empty Trash" BorderThickness="0" Click="EmptyTrash_Wanted">

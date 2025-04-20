@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="Button" x:Key="ControlableButtonStyles">
+        <Setter Property="Width" Value="50" />
+        <Setter Property="Background" Value="#2e2e2e" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="0, 2, 10, 2" />
+    </Style>
+    <Style TargetType="Slider" x:Key="ControlableSliderStyle">
+        <Setter Property="Width" Value="300" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Setter Property="IsSnapToTickEnabled" Value="False" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="ControlableSliderTextBlockStyle">
+        <Setter Property="Text" Value="00:00" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="8, 0, 0, 0" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+        
+</ResourceDictionary>

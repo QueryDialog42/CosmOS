@@ -59,17 +59,17 @@
             <TextBlock x:Name="currentMusic" Foreground="White" FontWeight="Bold" Margin="0, 15, 0, 0"  HorizontalAlignment="Center"/>
         </StackPanel>
         <StackPanel x:Name="musicSliderPanel" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Slider x:Name="slider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/>
-            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" Visibility="Collapsed" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
+            <Slider x:Name="slider" Style="{StaticResource ControlableSliderStyle}" PreviewMouseUp="SliderPositionChanged"/>
+            <TextBlock x:Name="remainedTime" Style="{StaticResource ControlableSliderTextBlockStyle}" Visibility="Collapsed"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel1" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-            <Button x:Name="startButton" Content="start" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="Play"/>
-            <Button x:Name="stopButton" Content="stop" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="Pause"/>
-            <Button x:Name="restartButton" Content="Restart" Width="50" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 0, 2" Click="Restart"/>
+            <Button x:Name="startButton" Style="{StaticResource ControlableButtonStyles}" Content="start" Click="Play"/>
+            <Button x:Name="stopButton" Style="{StaticResource ControlableButtonStyles}" Content="stop" Click="Pause"/>
+            <Button x:Name="restartButton" Style="{StaticResource ControlableButtonStyles}" Content="Restart" Click="Restart"/>
         </StackPanel>
         <StackPanel x:Name="musicPanel2" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
-            <Button x:Name="back" Content="5s Back" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0" Margin="0, 2, 10, 2" Click="Back"/>
-            <Button x:Name="front" Content="5s Front" Width="57" Background="#2e2e2e" Foreground="white" BorderThickness="0"  Margin="0, 2, 0, 2" Click="Forward"/>
+            <Button x:Name="back" Style="{StaticResource ControlableButtonStyles}" Content="5s Back" Width="57" Click="Back"/>
+            <Button x:Name="front" Style="{StaticResource ControlableButtonStyles}" Content="5s Front" Width="57" Click="Forward"/>
         </StackPanel>
         <Button x:Name="reloadNeeded" Grid.Row="3" Grid.ColumnSpan="2" Width="180" HorizontalAlignment="Center" Visibility="Collapsed" Background="#262626" BorderThickness="0" Foreground="white" Click="ReloadDesktopNeeded">
             <StackPanel Orientation="Horizontal">

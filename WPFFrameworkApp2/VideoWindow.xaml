@@ -49,18 +49,18 @@
         </Menu>
         
         <StackPanel x:Name="timeControl" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Slider x:Name="videoSlider" Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsSnapToTickEnabled="false" PreviewMouseUp="SliderPositionChanged"/>
-            <TextBlock x:Name="remainedTime" Text="00:00" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8, 0, 0, 0" Foreground="white"/>
+            <Slider x:Name="videoSlider" Style="{StaticResource ControlableSliderStyle}" Visibility="Visible" PreviewMouseUp="SliderPositionChanged"/>
+            <TextBlock x:Name="remainedTime" Style="{StaticResource ControlableSliderTextBlockStyle}"/>
         </StackPanel>
         
         <StackPanel x:Name="videoPanel1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="startButton" Content="start" Width="50" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 10, 2" Click="Play"/>
-            <Button x:Name="stopButton" Content="stop" Width="50" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 10, 2" Click="Pause"/>
-            <Button x:Name="restartButton" Content="Restart" Width="50" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 0, 2" Click="Restart"/>
+            <Button x:Name="startButton" Content="start" Style="{StaticResource ControlableButtonStyles}" Click="Play"/>
+            <Button x:Name="stopButton" Content="stop" Style="{StaticResource ControlableButtonStyles}" Click="Pause"/>
+            <Button x:Name="restartButton" Content="Restart" Style="{StaticResource ControlableButtonStyles}" Click="Restart"/>
         </StackPanel>
         <StackPanel x:Name="videoPanel2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" >
-            <Button x:Name="back" Content="5s Back" Width="57" Foreground="white" Background="Black" BorderThickness="0" Margin="0, 2, 10, 2" Click="Back"/>
-            <Button x:Name="front" Content="5s Front" Width="57" Foreground="white" Background="Black" BorderThickness="0"  Margin="0, 2, 0, 2" Click="Forward" />
+            <Button x:Name="back" Content="5s Back" Width="57" Style="{StaticResource ControlableButtonStyles}" Click="Back"/>
+            <Button x:Name="front" Content="5s Front" Width="57" Style="{StaticResource ControlableButtonStyles}" Click="Forward" />
         </StackPanel>
         
         <MediaElement x:Name="videoPlayer" Grid.Row="1" Grid.RowSpan="4" Panel.ZIndex="-1" LoadedBehavior="Manual" UnloadedBehavior="Manual" Stretch="Uniform" StretchDirection="Both" RenderTransformOrigin="0.5, 0.5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
