@@ -1,15 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using WPFFrameworkApp2;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Collections.Generic;
-using WPFFrameworkApp2;
 
 namespace WPFFrameworkApp
 {
     public partial class MainWindow : Window
     {
+        private SolidColorBrush menufontcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.menuFontColor));
         private DispatcherTimer clocktimer;
 
         public string currentDesktop; // path to unique desktop
@@ -22,11 +24,56 @@ namespace WPFFrameworkApp
 
         public MainWindow()
         {
+            DataContext = this;
             InitializeComponent();
             if (TempPath == null) CheckConfigurationIsRight();
 
             StartUp();
         }
+
+        #region Time functions
+        private void SetTimeLogics()
+        {
+            clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
+
+            clocktimer = new DispatcherTimer();
+            clocktimer.Interval = TimeSpan.FromSeconds(1);
+            clocktimer.Tick += UpdateTime;
+            clocktimer.Start();
+        }
+        private void UpdateTime(object sender, EventArgs e)
+        {
+            clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
+        }
+        #endregion
+
+        #region Expander functions
+        private void expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            gridSplitter.Visibility = Visibility.Visible;
+            Grid.SetColumnSpan(desktop, 1);
+
+            Grid grid = (Grid)gridSplitter.Parent;
+            grid.ColumnDefinitions[2].Width = GridLength.Auto;
+        }
+        private void expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            gridSplitter.Visibility = Visibility.Collapsed;
+            Grid.SetColumnSpan(desktop, 2);
+
+            Grid grid = (Grid)gridSplitter.Parent;
+            grid.ColumnDefinitions[2].Width = new GridLength(23);
+        }
+        #endregion
+
+        #region OnClosing functions
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            if (Title == MainItems.MAIN_WIN) Application.Current.Shutdown();
+            clocktimer.Stop();
+            clocktimer = null;
+        }
+        #endregion
 
         #region App Clicked functions
         private void NoteApp_Clicked(object sender, RoutedEventArgs e)
@@ -132,6 +179,7 @@ namespace WPFFrameworkApp
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
 
                 SetTimeLogics();
+                searchComboBox.Foreground = Brushes.Gray;
             }
             catch (Exception)
             {
@@ -148,9 +196,9 @@ namespace WPFFrameworkApp
             CheckCDesktopPathFile(CDesktopFile);
             CheckCcolorFile(C_CONFIGS);
             CheckCfontFile(C_CONFIGS);
-            
+
             TryReadCDesktopPath(CDesktopFile);
-            
+
         }
         private void CreateConfigFiles(string CDesktopFile, string input, string C_CONFIGS)
         {
@@ -240,7 +288,7 @@ namespace WPFFrameworkApp
             try
             {
                 TempPath = File.ReadAllText(CDesktopFile).Trim();
-                
+
                 if (Directory.Exists(TempPath) == false)
                 {
                     if (MessageBox.Show($"Path to {Configs.CDESK} is corrupted or does not exists.\nPlease reset the desktop path", "Incorrect path", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
@@ -276,6 +324,21 @@ namespace WPFFrameworkApp
                 MessageBox.Show($"{foldername} folder not found. Creating.", "Hidden folder not found", MessageBoxButton.OK, MessageBoxImage.Information);
                 CreateHiddenFolderOf(path);
             }
+        }
+        #endregion
+
+        #region ComboBox PlaceHolder functions
+        private void SetComboBoxPlaceHolder(object sender, RoutedEventArgs e)
+        {
+            searchComboBox.Text = "Search";
+            searchComboBox.Foreground = Brushes.Gray;
+            searchComboBox.IsTextSearchEnabled = false;
+        }
+        private void DeleteComboBoxPlaceHolders(object sender, RoutedEventArgs e)
+        {
+            searchComboBox.Text = string.Empty;
+            searchComboBox.Foreground = menufontcolor;
+            searchComboBox.IsTextSearchEnabled = true;
         }
         #endregion
 
@@ -348,7 +411,7 @@ namespace WPFFrameworkApp
                     {
                         Directory.Move(currentDesktop, Path.Combine(Path.GetDirectoryName(currentDesktop), newfoldername));
                     }
-                    catch (Exception ex) 
+                    catch (Exception ex)
                     {
                         RoutineLogics.ErrorMessage(Errors.MOVE_ERR, Errors.MOVE_ERR_MSG, newfoldername, ex.Message);
                     }
@@ -356,7 +419,7 @@ namespace WPFFrameworkApp
                 else RoutineLogics.ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as null, ", Configs.CDESK, " or ", MainItems.MAIN_WIN);
             }
             else RoutineLogics.ErrorMessage(Errors.PRMS_ERR, "You can not rename ", MainItems.MAIN_WIN, " (", Configs.CDESK, ") folder.");
-            
+
         }
         private void AboutGencosPage_Wanted(object sender, RoutedEventArgs e)
         {
@@ -429,50 +492,6 @@ namespace WPFFrameworkApp
             {
                 new CalendarApp();
             }
-        }
-        #endregion
-
-        #region Expander functions
-        private void expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            gridSplitter.Visibility = Visibility.Visible;
-            Grid.SetColumnSpan(desktop, 1);
-
-            Grid grid = (Grid)gridSplitter.Parent;
-            grid.ColumnDefinitions[2].Width = GridLength.Auto;
-        }
-        private void expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            gridSplitter.Visibility = Visibility.Collapsed;
-            Grid.SetColumnSpan(desktop, 2);
-
-            Grid grid = (Grid)gridSplitter.Parent;
-            grid.ColumnDefinitions[2].Width = new GridLength(23);
-        }
-        #endregion
-
-        #region Time functions
-        private void SetTimeLogics()
-        {
-            clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
-
-            clocktimer = new DispatcherTimer();
-            clocktimer.Interval = TimeSpan.FromSeconds(1);
-            clocktimer.Tick += UpdateTime;
-            clocktimer.Start();
-        }
-        private void UpdateTime(object sender, EventArgs e)
-        {
-            clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
-        }
-        #endregion
-
-        #region OnClosing functions
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            if (Title == MainItems.MAIN_WIN) Application.Current.Shutdown();
-            clocktimer.Stop();
-            clocktimer = null;
         }
         #endregion
     }

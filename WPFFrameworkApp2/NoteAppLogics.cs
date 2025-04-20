@@ -11,144 +11,6 @@ namespace WPFFrameworkApp
 {
     public static class NoteAppLogics
     {
-        #region NoteApp menuitems functions
-        public static void NewNote_Wanted(MainWindow windowForNote, string currentDesktopForNote)
-        {
-            string[] options = { "TXT", "RTF" };
-            switch (QueryDialog.ShowQueryDialog("Choose Note Type", "NoteApp", options, ImagePaths.NADD_IMG, ImagePaths.NOTE_IMG))
-            {
-                case 0: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new TXTNote(), true); break;
-                case 1: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new RTFNote(), false); break;
-            }
-        }
-        public static void OpenNote_Wanted(MainWindow windowForNote, string currentDesktopForNote)
-        {
-            OpenFileDialog fileDialog = new OpenFileDialog
-            {
-                InitialDirectory = currentDesktopForNote,
-                Filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}", // TXT files and RTF files are supported
-                Title = "Open Note"
-            };
-
-            if (fileDialog.ShowDialog() == true)
-            {
-                string file = fileDialog.FileName;
-                string folder = Path.GetDirectoryName(file);
-                if (file.EndsWith(SupportedFiles.TXT)) OpenTXTFile(windowForNote, folder, file);
-                else if (file.EndsWith(SupportedFiles.RTF)) OpenRTFFile(windowForNote, folder, file);
-                else RoutineLogics.ErrorMessage(Errors.UNSUPP_ERR, file, " is not supported for ", Versions.GOS_VRS, "\n.txt\n.rtf\nis supported for now.");
-            }
-        }
-        public static void TXTSaveNote_Wanted(string currentDesktopForNote, TXTNote noteapp)
-        {
-            string filename = noteapp.Title;
-            try
-            {
-                using (StreamWriter writer = new StreamWriter(Path.Combine(currentDesktopForNote, filename)))
-                {
-                    writer.WriteLine(noteapp.note.Text);
-                }
-            }
-            catch (Exception ex)
-            {
-                RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
-            }
-        }
-        public static void TXTSaveAsNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, TXTNote noteapp)
-        {
-            SaveFileDialog filedialog = new SaveFileDialog
-            {
-                InitialDirectory = currentDesktopForNote,
-                Filter = $"Text Files ({SupportedFiles.TXT})|*{SupportedFiles.TXT}",
-                Title = "Save As"
-            };
-            if (filedialog.ShowDialog() == true)
-            {
-                string file = filedialog.FileName;
-                try
-                {
-                    using (StreamWriter writer = new StreamWriter(file))
-                    {
-                        writer.WriteLine(noteapp.note.Text);
-                    }
-                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
-                    noteapp.Close();
-                }
-                catch (Exception ex)
-                {
-                    RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, Path.GetFileName(file), "\n", ex.Message);
-                }
-            }
-        }
-        public static void RTFSaveNote_Wanted(string currentDesktopForNote, RTFNote noteapp)
-        {
-            string filename = noteapp.Title;
-            try
-            {
-                TextRange textrange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
-                using (FileStream filestream = new FileStream(Path.Combine(currentDesktopForNote, filename), FileMode.Create))
-                {
-                    textrange.Save(filestream, DataFormats.Rtf);
-                }
-            }
-            catch (Exception ex)
-            {
-                RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
-            }
-        }
-        public static void RTFSaveAsNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, RTFNote noteapp)
-        {
-            SaveFileDialog filedialog = new SaveFileDialog
-            {
-                InitialDirectory = currentDesktopForNote,
-                Filter = $"RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}",
-                Title = "Save As"
-            };
-            if (filedialog.ShowDialog() == true)
-            {
-                string file = filedialog.FileName;
-                try
-                {
-                    TextRange textrange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
-                    using (FileStream filestream = new FileStream(file, FileMode.Create))
-                    {
-                        textrange.Save(filestream, DataFormats.Rtf);
-                    }
-                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
-                    noteapp.Close();
-                }
-                catch (Exception ex)
-                {
-                    RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, Path.GetFileName(file), "\n", ex.Message);
-                }
-            }
-        }
-        public static void CopyNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
-        {
-            RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
-            noteapp.Close();
-            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
-
-        }
-        public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
-        {
-            RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
-            noteapp.Close();
-            if(windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
-
-        }
-        public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
-        {
-            string filename = noteapp.Title;
-            if (MessageBox.Show($"Are you sure you want to delete {filename}?", "Delete Note", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-
-                RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
-                noteapp.Close();
-                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
-            }
-        }
-        #endregion
 
         #region NoteApp open function
         private static void OpenTXTFile(MainWindow windowForNote, string folder, string filepath)
@@ -273,6 +135,145 @@ namespace WPFFrameworkApp
             else
             {
                 MessageBox.Show("This feature is only supported on Windows 6.1 or later.", "Unsupported Platform", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+        #endregion
+
+        #region NoteApp menuitems functions
+        public static void NewNote_Wanted(MainWindow windowForNote, string currentDesktopForNote)
+        {
+            string[] options = { "TXT", "RTF" };
+            switch (QueryDialog.ShowQueryDialog("Choose Note Type", "NoteApp", options, ImagePaths.NADD_IMG, ImagePaths.NOTE_IMG))
+            {
+                case 0: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new TXTNote(), true); break;
+                case 1: CreateNoteAppEnvironment(windowForNote, currentDesktopForNote, new RTFNote(), false); break;
+            }
+        }
+        public static void OpenNote_Wanted(MainWindow windowForNote, string currentDesktopForNote)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog
+            {
+                InitialDirectory = currentDesktopForNote,
+                Filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}", // TXT files and RTF files are supported
+                Title = "Open Note"
+            };
+
+            if (fileDialog.ShowDialog() == true)
+            {
+                string file = fileDialog.FileName;
+                string folder = Path.GetDirectoryName(file);
+                if (file.EndsWith(SupportedFiles.TXT)) OpenTXTFile(windowForNote, folder, file);
+                else if (file.EndsWith(SupportedFiles.RTF)) OpenRTFFile(windowForNote, folder, file);
+                else RoutineLogics.ErrorMessage(Errors.UNSUPP_ERR, file, " is not supported for ", Versions.GOS_VRS, "\n.txt\n.rtf\nis supported for now.");
+            }
+        }
+        public static void TXTSaveNote_Wanted(string currentDesktopForNote, TXTNote noteapp)
+        {
+            string filename = noteapp.Title;
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(Path.Combine(currentDesktopForNote, filename)))
+                {
+                    writer.WriteLine(noteapp.note.Text);
+                }
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
+            }
+        }
+        public static void TXTSaveAsNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, TXTNote noteapp)
+        {
+            SaveFileDialog filedialog = new SaveFileDialog
+            {
+                InitialDirectory = currentDesktopForNote,
+                Filter = $"Text Files ({SupportedFiles.TXT})|*{SupportedFiles.TXT}",
+                Title = "Save As"
+            };
+            if (filedialog.ShowDialog() == true)
+            {
+                string file = filedialog.FileName;
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(file))
+                    {
+                        writer.WriteLine(noteapp.note.Text);
+                    }
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+                    noteapp.Close();
+                }
+                catch (Exception ex)
+                {
+                    RoutineLogics.ErrorMessage("TXT " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, Path.GetFileName(file), "\n", ex.Message);
+                }
+            }
+        }
+        public static void RTFSaveNote_Wanted(string currentDesktopForNote, RTFNote noteapp)
+        {
+            string filename = noteapp.Title;
+            try
+            {
+                TextRange textrange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
+                using (FileStream filestream = new FileStream(Path.Combine(currentDesktopForNote, filename), FileMode.Create))
+                {
+                    textrange.Save(filestream, DataFormats.Rtf);
+                }
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, filename, "\n", ex.Message);
+            }
+        }
+        public static void RTFSaveAsNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, RTFNote noteapp)
+        {
+            SaveFileDialog filedialog = new SaveFileDialog
+            {
+                InitialDirectory = currentDesktopForNote,
+                Filter = $"RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}",
+                Title = "Save As"
+            };
+            if (filedialog.ShowDialog() == true)
+            {
+                string file = filedialog.FileName;
+                try
+                {
+                    TextRange textrange = new TextRange(noteapp.RichNote.Document.ContentStart, noteapp.RichNote.Document.ContentEnd);
+                    using (FileStream filestream = new FileStream(file, FileMode.Create))
+                    {
+                        textrange.Save(filestream, DataFormats.Rtf);
+                    }
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+                    noteapp.Close();
+                }
+                catch (Exception ex)
+                {
+                    RoutineLogics.ErrorMessage("RTF " + Errors.SAVE_ERR, Errors.SAVE_ERR_MSG, Path.GetFileName(file), "\n", ex.Message);
+                }
+            }
+        }
+        public static void CopyNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
+        {
+            RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
+            noteapp.Close();
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+
+        }
+        public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
+        {
+            RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
+            noteapp.Close();
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+
+        }
+        public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
+        {
+            string filename = noteapp.Title;
+            if (MessageBox.Show($"Are you sure you want to delete {filename}?", "Delete Note", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+
+                RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
+                noteapp.Close();
+                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
             }
         }
         #endregion

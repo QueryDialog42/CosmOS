@@ -18,14 +18,17 @@
 
         <ComboBox Grid.Row="0" 
                   Grid.ColumnSpan="2"
-                  Height="20"
                   x:Name="searchComboBox" 
-                  IsEditable="True" 
-                  IsTextSearchEnabled="True" 
-                  DisplayMemberPath="Tag" 
-                  Panel.ZIndex="1" Width="200" 
+                  Panel.ZIndex="1"
                   HorizontalAlignment="Right"
-                  Background="Transparent">
+                  Width="200" Height="20"
+                  DisplayMemberPath="Tag"
+                  IsEditable="True"
+                  IsTextSearchEnabled="True"
+                  Text="Search"
+                  Foreground="Gray"
+                  LostFocus="SetComboBoxPlaceHolder"
+                  GotFocus="DeleteComboBoxPlaceHolders">
         </ComboBox>
 
         <Button x:Name="clockTime" Panel.ZIndex="1" BorderThickness="0" Background="Transparent" Width="150" Height="20" Click="CalendarApp_Wanted"/>

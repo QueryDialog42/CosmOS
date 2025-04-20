@@ -11,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Converters;
 
 namespace WPFFrameworkApp
 {
@@ -528,8 +527,10 @@ namespace WPFFrameworkApp
             SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
             SolidColorBrush safaricolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
             SolidColorBrush folderdesktopcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
+            var maindesktopcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
 
-            window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+            window.Background = maindesktopcolor;
+            window.desktop.Background = Brushes.Transparent;
             window.folderdesktop.Background = folderdesktopcolor;
             window.expander.Background = folderdesktopcolor;
             window.gridSplitter.Background = folderdesktopcolor;
