@@ -49,7 +49,7 @@ namespace WPFFrameworkApp
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new System.Net.NetworkCredential(fromEmail, "joua unfn whip alcd"), // Gönderen e-posta şifresi (Güvenlik için app.config kullanılabilir)
+                    Credentials = new System.Net.NetworkCredential(fromEmail, ""), // Gönderen e-posta şifresi (Güvenlik için app.config kullanılabilir)
                     EnableSsl = true
                 };
 

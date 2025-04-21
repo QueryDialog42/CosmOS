@@ -96,7 +96,6 @@ namespace WPFFrameworkApp
 
                 string image;
                 string filename = Path.GetFileName(file);
-                ComboBoxItem comboBoxItem = new ComboBoxItem();
                 switch (Path.GetExtension(file))
                 {
                     case SupportedFiles.TXT: image = ImagePaths.TXT_IMG; break;
@@ -127,8 +126,11 @@ namespace WPFFrameworkApp
                 stackpanel.Children.Add(imageicon);
                 stackpanel.Children.Add(textblock);
 
-                comboBoxItem.Content = stackpanel;
-                comboBoxItem.Tag = filename;
+                ComboBoxItem comboBoxItem = new ComboBoxItem
+                {
+                    Content = stackpanel,
+                    Tag = filename
+                };
 
                 AddSearchBoxItemListeners(comboBoxItem, file);
 

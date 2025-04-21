@@ -24,12 +24,13 @@ namespace WPFFrameworkApp
 
         public MainWindow()
         {
-            DataContext = this;
             InitializeComponent();
             if (TempPath == null) CheckConfigurationIsRight();
 
             StartUp();
         }
+
+
 
         #region Time functions
         private void SetTimeLogics()
@@ -334,7 +335,7 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region ComboBox PlaceHolder functions
+        #region ComboBox functions
         private void SetComboBoxPlaceHolder(object sender, RoutedEventArgs e)
         {
             searchComboBox.Text = "Search";
