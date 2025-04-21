@@ -241,6 +241,18 @@ namespace WPFFrameworkApp
             }
             return false;
         }
+        public static bool IsCalculatorAppOpen()
+        {
+            foreach(Window window in Application.Current.Windows)
+            {
+                if (window is CalculatorApp)
+                {
+                    window.Activate();
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
 
         #region ShortKeys functions

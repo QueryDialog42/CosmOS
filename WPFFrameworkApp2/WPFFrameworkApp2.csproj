@@ -8,6 +8,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="DesktopImages\calculator.png" />
     <None Remove="DesktopImages\calendar.png" />
     <None Remove="DesktopImages\movieadd.png" />
     <None Remove="DesktopImages\moviebutcopy.png" />
@@ -15,6 +16,7 @@
     <None Remove="DesktopImages\videodelete.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="DesktopImages\calculator.png" />
     <Resource Include="DesktopImages\calendar.png" />
     <Resource Include="DesktopImages\moviebutcopy.png" />
   </ItemGroup>

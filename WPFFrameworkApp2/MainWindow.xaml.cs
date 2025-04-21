@@ -105,6 +105,13 @@ namespace WPFFrameworkApp
                 new GenMailApp();
             }
         }
+        private void GenCalculatorApp_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (RoutineLogics.IsCalculatorAppOpen() == false)
+            {
+                new CalculatorApp();
+            }
+        }
         private void OpenTrashBacket(object sender, RoutedEventArgs e)
         {
             if (RoutineLogics.IsTrashBacketOpen() == false)
