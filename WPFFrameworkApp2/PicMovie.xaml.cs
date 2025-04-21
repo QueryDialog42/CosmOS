@@ -54,7 +54,7 @@ namespace WPFFrameworkApp
             string filename = Path.GetFileName(filepath);
 
             Button app = RoutineLogics.CreateButton(filename, 20);
-            TextBlock appname = RoutineLogics.CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = RoutineLogics.CreateTextBlock(filename, 0);
             Image image = RoutineLogics.CreateImage(20);
             StackPanel stackpanel = new StackPanel
             {
@@ -66,7 +66,7 @@ namespace WPFFrameworkApp
 
             app.Click += (s, e) =>
             {
-                PicWindow pictureApp = RoutineLogics.OpenPicWindow(window, filename, desktopPath);
+                PicWindow pictureApp = RoutineLogics.OpenPicWindow(window, window.currentDesktop, filename);
 
                 pictureApp.PicMain.Source = RoutineLogics.setBitmapImage(filepath);
                 pictureApp.isInPicFolder = true;
@@ -79,7 +79,7 @@ namespace WPFFrameworkApp
             string filename = Path.GetFileName(filepath);
 
             Button app = RoutineLogics.CreateButton(filename, 20);
-            TextBlock appname = RoutineLogics.CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = RoutineLogics.CreateTextBlock(filename, 0);
             Image image = RoutineLogics.CreateImage(20);
             StackPanel stackpanel = new StackPanel
             {
@@ -105,25 +105,25 @@ namespace WPFFrameworkApp
         private void AddPicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Add Picture/Video", picVideoFilter, null, desktopPath, desktopPath, 5);
-            RoutineLogics.ReloadWindow(window, desktopPath);
+            RoutineLogics.ReloadWindow(window);
             ReloadWindow();
         }
         private void MovePicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Picture/Video", picVideoFilter, null, MainWindow.PicVideoPath, MainWindow.PicVideoPath, 1);
-            RoutineLogics.ReloadWindow(window, desktopPath);
+            RoutineLogics.ReloadWindow(window);
             ReloadWindow(); 
         }
         private void CopyPicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Picture/Video", picVideoFilter, null, MainWindow.PicVideoPath, MainWindow.PicVideoPath);
-            RoutineLogics.ReloadWindow(window, desktopPath);
+            RoutineLogics.ReloadWindow(window);
             ReloadWindow();
         }
         private void DeletePicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Delete PicVideo", picVideoFilter, null, MainWindow.PicVideoPath, desktopPath, 3);
-            RoutineLogics.ReloadWindow(window, desktopPath);
+            RoutineLogics.ReloadWindow(window);
             ReloadWindow();
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)

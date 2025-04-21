@@ -39,15 +39,15 @@ namespace WPFFrameworkApp
         #endregion
 
         #region Search functions
-        public static void AddEveryItemIntoSearch(ComboBox searchBox, string desktopPath)
+        public static void AddEveryItemIntoSearch(MainWindow window)
         {
-            searchBox.Items.Clear(); // clear the search box
+            window.searchComboBox.Items.Clear(); // clear the search box
 
-            AddAllFoldersIntoSearch(searchBox, desktopPath);
-            AddAllAppIntoSearch(searchBox, desktopPath);
+            AddAllFoldersIntoSearch(window.searchComboBox, window.currentDesktop);
+            AddAllAppIntoSearch(window, window.currentDesktop);
 
-            var items = searchBox.Items.Cast<object>().ToArray();
-            SetWindowStyles(searchBox, items);
+            var items = window.searchComboBox.Items.Cast<object>().ToArray();
+            SetWindowStyles(window.searchComboBox, items);
         }
         public static void AddAllFoldersIntoSearch(ComboBox searchBox, string folderPath)
         {
@@ -87,7 +87,7 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        public static void AddAllAppIntoSearch(ComboBox searchBox, string desktopPath)
+        public static void AddAllAppIntoSearch(MainWindow window, string desktopPath)
         {
             IEnumerable<string> files = Directory.EnumerateFileSystemEntries(desktopPath);
             foreach (string file in files)
@@ -107,7 +107,7 @@ namespace WPFFrameworkApp
                     case SupportedFiles.PNG: image = ImagePaths.PNG_IMG; break;
                     case SupportedFiles.JPG: image = ImagePaths.JPG_IMG; break;
                     case SupportedFiles.MP4: image = ImagePaths.MP4_IMG; break;
-                    default: AddAllAppIntoSearch(searchBox, file); continue;
+                    default: AddAllAppIntoSearch(window, file); continue;
                 }
 
                 Image imageicon = new Image
@@ -132,7 +132,7 @@ namespace WPFFrameworkApp
 
                 AddSearchBoxItemListeners(comboBoxItem, file);
 
-                searchBox.Items.Add(comboBoxItem);
+                window.searchComboBox.Items.Add(comboBoxItem);
             }
         }
         private static void AddSearchBoxItemListeners(ComboBoxItem item, string filepath)
@@ -261,24 +261,24 @@ namespace WPFFrameworkApp
             renameItem.Click += (sender, e) =>
             {
                 RenameFile_Wanted(filepath, imageicon);
-                ReloadWindow(window, currentdesktop);
+                ReloadWindow(window);
             };
             copyitem.Click += (sender, e) =>
             {
                 CopyAnythingWithQuery("Copy File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop);
-                ReloadWindow(window, currentdesktop);
+                ReloadWindow(window);
             };
             moveitem.Click += (sender, e) =>
             {
                 MoveAnythingWithQuery("Move File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop, 1);
-                ReloadWindow(window, currentdesktop);
+                ReloadWindow(window);
             };
             deleteitem.Click += (sender, e) =>
             {
                 if (MessageBox.Show($"Are you sure to delete {filename}?", "Delete File", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
-                    ReloadWindow(window, currentdesktop);
+                    ReloadWindow(window);
                 }
             };
             moreinfo.Click += (sender, e) =>
@@ -299,7 +299,7 @@ namespace WPFFrameworkApp
 
             return contextMenu;
         }
-        private static ContextMenu SetShortKeyOptionsForFolders(MainWindow window, string desktopPath, string filename)
+        private static ContextMenu SetShortKeyOptionsForFolders(MainWindow window, string filename)
         {
             string color = GetColorSettingsFromCcol()[3];
             ContextMenu contextMenu = new ContextMenu();
@@ -307,9 +307,9 @@ namespace WPFFrameworkApp
             MenuItem deleteitem = CreateMenuItemForContextMenu("Delete", color, ImagePaths.FDEL_IMG);
             MenuItem folderInfo = CreateMenuItemForContextMenu("Details", color, ImagePaths.INFO_IMG);
 
-            renameItem.Click += (sender, e) => AddRenameFolderListener(window, desktopPath, filename);
-            deleteitem.Click += (sender, e) => AddDeleteFolderListener(window, desktopPath, filename);
-            folderInfo.Click += (sender, e) => setFolderInfoWindow(Path.Combine(desktopPath, filename));
+            renameItem.Click += (sender, e) => AddRenameFolderListener(window, filename);
+            deleteitem.Click += (sender, e) => AddDeleteFolderListener(window, filename);
+            folderInfo.Click += (sender, e) => setFolderInfoWindow(Path.Combine(window.currentDesktop, filename));
 
             contextMenu.Items.Add(renameItem);
             contextMenu.Items.Add(deleteitem);
@@ -688,8 +688,10 @@ namespace WPFFrameworkApp
                 Height = 60 + extrasize, // Set desired height
             };
         }
-        public static TextBlock CreateTextBlock(string filename, string[] fontsettings, short which)
+        public static TextBlock CreateTextBlock(string filename, short which)
         {
+            string[] fontsettings = GetFontSettingsFromCfont();
+
             switch (which)
             {
                 case 0: return CreateTextBlockForDesktop(filename, fontsettings);
@@ -748,19 +750,21 @@ namespace WPFFrameworkApp
                 FontSize = float.Parse(fontsettings[9])
             };
         }
-        private static void InitTextFile(MainWindow window, string desktopPath, string filename, string[] fontSettings)
+        private static void InitTextFile(MainWindow window, string filename)
         {
+            string[] fontsettings = GetFontSettingsFromCfont();
+
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontSettings, 0);
+            TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel { Orientation = Orientation.Vertical };
             Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
 
             window.desktop.Children.Add(app);
 
-            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(desktopPath, filename), ImagePaths.TXT_IMG);
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(window.currentDesktop, filename), ImagePaths.TXT_IMG);
 
-            app.Click += (sender, e) => AddTextListener(window, desktopPath, filename);
+            app.Click += (sender, e) => AddTextListener(window, window.currentDesktop, filename);
         }
         private static string ReadTXTFile(string filepath)
         {
@@ -775,10 +779,10 @@ namespace WPFFrameworkApp
                 return stringbuilder.ToString();
             }
         }
-        private static void InitRTFFile(MainWindow window, string desktopPath, string filename, string[] fontsettings)
+        private static void InitRTFFile(MainWindow window, string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -788,15 +792,15 @@ namespace WPFFrameworkApp
 
             window.desktop.Children.Add(app);
 
-            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(desktopPath, filename), ImagePaths.RTF_IMG);
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(window.currentDesktop, filename), ImagePaths.RTF_IMG);
 
-            app.Click += (sender, e) => AddRTFListener(window, desktopPath, filename);
+            app.Click += (sender, e) => AddRTFListener(window, window.currentDesktop, filename);
         }
-        private static void InitAudioFile(MainWindow window, string filepath, string fileimage, string[] fontsettings)
+        private static void InitAudioFile(MainWindow window, string filepath, string fileimage)
         {
             string filename = Path.GetFileName(filepath);
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -811,10 +815,10 @@ namespace WPFFrameworkApp
 
             app.Click += (o, e) => AddAudioListener(filepath, filename);
         }
-        private static void InitEXEFile(MainWindow window, string desktopPath, string filepath, string filename, string[] fontsettings)
+        private static void InitEXEFile(MainWindow window, string filepath, string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -828,10 +832,10 @@ namespace WPFFrameworkApp
 
             app.Click += (s, e) => AddEXEListener(filepath, filename);
         }
-        private static void InitPictureFile(MainWindow window, string desktopPath, string filepath, string fileimage, string filename, string[] fontsettings)
+        private static void InitPictureFile(MainWindow window, string filepath, string fileimage, string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -843,23 +847,23 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, filepath, fileimage);
 
-            app.Click += (s, e) => AddPictureListener(window, desktopPath, filename, filepath);
+            app.Click += (s, e) => AddPictureListener(window, window.currentDesktop, filename, filepath);
         }
-        private static void InitMP4File(MainWindow window, string desktopPath, string filepath, string fileimage, string filename, string[] fontsettings)
+        private static void InitMP4File(MainWindow window, string filepath, string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontsettings, 0);
+            TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
                 Orientation = Orientation.Vertical
             };
-            Appearence(image, stackpanel, app, appname, fileimage);
+            Appearence(image, stackpanel, app, appname, ImagePaths.MP4_IMG);
             window.desktop.Children.Add(app);
 
-            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, filepath, fileimage);
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, filepath, ImagePaths.MP4_IMG);
 
-            app.Click += (sender, e) => AddMP4Listener(desktopPath, filename, filepath);
+            app.Click += (sender, e) => AddMP4Listener(window.currentDesktop, filename, filepath);
         }
         public static BitmapImage setBitmapImage(string imagepath)
         {
@@ -872,7 +876,7 @@ namespace WPFFrameworkApp
 
             return bitmap;
         }
-        public static PicWindow OpenPicWindow(MainWindow window, string filename, string desktopPath)
+        public static PicWindow OpenPicWindow(MainWindow window, string desktopPath, string filename)
         {
             BitmapImage icon = new BitmapImage(new Uri(filename.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG, UriKind.RelativeOrAbsolute));
             icon.Freeze();
@@ -891,10 +895,10 @@ namespace WPFFrameworkApp
 
             return pictureApp;
         }
-        private static void InitFolder(MainWindow window, string desktopPath, string filename, string[] fontsettings)
+        private static void InitFolder(MainWindow window, string filename)
         {
             Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, fontsettings, 1);
+            TextBlock appname = CreateTextBlock(filename, 1);
             Image image = CreateImage();
             StackPanel stackpanel = new StackPanel
             {
@@ -904,9 +908,9 @@ namespace WPFFrameworkApp
 
             window.folderdesktop.Children.Add(app);
 
-            app.ContextMenu = SetShortKeyOptionsForFolders(window, desktopPath, filename);
+            app.ContextMenu = SetShortKeyOptionsForFolders(window, filename);
 
-            app.Click += (sender, e) => AddFolderListener(desktopPath, filename);
+            app.Click += (sender, e) => AddFolderListener(window.currentDesktop, filename);
         }
         #endregion
 
@@ -1005,7 +1009,7 @@ namespace WPFFrameworkApp
         }
         public static void AddPictureListener(MainWindow window, string desktopPath, string filename, string filepath)
         {
-            PicWindow pictureApp = OpenPicWindow(window, filename, desktopPath);
+            PicWindow pictureApp = OpenPicWindow(window, desktopPath, filename);
 
             pictureApp.PicMain.Source = setBitmapImage(filepath);
             pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
@@ -1022,22 +1026,21 @@ namespace WPFFrameworkApp
         #endregion
 
         #region Window Reload functions
-        public static void ReloadWindow(MainWindow window, string desktopPath, ComboBox searchBox = null)
+        public static void ReloadWindow(MainWindow window)
         {
             window.desktop.Children.Clear();
             window.folderdesktop.Children.Clear();
             SetWindowSettings(window);
             try
             {
-                string[] fontsettings = GetFontSettingsFromCfont();
                 string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
-                IEnumerable<string> files = Directory.EnumerateFileSystemEntries(desktopPath);
+                IEnumerable<string> files = Directory.EnumerateFileSystemEntries(window.currentDesktop);
                 foreach (string file in files)
                 {
                     string filename = Path.GetFileName(file);
                     if (Directory.Exists(file))
                     {
-                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, desktopPath, filename, fontsettings);
+                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, filename);
                         else // then it is trashbacket
                         {
                             Grid.SetColumnSpan(window.safari, 1);
@@ -1048,18 +1051,18 @@ namespace WPFFrameworkApp
                     }
                     switch (Path.GetExtension(filename))
                     {
-                        case SupportedFiles.TXT: InitTextFile(window, desktopPath, filename, fontsettings); break;
-                        case SupportedFiles.RTF: InitRTFFile(window, desktopPath, filename, fontsettings); break;
-                        case SupportedFiles.WAV: InitAudioFile(window, file, ImagePaths.WAV_IMG, fontsettings); break;
-                        case SupportedFiles.MP3: InitAudioFile(window, file, ImagePaths.MP3_IMG, fontsettings); break;
-                        case SupportedFiles.EXE: InitEXEFile(window, desktopPath, file, filename, fontsettings); break;
-                        case SupportedFiles.PNG: InitPictureFile(window, desktopPath, file, ImagePaths.PNG_IMG, filename, fontsettings); break;
-                        case SupportedFiles.JPG: InitPictureFile(window, desktopPath, file, ImagePaths.JPG_IMG, filename, fontsettings); break;
-                        case SupportedFiles.MP4: InitMP4File(window, desktopPath, file, ImagePaths.MP4_IMG, filename, fontsettings); break;
+                        case SupportedFiles.TXT: InitTextFile(window, filename); break;
+                        case SupportedFiles.RTF: InitRTFFile(window, filename); break;
+                        case SupportedFiles.WAV: InitAudioFile(window, file, ImagePaths.WAV_IMG); break;
+                        case SupportedFiles.MP3: InitAudioFile(window, file, ImagePaths.MP3_IMG); break;
+                        case SupportedFiles.EXE: InitEXEFile(window, file, filename); break;
+                        case SupportedFiles.PNG: InitPictureFile(window, file, ImagePaths.PNG_IMG, filename); break;
+                        case SupportedFiles.JPG: InitPictureFile(window, file, ImagePaths.JPG_IMG, filename); break;
+                        case SupportedFiles.MP4: InitMP4File(window, file, filename); break;
                         default: ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS); File.Delete(file); break;
                     }
                 }
-                if (searchBox != null) AddEveryItemIntoSearch(searchBox, desktopPath);
+                if (window.searchComboBox != null) AddEveryItemIntoSearch(window);
                 SetApplications(window);
                 window.Show();
             }
@@ -1072,7 +1075,7 @@ namespace WPFFrameworkApp
         public static void WindowReloadNeeded(string directoryName)
         {
             MainWindow directionFolder = GetMainWindow(directoryName);
-            if (directionFolder != null && directoryName != null) ReloadWindow(directionFolder, directoryName);
+            if (directionFolder != null && directoryName != null) ReloadWindow(directionFolder);
         }
         public static void ReloadNeededForEveryWindow()
         {
@@ -1211,7 +1214,7 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        private static void MoveCertainWindow(string title, string filter, string initialDirectory, string currentDesktop, string window)
+        private static void MoveCertainWindow(string title, string filter, string initialDirectory, string currentDesktop, string windowPath)
         {
             OpenFileDialog movedialog = new OpenFileDialog
             {
@@ -1228,7 +1231,7 @@ namespace WPFFrameworkApp
                     string filename = Path.GetFileName(filepath);
                     try
                     {
-                        File.Move(filepath, Path.Combine(window, filename));
+                        File.Move(filepath, Path.Combine(windowPath, filename));
                     }
                     catch (Exception ex)
                     {
@@ -1305,7 +1308,7 @@ namespace WPFFrameworkApp
             addtogenmuic.Click += (sender, e) =>
             {
                 MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
-                ReloadWindow(window, currentdesktop);
+                ReloadWindow(window);
                 GenMusicApp genmusicapp = GetMusicAppWindow();
                 genmusicapp?.IsReloadNeeded(true);
             };
@@ -1319,14 +1322,14 @@ namespace WPFFrameworkApp
             addtopicmovie.Click += (sender, e) =>
             {
                 MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.PicVideoPath, filename));
-                ReloadWindow(window, currentdesktop);
+                ReloadWindow(window);
                 PicMovie picmovie = GetPicMovieWindow();
                 picmovie?.ReloadWindow();
             };
 
             contextMenu.Items.Add(addtopicmovie);
         }
-        private static void AddRenameFolderListener(MainWindow window, string desktopPath, string filename)
+        private static void AddRenameFolderListener(MainWindow window, string filename)
         {
             string newfilename = InputDialog.ShowInputDialog("Enter the new name:", "Rename Folder", ImagePaths.FOLDER_IMG, ImagePaths.RENM_IMG);
             if (InputDialog.Result == false) return;
@@ -1334,8 +1337,8 @@ namespace WPFFrameworkApp
             {
                 try
                 {
-                    Directory.Move(Path.Combine(desktopPath, filename), Path.Combine(desktopPath, newfilename));
-                    ReloadWindow(window, desktopPath);
+                    Directory.Move(Path.Combine(window.currentDesktop, filename), Path.Combine(window.currentDesktop, newfilename));
+                    ReloadWindow(window);
                 }
                 catch (Exception ex)
                 {
@@ -1343,14 +1346,14 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        private static void AddDeleteFolderListener(MainWindow window, string desktopPath, string filename)
+        private static void AddDeleteFolderListener(MainWindow window, string filename)
         {
             if (MessageBox.Show($"Are you sure to delete {filename} folder?", "Folder Delete", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 try
                 {
-                    Directory.Delete(Path.Combine(desktopPath, filename));
-                    ReloadWindow(window, desktopPath);
+                    Directory.Delete(Path.Combine(window.currentDesktop, filename));
+                    ReloadWindow(window);
                 }
                 catch (Exception ex)
                 {

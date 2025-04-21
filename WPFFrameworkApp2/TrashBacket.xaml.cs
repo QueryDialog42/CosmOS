@@ -31,10 +31,9 @@ namespace WPFFrameworkApp
             IEnumerable<string> trashes = Directory.EnumerateFileSystemEntries(MainWindow.TrashPath);
             foreach (string trash in trashes)
             {
-                string[] color = RoutineLogics.GetFontSettingsFromCfont();
                 string trashname = Path.GetFileName(trash);
                 Button app = CreateButtonForTrashBacket(trashname);
-                TextBlock appname = RoutineLogics.CreateTextBlock(trashname, color, 0);
+                TextBlock appname = RoutineLogics.CreateTextBlock(trashname, 0);
                 Image image = RoutineLogics.CreateImage();
                 StackPanel stackpanel = new StackPanel() { Orientation = Orientation.Vertical };
 

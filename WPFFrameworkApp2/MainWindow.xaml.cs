@@ -176,7 +176,7 @@ namespace WPFFrameworkApp
                 PicVideoPath = Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
 
-                if (currentDesktop != null) RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
+                if (currentDesktop != null) RoutineLogics.ReloadWindow(this);
 
                 SetTimeLogics();
                 searchComboBox.Foreground = Brushes.Gray;
@@ -348,7 +348,7 @@ namespace WPFFrameworkApp
             string filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}|PNG Files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG Files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
             RoutineLogics.MoveAnythingWithQuery("Import File", filter, null, desktopPath, desktopPath, 4);
 
-            RoutineLogics.ReloadWindow(window, desktopPath, window.searchComboBox);
+            RoutineLogics.ReloadWindow(window);
 
         }
         private void NewFolder(object sender, RoutedEventArgs e)
@@ -362,7 +362,7 @@ namespace WPFFrameworkApp
                     if (Directory.Exists(folderpath) == false)
                     {
                         Directory.CreateDirectory(folderpath);
-                        RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
+                        RoutineLogics.ReloadWindow(this);
                     }
                     else RoutineLogics.ErrorMessage(Errors.CRT_ERR, foldername, " already exists.");
                 }
@@ -427,7 +427,7 @@ namespace WPFFrameworkApp
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ReloadWindow(this, currentDesktop, searchComboBox);
+            RoutineLogics.ReloadWindow(this);
         }
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {

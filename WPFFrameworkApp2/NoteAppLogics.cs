@@ -167,12 +167,12 @@ namespace WPFFrameworkApp
                 else RoutineLogics.ErrorMessage(Errors.UNSUPP_ERR, file, " is not supported for ", Versions.GOS_VRS, "\n.txt\n.rtf\nis supported for now.");
             }
         }
-        public static void TXTSaveNote_Wanted(string currentDesktopForNote, TXTNote noteapp)
+        public static void TXTSaveNote_Wanted(TXTNote noteapp)
         {
             string filename = noteapp.Title;
             try
             {
-                using (StreamWriter writer = new StreamWriter(Path.Combine(currentDesktopForNote, filename)))
+                using (StreamWriter writer = new StreamWriter(Path.Combine(noteapp.currentDesktopForNote, filename)))
                 {
                     writer.WriteLine(noteapp.note.Text);
                 }
@@ -199,7 +199,7 @@ namespace WPFFrameworkApp
                     {
                         writer.WriteLine(noteapp.note.Text);
                     }
-                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -242,7 +242,7 @@ namespace WPFFrameworkApp
                     {
                         textrange.Save(filestream, DataFormats.Rtf);
                     }
-                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -255,25 +255,25 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
             noteapp.Close();
-            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
 
         }
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
             noteapp.Close();
-            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
 
         }
-        public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
+        public static void DeleteNote_Wanted(MainWindow windowForNote, dynamic noteapp)
         {
             string filename = noteapp.Title;
             if (MessageBox.Show($"Are you sure you want to delete {filename}?", "Delete Note", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
 
-                RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
+                RoutineLogics.MoveAnythingWithoutQuery(windowForNote.currentDesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
                 noteapp.Close();
-                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote, windowForNote.searchComboBox);
+                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
             }
         }
         #endregion

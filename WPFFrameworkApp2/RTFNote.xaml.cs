@@ -162,12 +162,12 @@ namespace WPFFrameworkApp
         public void RenameFile(object sender, RoutedEventArgs e)
         {
             RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.RTF_IMG);
-            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+            RoutineLogics.ReloadWindow(windowForNote);
             Close();
         }
         public void DeleteFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
+            NoteAppLogics.DeleteNote_Wanted(windowForNote, this);
         }
         public void AboutPage(object sender, RoutedEventArgs e)
         {

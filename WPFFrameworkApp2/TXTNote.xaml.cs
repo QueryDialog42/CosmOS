@@ -48,7 +48,7 @@ namespace WPFFrameworkApp
         }
         public void SaveFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.TXTSaveNote_Wanted(currentDesktopForNote, this);
+            NoteAppLogics.TXTSaveNote_Wanted(this);
         }
         public void SaveAsFile(object sender, RoutedEventArgs e)
         {
@@ -56,7 +56,7 @@ namespace WPFFrameworkApp
         }
         public void CopyFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.TXTSaveNote_Wanted(currentDesktopForNote, this);
+            NoteAppLogics.TXTSaveNote_Wanted(this);
         }
         public void MoveFile(object sender, RoutedEventArgs e)
         {
@@ -65,12 +65,12 @@ namespace WPFFrameworkApp
         public void RenameFile(object sender, RoutedEventArgs e)
         {
             RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.TXT_IMG);
-            RoutineLogics.ReloadWindow(windowForNote, currentDesktopForNote);
+            RoutineLogics.ReloadWindow(windowForNote);
             Close();
         }
         public void DeleteFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
+            NoteAppLogics.DeleteNote_Wanted(windowForNote, this);
         }
         public void AboutPage(object sender, RoutedEventArgs e)
         {

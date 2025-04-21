@@ -187,7 +187,7 @@ namespace WPFFrameworkApp2
         {
             RoutineLogics.GetPicMovieWindow()?.ReloadWindow();
             MainWindow window = RoutineLogics.GetMainWindow(desktopPath);
-            if (window != null) RoutineLogics.ReloadWindow(window, desktopPath, window.searchComboBox);
+            if (window != null) RoutineLogics.ReloadWindow(window);
         }
         private void StartUp()
         {
