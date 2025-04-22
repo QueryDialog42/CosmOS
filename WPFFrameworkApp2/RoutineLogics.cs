@@ -1182,7 +1182,7 @@ namespace WPFFrameworkApp
             {
                 string filepath = copydialog.FileName;
                 string filename = Path.GetFileName(filepath); // filepath = the path where the file will go
-                if (filepath.Contains(HiddenFolders.HAUD_FOL) == false && filepath.Contains(HiddenFolders.HTRSH_FOL) == false)
+                if (CheckIfDirectionNotHidden(filepath))
                 {
                     try
                     {
@@ -1214,7 +1214,7 @@ namespace WPFFrameworkApp
             {
                 string filepath = movedialog.FileName;
                 string filename = Path.GetFileName(filepath); // filepath = the path where the file will go
-                if (filepath.Contains(HiddenFolders.HAUD_FOL) == false && filepath.Contains(HiddenFolders.HTRSH_FOL) == false)
+                if (CheckIfDirectionNotHidden(filepath))
                 {
                     try
                     {
@@ -1308,6 +1308,12 @@ namespace WPFFrameworkApp
                 return true;
             }
             return false;
+        }
+        private static bool CheckIfDirectionNotHidden(string filepath)
+        {
+            string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
+            if (hiddenfolders.Contains(Path.GetFileName(Path.GetDirectoryName(filepath)))) return false;
+            else return true;
         }
         private static void CloseAllGenMusicApps()
         {
