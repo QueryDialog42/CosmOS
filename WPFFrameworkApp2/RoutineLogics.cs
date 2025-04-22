@@ -1260,6 +1260,10 @@ namespace WPFFrameworkApp
         }
         #endregion
 
+        #region Add History functions
+        // History functions here
+        #endregion
+
         #region Unclassified public functions
         public static void ErrorMessage(string errtitle, params string[] errmessage)
         {

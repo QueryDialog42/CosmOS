@@ -96,30 +96,57 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
-                <WrapPanel x:Name="desktop" Grid.Column="0" Grid.ColumnSpan="2" Background="LightGray">
-                    <WrapPanel.ContextMenu>
-                        <ContextMenu x:Name="mainContextMenu" BorderThickness="0">
-                            <MenuItem x:Name="itemmenu1" Header="New File" BorderThickness="0" Click="NoteApp_Clicked">
-                                <MenuItem.Icon>
-                                    <Image Source="/NoteImages/noteadd.png"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem x:Name="itemmenu2" Header="New Folder" BorderThickness="0" Click="NewFolder">
-                                <MenuItem.Icon>
-                                    <Image Source="/DesktopImages/newfolder.png"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadWindow_Wanted">
-                                <MenuItem.Icon>
-                                    <Image Source="/DesktopImages/refresh.png"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </ContextMenu>
-                    </WrapPanel.ContextMenu>
-                </WrapPanel>
-            </ScrollViewer>
+            <Grid x:Name="splitterGrid" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="0"/>
+                </Grid.RowDefinitions>
+ 
+                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
 
+                <ScrollViewer Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="desktop" Grid.Column="0" Background="LightGray">
+                        <WrapPanel.ContextMenu>
+                            <ContextMenu x:Name="mainContextMenu" BorderThickness="0">
+                                <MenuItem x:Name="itemmenu1" Header="New File" BorderThickness="0" Click="NoteApp_Clicked">
+                                    <MenuItem.Icon>
+                                        <Image Source="/NoteImages/noteadd.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem x:Name="itemmenu2" Header="New Folder" BorderThickness="0" Click="NewFolder">
+                                    <MenuItem.Icon>
+                                        <Image Source="/DesktopImages/newfolder.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadWindow_Wanted">
+                                    <MenuItem.Icon>
+                                        <Image Source="/DesktopImages/refresh.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </WrapPanel.ContextMenu>
+                    </WrapPanel>
+                </ScrollViewer>
+
+                <Grid Grid.Row="2" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Menu Background="DarkGray">
+                        <MenuItem Header="History" Height="20">
+                            <MenuItem Header="Clear History">
+                                <MenuItem.Icon>
+                                    <Image Source="/NoteImages/clearstyle.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                    <ListBox Background="Gray" Grid.Row="1"/>
+                </Grid>
+                
+            </Grid>
             <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
 
             <Expander x:Name="expander" Grid.Column="2" ExpandDirection="Left"

@@ -65,7 +65,7 @@ namespace WPFFrameworkApp
         private void expander_Expanded(object sender, RoutedEventArgs e)
         {
             gridSplitter.Visibility = Visibility.Visible;
-            Grid.SetColumnSpan(desktop, 1);
+            Grid.SetColumnSpan(splitterGrid, 1);
 
             Grid grid = (Grid)gridSplitter.Parent;
             grid.ColumnDefinitions[2].Width = GridLength.Auto;
@@ -73,7 +73,7 @@ namespace WPFFrameworkApp
         private void expander_Collapsed(object sender, RoutedEventArgs e)
         {
             gridSplitter.Visibility = Visibility.Collapsed;
-            Grid.SetColumnSpan(desktop, 2);
+            Grid.SetColumnSpan(splitterGrid, 2);
 
             Grid grid = (Grid)gridSplitter.Parent;
             grid.ColumnDefinitions[2].Width = new GridLength(23);
