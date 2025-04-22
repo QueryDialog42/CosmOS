@@ -43,20 +43,20 @@ namespace WPFFrameworkApp
         {
             window.searchComboBox.Items.Clear(); // clear the search box
 
-            AddAllFoldersIntoSearch(window.searchComboBox, window.currentDesktop);
+            AddAllFoldersIntoSearch(window, window.currentDesktop);
             AddAllAppIntoSearch(window, window.currentDesktop);
 
             var items = window.searchComboBox.Items.Cast<object>().ToArray();
             SetWindowStyles(window.searchComboBox, items);
         }
-        public static void AddAllFoldersIntoSearch(ComboBox searchBox, string folderPath)
+        public static void AddAllFoldersIntoSearch(MainWindow window, string folderPath)
         {
             IEnumerable<string> folders = Directory.EnumerateDirectories(folderPath);
             string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
             foreach (string folder in folders)
             {
                 string foldername = Path.GetFileName(folder);
-                if (new DirectoryInfo(folder).GetDirectories().Length > 0) AddAllFoldersIntoSearch(searchBox, folder);
+                if (new DirectoryInfo(folder).GetDirectories().Length > 0) AddAllFoldersIntoSearch(window, folder);
                 if (hiddenfolders.Contains(foldername) == false)
                 {
                     Image imageicon = new Image
@@ -82,8 +82,8 @@ namespace WPFFrameworkApp
                         Tag = foldername
                     };
 
-                    AddSearchBoxItemListeners(comboBoxItem, folder);
-                    searchBox.Items.Add(comboBoxItem);
+                    AddSearchBoxItemListeners(window, comboBoxItem, folder);
+                    window?.searchComboBox.Items.Add(comboBoxItem);
                 }
             }
         }
@@ -132,29 +132,21 @@ namespace WPFFrameworkApp
                     Tag = filename
                 };
 
-                AddSearchBoxItemListeners(comboBoxItem, file);
+                AddSearchBoxItemListeners(window,comboBoxItem, file);
 
-                window.searchComboBox.Items.Add(comboBoxItem);
+                window?.searchComboBox.Items.Add(comboBoxItem);
             }
         }
-        private static void AddSearchBoxItemListeners(ComboBoxItem item, string filepath)
+        private static void AddSearchBoxItemListeners(MainWindow window, ComboBoxItem item, string filepath)
         {
             string filename = item.Tag.ToString();
             string desktopPath = Path.GetDirectoryName(filepath);
-            MainWindow window = GetMainWindow(desktopPath);
 
-            switch (Path.GetExtension(filename))
+            item.PreviewMouseLeftButtonUp += (sender, e) =>
             {
-                case SupportedFiles.TXT: item.PreviewMouseLeftButtonDown += (sender, e) => AddTextListener(window, desktopPath, filename); break;
-                case SupportedFiles.RTF: item.PreviewMouseLeftButtonDown += (sender, e) => AddRTFListener(window, desktopPath, filename); break;
-                case SupportedFiles.WAV: item.PreviewMouseLeftButtonDown += (sender, e) => AddAudioListener(filepath, filename); break;
-                case SupportedFiles.MP3: item.PreviewMouseLeftButtonDown += (sender, e) => AddAudioListener(filepath, filename); break;
-                case SupportedFiles.EXE: item.PreviewMouseLeftButtonDown += (sender, e) => AddEXEListener(filepath, filename); break;
-                case SupportedFiles.PNG: item.PreviewMouseLeftButtonDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
-                case SupportedFiles.JPG: item.PreviewMouseLeftButtonDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
-                case SupportedFiles.MP4: item.PreviewMouseLeftButtonDown += (sender, e) => AddMP4Listener(desktopPath, filename, filepath); break;
-                default: item.PreviewMouseLeftButtonDown += (sender, e) => AddFolderListener(desktopPath, filename); break;
-            }
+                string fileimage = ChooseListenerFor(window, Path.GetDirectoryName(filepath), filepath);
+                AddFileToHistoryListener(window, fileimage, filepath);
+            };
         }
         #endregion
 
@@ -439,6 +431,50 @@ namespace WPFFrameworkApp
                 }
             }
             return null;
+        }
+        #endregion
+
+        #region Add History functions
+        private static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
+        {
+            Image image = new()
+            {
+                Source = setBitmapImage(imagepath),
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 30
+            };
+
+            TextBlock textblock = new()
+            {
+                Text = "   " + Path.GetFileName(filepath),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            StackPanel stackpanel = new()
+            {
+                Orientation = Orientation.Horizontal,
+            };
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(textblock);
+
+            ListBoxItem historyitem = new()
+            {
+                Content = stackpanel,
+                Tag = filepath
+            };
+
+            historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, window.currentDesktop, filepath);
+
+            foreach(ListBoxItem item in window.historyList.Items)
+            {
+                if (item?.Tag?.ToString() == filepath)
+                {
+                    window?.historyList?.Items?.Remove(item);
+                    break;
+                }
+            }
+            window?.historyList?.Items?.Insert(0, historyitem);
         }
         #endregion
 
@@ -765,22 +801,6 @@ namespace WPFFrameworkApp
                 FontSize = float.Parse(fontsettings[9])
             };
         }
-        private static void InitTextFile(MainWindow window, string filename)
-        {
-            string[] fontsettings = GetFontSettingsFromCfont();
-
-            Button app = CreateButton(filename);
-            TextBlock appname = CreateTextBlock(filename, 0);
-            Image image = CreateImage();
-            StackPanel stackpanel = new StackPanel { Orientation = Orientation.Vertical };
-            Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
-
-            window.desktop.Children.Add(app);
-
-            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(window.currentDesktop, filename), ImagePaths.TXT_IMG);
-
-            app.Click += (sender, e) => AddTextListener(window, window.currentDesktop, filename);
-        }
         private static string ReadTXTFile(string filepath)
         {
             using (StreamReader reader = new StreamReader(filepath))
@@ -794,8 +814,30 @@ namespace WPFFrameworkApp
                 return stringbuilder.ToString();
             }
         }
-        private static void InitRTFFile(MainWindow window, string filename)
+        private static void InitTextFile(MainWindow window, string filepath)
         {
+            string[] fontsettings = GetFontSettingsFromCfont();
+            string filename = Path.GetFileName(filepath);
+
+            Button app = CreateButton(filename);
+            TextBlock appname = CreateTextBlock(filename, 0);
+            Image image = CreateImage();
+            StackPanel stackpanel = new StackPanel { Orientation = Orientation.Vertical };
+            Appearence(image, stackpanel, app, appname, ImagePaths.TXT_IMG);
+
+            window.desktop.Children.Add(app);
+
+            app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, filepath, ImagePaths.TXT_IMG);
+
+            app.Click += (sender, e) =>
+            {
+                AddTextListener(window, window.currentDesktop, filepath);
+                AddFileToHistoryListener(window, ImagePaths.TXT_IMG, filepath);
+            };
+        }
+        private static void InitRTFFile(MainWindow window, string filepath)
+        {
+            string filename = Path.GetFileName(filepath);
             Button app = CreateButton(filename);
             TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
@@ -809,7 +851,11 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, Path.Combine(window.currentDesktop, filename), ImagePaths.RTF_IMG);
 
-            app.Click += (sender, e) => AddRTFListener(window, window.currentDesktop, filename);
+            app.Click += (sender, e) =>
+            {
+                AddRTFListener(window, window.currentDesktop, filename);
+                AddFileToHistoryListener(window, ImagePaths.RTF_IMG, filepath);
+            };
         }
         private static void InitAudioFile(MainWindow window, string filepath, string fileimage)
         {
@@ -828,10 +874,16 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, filepath, fileimage);
 
-            app.Click += (o, e) => AddAudioListener(filepath, filename);
+            app.Click += (o, e) =>
+            {
+                AddAudioListener(window, filepath, fileimage);
+                AddFileToHistoryListener(window, fileimage, filepath);
+            };
         }
-        private static void InitEXEFile(MainWindow window, string filepath, string filename)
+        private static void InitEXEFile(MainWindow window, string filepath)
         {
+            string filename = Path.GetFileName(filepath);
+
             Button app = CreateButton(filename);
             TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
@@ -845,10 +897,16 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.EXE_IMG, ImagePaths.DELEXE_IMG, filepath, ImagePaths.EXE_IMG);
 
-            app.Click += (s, e) => AddEXEListener(filepath, filename);
+            app.Click += (s, e) =>
+            {
+                AddEXEListener(window, filepath);
+                AddFileToHistoryListener(window, ImagePaths.EXE_IMG, filepath);
+            };
         }
-        private static void InitPictureFile(MainWindow window, string filepath, string fileimage, string filename)
+        private static void InitPictureFile(MainWindow window, string filepath, string fileimage)
         {
+            string filename = Path.GetFileName(filepath);
+
             Button app = CreateButton(filename);
             TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
@@ -862,10 +920,16 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, filepath, fileimage);
 
-            app.Click += (s, e) => AddPictureListener(window, window.currentDesktop, filename, filepath);
+            app.Click += (s, e) =>
+            {
+                AddPictureListener(window, window.currentDesktop, filepath, fileimage);
+                AddFileToHistoryListener(window, fileimage, filepath);
+            };
         }
-        private static void InitMP4File(MainWindow window, string filepath, string filename)
+        private static void InitMP4File(MainWindow window, string filepath)
         {
+            string filename = Path.GetFileName(filepath);
+            
             Button app = CreateButton(filename);
             TextBlock appname = CreateTextBlock(filename, 0);
             Image image = CreateImage();
@@ -878,7 +942,11 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptions(window, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, filepath, ImagePaths.MP4_IMG);
 
-            app.Click += (sender, e) => AddMP4Listener(window.currentDesktop, filename, filepath);
+            app.Click += (sender, e) =>
+            {
+                AddMP4Listener(window, filepath);
+                AddFileToHistoryListener(window, ImagePaths.MP4_IMG, filepath);
+            };
         }
         public static BitmapImage setBitmapImage(string imagepath)
         {
@@ -910,8 +978,9 @@ namespace WPFFrameworkApp
 
             return pictureApp;
         }
-        private static void InitFolder(MainWindow window, string filename)
+        private static void InitFolder(MainWindow window, string filepath)
         {
+            string filename = Path.GetFileName(filepath);
             Button app = CreateButton(filename);
             TextBlock appname = CreateTextBlock(filename, 1);
             Image image = CreateImage();
@@ -925,13 +994,14 @@ namespace WPFFrameworkApp
 
             app.ContextMenu = SetShortKeyOptionsForFolders(window, filename);
 
-            app.Click += (sender, e) => AddFolderListener(window.currentDesktop, filename);
+            app.Click += (sender, e) => AddFolderListener(filepath);
         }
         #endregion
 
         #region App Listener functions
-        public static void AddTextListener(MainWindow window, string desktopPath, string filename)
+        public static void AddTextListener(MainWindow window, string desktopPath, string filepath)
         {
+            string filename = Path.GetFileName(filepath);
             try
             {
                 TXTNote noteapp = new TXTNote
@@ -941,23 +1011,26 @@ namespace WPFFrameworkApp
                     Title = filename
                 };
 
-                noteapp.note.Text = ReadTXTFile(Path.Combine(desktopPath, filename));
+                noteapp.note.Text = ReadTXTFile(filepath);
             }
             catch (Exception ex)
             {
                 ErrorMessage("TXT" + Errors.READ_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
             }
+
+            
         }
-        public static void AddFolderListener(string desktopPath, string filename)
+        public static void AddFolderListener(string filepath)
         {
-            MainWindow.TempPath = Path.Combine(desktopPath, filename);
+            MainWindow.TempPath = filepath;
             MainWindow newWindow = new MainWindow
             {
-                Title = filename
+                Title = Path.GetFileName(filepath),
             };
         }
-        public static void AddRTFListener(MainWindow window, string desktopPath, string filename)
+        public static void AddRTFListener(MainWindow window, string desktopPath, string filepath)
         {
+            string filename = Path.GetFileName(filepath);
             RTFNote noteapp = new RTFNote
             {
                 windowForNote = window,
@@ -994,8 +1067,9 @@ namespace WPFFrameworkApp
                 ErrorMessage("RTF" + Errors.OPEN_ERR, Errors.READ_ERR_MSG, filename ?? "null File", "\n", ex.Message);
             }
         }
-        public static void AddAudioListener(string filepath, string filename)
+        public static void AddAudioListener(MainWindow window, string filepath, string fileimage)
         {
+            string filename = Path.GetFileName(filepath);
             CloseAllGenMusicApps();
             GenMusicApp.mediaPlayer?.Close();
             GenMusicApp.mediaPlayer = null;
@@ -1003,8 +1077,9 @@ namespace WPFFrameworkApp
             GenMusicApp musicapp = new GenMusicApp();
             musicapp.MusicAppButton_Clicked(filepath, filename);
         }
-        public static void AddEXEListener(string filepath, string filename)
+        public static void AddEXEListener(MainWindow window, string filepath)
         {
+            string filename = Path.GetFileName(filepath);
             string[] options = { "Run", "Cancel" };
             if (QueryDialog.ShowQueryDialog($"Are you sure you want to run {filename}?", "Executable File Run", options, ImagePaths.EXE_IMG) == 0)
             {
@@ -1022,21 +1097,36 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        public static void AddPictureListener(MainWindow window, string desktopPath, string filename, string filepath)
+        public static void AddPictureListener(MainWindow window, string desktopPath, string filepath, string fileimage)
         {
-            PicWindow pictureApp = OpenPicWindow(window, desktopPath, filename);
+            PicWindow pictureApp = OpenPicWindow(window, desktopPath, Path.GetFileName(filepath));
 
             pictureApp.PicMain.Source = setBitmapImage(filepath);
             pictureApp.SizeToContent = SizeToContent.WidthAndHeight;
         }
-        public static void AddMP4Listener(string desktopPath, string filename, string filepath)
+        public static void AddMP4Listener(MainWindow window, string filepath)
         {
             var videoApp = new VideoWindow
             {
-                Title = filename,
-                desktopPath = desktopPath
+                Title = Path.GetFileName(filepath),
+                desktopPath = Path.GetDirectoryName(filepath)
             };
             videoApp.videoPlayer.Source = new Uri(filepath);
+        }
+        public static string ChooseListenerFor(MainWindow window, string desktopPath, string filepath)
+        {
+            switch (Path.GetExtension(filepath))
+            {
+               case SupportedFiles.TXT: AddTextListener(window, desktopPath, filepath); return ImagePaths.TXT_IMG;
+               case SupportedFiles.RTF: AddRTFListener(window, desktopPath, filepath); return ImagePaths.RTF_IMG;
+               case SupportedFiles.WAV: AddAudioListener(window, filepath, ImagePaths.WAV_IMG); return ImagePaths.WAV_IMG;
+               case SupportedFiles.MP3: AddAudioListener(window, filepath, ImagePaths.MP3_IMG); return ImagePaths.MP3_IMG;
+               case SupportedFiles.EXE: AddEXEListener(window,filepath); return ImagePaths.EXE_IMG;
+               case SupportedFiles.PNG: AddPictureListener(window, desktopPath, filepath, ImagePaths.PNG_IMG); return ImagePaths.PNG_IMG;
+               case SupportedFiles.JPG: AddPictureListener(window, desktopPath, filepath, ImagePaths.JPG_IMG); return ImagePaths.JPG_IMG;
+               case SupportedFiles.MP4: AddMP4Listener(window, filepath); return ImagePaths.MP4_IMG;
+               default: AddFolderListener(filepath); return ImagePaths.FOLDER_IMG;
+            }
         }
         #endregion
 
@@ -1052,12 +1142,12 @@ namespace WPFFrameworkApp
             {
                 string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
                 IEnumerable<string> files = Directory.EnumerateFileSystemEntries(window.currentDesktop);
-                foreach (string file in files)
+                foreach (string filepath in files)
                 {
-                    string filename = Path.GetFileName(file);
-                    if (Directory.Exists(file))
+                    string filename = Path.GetFileName(filepath);
+                    if (Directory.Exists(filepath))
                     {
-                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, filename);
+                        if (hiddenfolders.Contains(filename) == false) InitFolder(window, filepath);
                         else // then it is trashbacket
                         {
                             Grid.SetColumnSpan(window.safari, 1);
@@ -1068,15 +1158,15 @@ namespace WPFFrameworkApp
                     }
                     switch (Path.GetExtension(filename))
                     {
-                        case SupportedFiles.TXT: InitTextFile(window, filename); break;
-                        case SupportedFiles.RTF: InitRTFFile(window, filename); break;
-                        case SupportedFiles.WAV: InitAudioFile(window, file, ImagePaths.WAV_IMG); break;
-                        case SupportedFiles.MP3: InitAudioFile(window, file, ImagePaths.MP3_IMG); break;
-                        case SupportedFiles.EXE: InitEXEFile(window, file, filename); break;
-                        case SupportedFiles.PNG: InitPictureFile(window, file, ImagePaths.PNG_IMG, filename); break;
-                        case SupportedFiles.JPG: InitPictureFile(window, file, ImagePaths.JPG_IMG, filename); break;
-                        case SupportedFiles.MP4: InitMP4File(window, file, filename); break;
-                        default: ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS); File.Delete(file); break;
+                        case SupportedFiles.TXT: InitTextFile(window, filepath); break;
+                        case SupportedFiles.RTF: InitRTFFile(window, filepath); break;
+                        case SupportedFiles.WAV: InitAudioFile(window, filepath, ImagePaths.WAV_IMG); break;
+                        case SupportedFiles.MP3: InitAudioFile(window, filepath, ImagePaths.MP3_IMG); break;
+                        case SupportedFiles.EXE: InitEXEFile(window, filepath); break;
+                        case SupportedFiles.PNG: InitPictureFile(window, filepath, ImagePaths.PNG_IMG); break;
+                        case SupportedFiles.JPG: InitPictureFile(window, filepath, ImagePaths.JPG_IMG); break;
+                        case SupportedFiles.MP4: InitMP4File(window, filepath); break;
+                        default: ErrorMessage(Errors.UNSUPP_ERR, filename, " is not supported for ", Versions.GOS_VRS); File.Delete(filepath); break;
                     }
                 }
                 if (window.searchComboBox != null) AddEveryItemIntoSearch(window);
@@ -1258,10 +1348,6 @@ namespace WPFFrameworkApp
                 }
             }
         }
-        #endregion
-
-        #region Add History functions
-        // History functions here
         #endregion
 
         #region Unclassified public functions

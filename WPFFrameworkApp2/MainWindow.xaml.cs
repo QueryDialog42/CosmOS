@@ -337,6 +337,13 @@ namespace WPFFrameworkApp
         }
         #endregion
 
+        #region SearchBox menuitem functions
+        private void ClearHistory_Wanted(object sender, RoutedEventArgs e)
+        {
+            historyList.Items.Clear();
+        }
+        #endregion
+
         #region Desktop MenuItem Option functions
         private static void ImportFile(MainWindow window, string desktopPath)
         {

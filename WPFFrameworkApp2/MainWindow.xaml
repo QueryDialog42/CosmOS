@@ -136,14 +136,16 @@
                     </Grid.RowDefinitions>
                     <Menu Background="DarkGray">
                         <MenuItem Header="History" Height="20">
-                            <MenuItem Header="Clear History">
+                            <MenuItem Header="Clear History" Click="ClearHistory_Wanted">
                                 <MenuItem.Icon>
                                     <Image Source="/NoteImages/clearstyle.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
                     </Menu>
-                    <ListBox Background="Gray" Grid.Row="1"/>
+                    <ListBox x:Name="historyList"
+                             Background="Gray"
+                             Grid.Row="1" />
                 </Grid>
                 
             </Grid>
