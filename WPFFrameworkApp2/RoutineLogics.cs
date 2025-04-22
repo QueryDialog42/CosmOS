@@ -145,15 +145,15 @@ namespace WPFFrameworkApp
 
             switch (Path.GetExtension(filename))
             {
-                case SupportedFiles.TXT: item.PreviewMouseDown += (sender, e) => AddTextListener(window, desktopPath, filename); break;
-                case SupportedFiles.RTF: item.PreviewMouseDown += (sender, e) => AddRTFListener(window, desktopPath, filename); break;
-                case SupportedFiles.WAV: item.PreviewMouseDown += (sender, e) => AddAudioListener(filepath, filename); break;
-                case SupportedFiles.MP3: item.PreviewMouseDown += (sender, e) => AddAudioListener(filepath, filename); break;
-                case SupportedFiles.EXE: item.PreviewMouseDown += (sender, e) => AddEXEListener(filepath, filename); break;
-                case SupportedFiles.PNG: item.PreviewMouseDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
-                case SupportedFiles.JPG: item.PreviewMouseDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
-                case SupportedFiles.MP4: item.PreviewMouseDown += (sender, e) => AddMP4Listener(desktopPath, filename, filepath); break;
-                default: item.PreviewMouseDown += (sender, e) => AddFolderListener(desktopPath, filename); break;
+                case SupportedFiles.TXT: item.PreviewMouseLeftButtonDown += (sender, e) => AddTextListener(window, desktopPath, filename); break;
+                case SupportedFiles.RTF: item.PreviewMouseLeftButtonDown += (sender, e) => AddRTFListener(window, desktopPath, filename); break;
+                case SupportedFiles.WAV: item.PreviewMouseLeftButtonDown += (sender, e) => AddAudioListener(filepath, filename); break;
+                case SupportedFiles.MP3: item.PreviewMouseLeftButtonDown += (sender, e) => AddAudioListener(filepath, filename); break;
+                case SupportedFiles.EXE: item.PreviewMouseLeftButtonDown += (sender, e) => AddEXEListener(filepath, filename); break;
+                case SupportedFiles.PNG: item.PreviewMouseLeftButtonDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
+                case SupportedFiles.JPG: item.PreviewMouseLeftButtonDown += (sender, e) => AddPictureListener(window, desktopPath, filename, filepath); break;
+                case SupportedFiles.MP4: item.PreviewMouseLeftButtonDown += (sender, e) => AddMP4Listener(desktopPath, filename, filepath); break;
+                default: item.PreviewMouseLeftButtonDown += (sender, e) => AddFolderListener(desktopPath, filename); break;
             }
         }
         #endregion
@@ -534,6 +534,7 @@ namespace WPFFrameworkApp
                 window.MusicApp.Visibility = Visibility.Visible;
                 window.MailApp.Visibility = Visibility.Visible;
                 window.PicMovie.Visibility = Visibility.Visible;
+                window.CalculatorApp.Visibility = Visibility.Visible;
             }
         }
         private static void SetBackgroundSettings(MainWindow window, string[] colors)
@@ -1042,6 +1043,8 @@ namespace WPFFrameworkApp
         #region Window Reload functions
         public static void ReloadWindow(MainWindow window)
         {
+            if (window == null) return; // If window is null, then no reload needed
+
             window.desktop.Children.Clear();
             window.folderdesktop.Children.Clear();
             SetWindowSettings(window);
@@ -1108,6 +1111,7 @@ namespace WPFFrameworkApp
             mainfolder.MusicApp.Visibility = Visibility.Collapsed;
             mainfolder.MailApp.Visibility = Visibility.Collapsed;
             mainfolder.PicMovie.Visibility = Visibility.Collapsed;
+            mainfolder.CalculatorApp.Visibility = Visibility.Collapsed;
         }
         private static void MusicAppReloadNeeded()
         {

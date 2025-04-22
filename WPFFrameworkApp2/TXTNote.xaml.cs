@@ -70,7 +70,7 @@ namespace WPFFrameworkApp
         }
         public void DeleteFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.DeleteNote_Wanted(windowForNote, this);
+            NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
         public void AboutPage(object sender, RoutedEventArgs e)
         {

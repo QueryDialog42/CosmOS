@@ -265,13 +265,13 @@ namespace WPFFrameworkApp
             if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
 
         }
-        public static void DeleteNote_Wanted(MainWindow windowForNote, dynamic noteapp)
+        public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
         {
             string filename = noteapp.Title;
             if (MessageBox.Show($"Are you sure you want to delete {filename}?", "Delete Note", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
 
-                RoutineLogics.MoveAnythingWithoutQuery(windowForNote.currentDesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
+                RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
                 noteapp.Close();
                 if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
             }

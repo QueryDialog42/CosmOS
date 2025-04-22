@@ -4,7 +4,6 @@ using System.Windows.Media;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Windows.Documents;
-using System.Runtime.Versioning;
 
 namespace WPFFrameworkApp
 {
@@ -167,7 +166,7 @@ namespace WPFFrameworkApp
         }
         public void DeleteFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.DeleteNote_Wanted(windowForNote, this);
+            NoteAppLogics.DeleteNote_Wanted(windowForNote, currentDesktopForNote, this);
         }
         public void AboutPage(object sender, RoutedEventArgs e)
         {

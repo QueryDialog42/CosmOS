@@ -65,7 +65,7 @@ namespace WPFFrameworkApp
                 case 4: RoutineLogics.RenameFile_Wanted(Path.Combine(MainWindow.PicVideoPath, Title), Title.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG); break;
                 case 5: RoutineLogics.MoveAnythingWithoutQuery(MainWindow.PicVideoPath, Title, Path.Combine(MainWindow.TrashPath, Title)); break;
             }
-            if (window != null) RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window);
             picmovie?.ReloadWindow();
         }
         private void outOfPicVideosDo(byte which)
@@ -78,7 +78,7 @@ namespace WPFFrameworkApp
                 case 4: RoutineLogics.RenameFile_Wanted(Path.Combine(desktopPath, Title), Title.EndsWith(SupportedFiles.PNG) ? ImagePaths.PNG_IMG : ImagePaths.JPG_IMG); break;
                 case 5: RoutineLogics.MoveAnythingWithoutQuery(desktopPath, Title, Path.Combine(MainWindow.TrashPath, Title)); break;
             }
-            if (window != null) RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window);
         }
         private void switchOfPicMovieLogics(byte which)
         {

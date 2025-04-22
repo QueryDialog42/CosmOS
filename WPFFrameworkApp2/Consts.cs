@@ -107,7 +107,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.3.3";
+        public const string GOS_VRS = "GencOS v2.3.4";
         public const string MAIL_VRS = "GenMail v0.0.5";
         public const string NOTE_VRS = "GenNote v1.5.0";
         public const string MUSIC_VRS = "GenMusic v1.7.1";

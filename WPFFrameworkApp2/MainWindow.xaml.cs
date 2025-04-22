@@ -30,8 +30,6 @@ namespace WPFFrameworkApp
             StartUp();
         }
 
-
-
         #region Time functions
         private void SetTimeLogics()
         {
@@ -45,6 +43,21 @@ namespace WPFFrameworkApp
         private void UpdateTime(object sender, EventArgs e)
         {
             clockTime.Content = DateTime.Now.ToString("HH:mm:ss");
+        }
+        #endregion
+
+        #region ComboBox functions
+        private void SetComboBoxPlaceHolder(object sender, RoutedEventArgs e)
+        {
+            searchComboBox.Text = "Search";
+            searchComboBox.Foreground = Brushes.Gray;
+            searchComboBox.IsTextSearchEnabled = false;
+        }
+        private void DeleteComboBoxPlaceHolders(object sender, RoutedEventArgs e)
+        {
+            searchComboBox.Text = string.Empty;
+            searchComboBox.Foreground = menufontcolor;
+            searchComboBox.IsTextSearchEnabled = true;
         }
         #endregion
 
@@ -150,18 +163,7 @@ namespace WPFFrameworkApp
                         }
                     }
                 }
-                else
-                {
-                    switch (MessageBox.Show("If you continue without valid path, your files will not be loaded.\nDo you want to continue?", "OS Without Desktop Path", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
-                    {
-                        case MessageBoxResult.Yes: return null;
-                        case MessageBoxResult.No:
-                            input = InputDialog.ShowInputDialog($"Please enter {Configs.CDESK} path", "Path Needed");
-                            continue;
-                        default: Environment.Exit(0); break;
-
-                    }
-                }
+                else Environment.Exit(0);
             }
         }
         private bool CheckConfigDirectory(string C_CONFIGS, string CDesktopFile)
@@ -189,9 +191,9 @@ namespace WPFFrameworkApp
                 SetTimeLogics();
                 searchComboBox.Foreground = Brushes.Gray;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("GencOS is opened without C_DESKTOP path. Minimal operation system will be used.", "GencOS Without Path", MessageBoxButton.OK, MessageBoxImage.Information);
+                RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, "GencOS main\n", ex.Message);
             }
         }
         private void CheckConfigurationIsRight()
@@ -332,21 +334,6 @@ namespace WPFFrameworkApp
                 MessageBox.Show($"{foldername} folder not found. Creating.", "Hidden folder not found", MessageBoxButton.OK, MessageBoxImage.Information);
                 CreateHiddenFolderOf(path);
             }
-        }
-        #endregion
-
-        #region ComboBox functions
-        private void SetComboBoxPlaceHolder(object sender, RoutedEventArgs e)
-        {
-            searchComboBox.Text = "Search";
-            searchComboBox.Foreground = Brushes.Gray;
-            searchComboBox.IsTextSearchEnabled = false;
-        }
-        private void DeleteComboBoxPlaceHolders(object sender, RoutedEventArgs e)
-        {
-            searchComboBox.Text = string.Empty;
-            searchComboBox.Foreground = menufontcolor;
-            searchComboBox.IsTextSearchEnabled = true;
         }
         #endregion
 
