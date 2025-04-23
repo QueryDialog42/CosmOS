@@ -75,6 +75,7 @@
         public const string DELMP4_IMG = "DesktopImages/videodelete.png";
         public const string COPYMP4_IMG = "DesktopImages/moviebutcopy.png";
         public const string HLOGO_IMG = "DesktopImages/paperplane128x128.png";
+        public const string GEN_DEL_IMG = "DesktopImages/generaldeleteicon.png";
     }
 
     public struct HiddenFolders
@@ -107,7 +108,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.3.6";
+        public const string GOS_VRS = "GencOS v2.3.7";
         public const string MAIL_VRS = "GenMail v0.0.5";
         public const string NOTE_VRS = "GenNote v1.5.0";
         public const string MUSIC_VRS = "GenMusic v1.7.1";

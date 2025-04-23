@@ -23,6 +23,8 @@ namespace WPFFrameworkApp
         public static string folderFontcolor = GetFontColor(fontcolor, 1);
         public static string desktopFontcolor = GetFontColor(fontcolor, 0);
 
+        public static bool IsHistoryEnabled = true;
+
         #region Style functions
         public static void SetWindowStyles(dynamic menu, dynamic[] menuitems)
         {
@@ -437,16 +439,32 @@ namespace WPFFrameworkApp
         #region Add History functions
         private static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
         {
+            if (IsHistoryEnabled == false) return;
+
             Image image = new()
             {
                 Source = setBitmapImage(imagepath),
                 VerticalAlignment = VerticalAlignment.Center,
                 Height = 30
             };
+            FileInfo fileinfo = new FileInfo(filepath);
 
-            TextBlock textblock = new()
+            TextBlock filename = new()
             {
-                Text = "   " + Path.GetFileName(filepath),
+                Text = "   " + fileinfo.Name,
+                Width = 200,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+            TextBlock lastAccess = new()
+            {
+                Text = fileinfo.LastAccessTime.ToString(),
+                Width = 200,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            TextBlock location = new()
+            {
+                Text = fileinfo.DirectoryName,
+                Width = Double.NaN,
                 VerticalAlignment = VerticalAlignment.Center
             };
 
@@ -456,7 +474,9 @@ namespace WPFFrameworkApp
             };
 
             stackpanel.Children.Add(image);
-            stackpanel.Children.Add(textblock);
+            stackpanel.Children.Add(filename);
+            stackpanel.Children.Add(lastAccess);
+            stackpanel.Children.Add(location);
 
             ListBoxItem historyitem = new()
             {
@@ -464,9 +484,11 @@ namespace WPFFrameworkApp
                 Tag = filepath
             };
 
+            historyitem.ContextMenu = CreateContextMenuForHistoryItems(window, historyitem);
+
             historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, window.currentDesktop, filepath);
 
-            foreach(ListBoxItem item in window.historyList.Items)
+            foreach (ListBoxItem item in window.historyList.Items)
             {
                 if (item?.Tag?.ToString() == filepath)
                 {
@@ -476,6 +498,23 @@ namespace WPFFrameworkApp
             }
             window?.historyList?.Items?.Insert(0, historyitem);
         }
+        private static ContextMenu CreateContextMenuForHistoryItems(MainWindow window, ListBoxItem historyitem)
+        {
+            MenuItem deleteitem = new()
+            {
+                Header = "Delete History",
+                Icon = new Image
+                {
+                    Source = setBitmapImage(ImagePaths.GEN_DEL_IMG)
+                }
+            };
+            deleteitem.Click += (sender, e) => window.historyList.Items.Remove(historyitem);
+
+            ContextMenu contextMenu = new();
+            contextMenu.Items.Add(deleteitem); 
+
+            return contextMenu;
+        } 
         #endregion
 
         #region GetSettings functions
@@ -520,6 +559,7 @@ namespace WPFFrameworkApp
             {
                 SetBackgroundSettings(window, colors);
                 SetMenuFontSettings(window, fonts);
+                SetHistorySettings(window);
 
                 window.clockTime.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
             }
@@ -560,6 +600,22 @@ namespace WPFFrameworkApp
 
             File.WriteAllLines(Path.Combine(configFolder, Configs.CCOL), colors);
             File.WriteAllLines(Path.Combine(configFolder, Configs.CFONT), fonts);
+        }
+        private static void SetHistorySettings(MainWindow window)
+        {
+            if (IsHistoryEnabled)
+            {
+                window.historySplitter.Visibility = Visibility.Visible;
+                window.historyList.Visibility = Visibility.Visible;
+                window.historyMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                window.historySplitter.Visibility = Visibility.Collapsed;
+                window.historyList.Visibility = Visibility.Collapsed;
+                window.historyList.Items.Clear();
+                window.historyMenu.Visibility = Visibility.Collapsed;
+            }
         }
         private static void SetApplications(MainWindow window)
         {
@@ -602,47 +658,53 @@ namespace WPFFrameworkApp
         }
         private static void SetColorOfMenuItems(MainWindow window, SolidColorBrush menucolor)
         {
-            //main desktop contexmenu's items
-            window.itemmenu1.Background = menucolor;
-            window.itemmenu2.Background = menucolor;
-            window.itemmenu3.Background = menucolor;
+            MenuItem[] items = {
+                window.itemmenu1,
+                window.itemmenu2,
+                window.itemmenu3,
+                window.trashitem1,
+                window.trashitem2,
+                window.menuitem1,
+                window.menuitem2,
+                window.menuitem3,
+                window.menuitem4,
+                window.menuitem5,
+                window.menuitem6,
+                window.menuitem7,
+                window.menuitem8,
+                window.menuitem9,
+                window.menuitem10
+            };
 
-            // trash backet contexmenu's items
-            window.trashitem1.Background = menucolor;
-            window.trashitem2.Background = menucolor;
-
-            // main menubar's items
-            window.menuitem1.Background = menucolor;
-            window.menuitem2.Background = menucolor;
-            window.menuitem3.Background = menucolor;
-            window.menuitem4.Background = menucolor;
-            window.menuitem5.Background = menucolor;
-            window.menuitem6.Background = menucolor;
-            window.menuitem7.Background = menucolor;
-            window.menuitem8.Background = menucolor;
-            window.menuitem9.Background = menucolor;
+            foreach (MenuItem item in items)
+            {
+                item.Background = menucolor;
+            }
         }
         private static void SetBorderThicknessOfMenuItems(MainWindow window, Thickness borderthickness)
         {
-            // main desktop contexmenu's items
-            window.itemmenu1.BorderThickness = borderthickness;
-            window.itemmenu2.BorderThickness = borderthickness;
-            window.itemmenu3.BorderThickness = borderthickness;
+            MenuItem[] items = {
+                window.itemmenu1,
+                window.itemmenu2, 
+                window.itemmenu3,
+                window.trashitem1,
+                window.trashitem2, 
+                window.menuitem1,
+                window.menuitem2,
+                window.menuitem3,
+                window.menuitem4,
+                window.menuitem5,
+                window.menuitem6,
+                window.menuitem7,
+                window.menuitem8,
+                window.menuitem9,
+                window.menuitem10
+            };
 
-            // trash backet contexmenu's items
-            window.trashitem1.BorderThickness = borderthickness;
-            window.trashitem2.BorderThickness = borderthickness;
-
-            // main menubar's items
-            window.menuitem1.BorderThickness = borderthickness;
-            window.menuitem2.BorderThickness = borderthickness;
-            window.menuitem3.BorderThickness = borderthickness;
-            window.menuitem4.BorderThickness = borderthickness;
-            window.menuitem5.BorderThickness = borderthickness;
-            window.menuitem6.BorderThickness = borderthickness;
-            window.menuitem7.BorderThickness = borderthickness;
-            window.menuitem8.BorderThickness = borderthickness;
-            window.menuitem9.BorderThickness = borderthickness;
+            foreach (MenuItem item in items) 
+            {
+                item.BorderThickness = borderthickness;
+            }
         }
         #endregion
 
@@ -853,7 +915,7 @@ namespace WPFFrameworkApp
 
             app.Click += (sender, e) =>
             {
-                AddRTFListener(window, window.currentDesktop, filename);
+                AddRTFListener(window, window.currentDesktop, filepath);
                 AddFileToHistoryListener(window, ImagePaths.RTF_IMG, filepath);
             };
         }
@@ -1039,7 +1101,7 @@ namespace WPFFrameworkApp
             };
             try
             {
-                using (StreamReader reader = new StreamReader(Path.Combine(desktopPath, filename)))
+                using (StreamReader reader = new StreamReader(filepath))
                 {
                     StringBuilder stringbuilder = new StringBuilder();
                     string line;

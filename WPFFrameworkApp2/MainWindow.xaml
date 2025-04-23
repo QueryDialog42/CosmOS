@@ -85,6 +85,17 @@
                         <Image Source="/DesktopImages/font.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem x:Name="menuitem10" Header="_History Settings">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/history.png" />
+                    </MenuItem.Icon>
+                    <RadioButton x:Name="enableButton" IsChecked="True">
+                        <TextBlock Text="Enable" />
+                    </RadioButton>
+                    <RadioButton x:Name="disableButton">
+                        <TextBlock Text="Disable" />
+                    </RadioButton>
+                </MenuItem>
             </MenuItem>
         </Menu>
         
@@ -103,7 +114,7 @@
                     <RowDefinition Height="0"/>
                 </Grid.RowDefinitions>
  
-                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
+                <GridSplitter x:Name="historySplitter" Grid.Row="1" HorizontalAlignment="Stretch"/>
 
                 <ScrollViewer Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="desktop" Grid.Column="0" Background="LightGray">
@@ -134,7 +145,7 @@
                         <RowDefinition Height="20" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Menu Background="DarkGray">
+                    <Menu x:Name="historyMenu" Background="DarkGray">
                         <MenuItem Header="History" Height="20">
                             <MenuItem Header="Clear History" Click="ClearHistory_Wanted">
                                 <MenuItem.Icon>
@@ -151,7 +162,7 @@
             </Grid>
             <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
 
-            <Expander x:Name="expander" Grid.Column="2" ExpandDirection="Left"
+            <Expander x:Name="expander" Grid.Column="2" Background="#9c9268" ExpandDirection="Left"
                       Expanded="expander_Expanded"
                       Collapsed="expander_Collapsed"
                       BorderThickness="0">

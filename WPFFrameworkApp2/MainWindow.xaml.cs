@@ -189,7 +189,7 @@ namespace WPFFrameworkApp
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this);
 
                 SetTimeLogics();
-                searchComboBox.Foreground = Brushes.Gray;
+                SetHistoryListener();
             }
             catch (Exception ex)
             {
@@ -334,6 +334,22 @@ namespace WPFFrameworkApp
                 MessageBox.Show($"{foldername} folder not found. Creating.", "Hidden folder not found", MessageBoxButton.OK, MessageBoxImage.Information);
                 CreateHiddenFolderOf(path);
             }
+        }
+        #endregion
+
+        #region History Settings functions
+        private void SetHistoryListener()
+        {
+            enableButton.Checked += (sender, e) =>
+            {
+                RoutineLogics.IsHistoryEnabled = true;
+                RoutineLogics.MainWindowManuallyReloadNeeded(this);
+            };
+            disableButton.Checked += (sender, e) =>
+            {
+                RoutineLogics.IsHistoryEnabled = false;
+                RoutineLogics.MainWindowManuallyReloadNeeded(this);
+            };
         }
         #endregion
 
