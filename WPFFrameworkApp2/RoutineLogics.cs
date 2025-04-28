@@ -269,24 +269,24 @@ namespace WPFFrameworkApp
             renameItem.Click += (sender, e) =>
             {
                 RenameFile_Wanted(filepath, imageicon);
-                ReloadWindow(window);
+                ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             };
             copyitem.Click += (sender, e) =>
             {
                 CopyAnythingWithQuery("Copy File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop);
-                ReloadWindow(window);
+                ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             };
             moveitem.Click += (sender, e) =>
             {
                 MoveAnythingWithQuery("Move File", "All Files (*.*)|*.*", filename, currentdesktop, currentdesktop, 1);
-                ReloadWindow(window);
+                ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             };
             deleteitem.Click += (sender, e) =>
             {
                 if (MessageBox.Show($"Are you sure to delete {filename}?", "Delete File", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.TrashPath, filename));
-                    ReloadWindow(window);
+                    ReloadWindow(window, MainWindow.CDesktopDisplayMode);
                 }
             };
             moreinfo.Click += (sender, e) =>
@@ -437,7 +437,7 @@ namespace WPFFrameworkApp
         #endregion
 
         #region Add History functions
-        private static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
+        public static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
         {
             if (IsHistoryEnabled == false) return;
 
@@ -605,6 +605,8 @@ namespace WPFFrameworkApp
         {
             if (IsHistoryEnabled)
             {
+                Grid.SetRowSpan(window.listDesktop, 1);
+
                 window.historySplitter.Visibility = Visibility.Visible;
                 window.historyList.Visibility = Visibility.Visible;
                 window.historyMenu.Visibility = Visibility.Visible;
@@ -615,6 +617,9 @@ namespace WPFFrameworkApp
                 window.historyList.Visibility = Visibility.Collapsed;
                 window.historyList.Items.Clear();
                 window.historyMenu.Visibility = Visibility.Collapsed;
+                window.historyHeight.Height = new GridLength(0);
+
+                Grid.SetRowSpan(window.listDesktop, 2);
             }
         }
         private static void SetApplications(MainWindow window)
@@ -673,7 +678,8 @@ namespace WPFFrameworkApp
                 window.menuitem7,
                 window.menuitem8,
                 window.menuitem9,
-                window.menuitem10
+                window.menuitem10,
+                window.menuitem11
             };
 
             foreach (MenuItem item in items)
@@ -698,12 +704,33 @@ namespace WPFFrameworkApp
                 window.menuitem7,
                 window.menuitem8,
                 window.menuitem9,
-                window.menuitem10
+                window.menuitem10,
+                window.menuitem11
             };
 
             foreach (MenuItem item in items) 
             {
                 item.BorderThickness = borderthickness;
+            }
+        }
+        private static void SetItemFontStylesFor(TextBlock item, string[] fontsettings, byte which)
+        {
+            switch (which)
+            {
+                case 0:
+                    item.FontFamily = new FontFamily(fontsettings[0]);
+                    item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1]));
+                    item.FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+                    item.FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+                    item.FontSize = Convert.ToDouble(fontsettings[4]);
+                    break;
+                case 1:
+                    item.FontFamily = new FontFamily(fontsettings[5]);
+                    item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6]));
+                    item.FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+                    item.FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+                    item.FontSize = Convert.ToDouble(fontsettings[9]);
+                    break;
             }
         }
         #endregion
@@ -1012,14 +1039,22 @@ namespace WPFFrameworkApp
         }
         public static BitmapImage setBitmapImage(string imagepath)
         {
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
-            bitmap.UriSource = new Uri(imagepath, UriKind.RelativeOrAbsolute);
-            bitmap.EndInit();
-            bitmap.Freeze(); // Make the image thread-safe
+            try
+            {
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the image into memory
+                bitmap.UriSource = new Uri(imagepath, UriKind.RelativeOrAbsolute);
+                bitmap.EndInit();
+                bitmap.Freeze(); // Make the image thread-safe
 
-            return bitmap;
+                return bitmap;
+            } catch (Exception ex)
+            {
+                ErrorMessage("Unknown Image", "Un located file or image, it may be deleted:\n", ex.Message);
+                return null;
+            }
+            
         }
         public static PicWindow OpenPicWindow(MainWindow window, string desktopPath, string filename)
         {
@@ -1057,6 +1092,157 @@ namespace WPFFrameworkApp
             app.ContextMenu = SetShortKeyOptionsForFolders(window, filename);
 
             app.Click += (sender, e) => AddFolderListener(filepath);
+        }
+        private static void CreateTextItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, ImagePaths.TXT_IMG);
+        }
+        private static void CreateRTFItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, ImagePaths.RTF_IMG);
+        }
+        private static void CreateWAVItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, ImagePaths.WAV_IMG);
+        }
+        private static void CreateMP3Item(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, ImagePaths.MP3_IMG);
+        }
+        private static void CreateEXEItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.EXE_IMG, ImagePaths.DELEXE_IMG, ImagePaths.EXE_IMG);
+        }
+        private static void CreatePNGItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, ImagePaths.PNG_IMG);
+        }
+        private static void CreateJPGItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, ImagePaths.JPG_IMG);
+        }
+        private static void CreateMP4Item(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, ImagePaths.MP4_IMG);
+        } 
+        private static ListBoxItem ReturnNewFileItem(string filepath, string imagepath)
+        {
+            var fileinfo = new FileInfo(filepath);
+
+            var image = new Image
+            {
+                Source = setBitmapImage(imagepath),
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 30
+            };
+
+            var filename = new TextBlock
+            {
+                Text = "   " + fileinfo.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 180
+            };
+
+            var filelength = new TextBlock
+            {
+                Text = $"{fileinfo.Length / 1024} KB",
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            var lastModified = new TextBlock
+            {
+                Text = fileinfo.LastWriteTime.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            string[] fontsettings = GetFontSettingsFromCfont();
+            SetItemFontStylesFor(filename, fontsettings, 0);
+            SetItemFontStylesFor(filelength, fontsettings, 0);
+            SetItemFontStylesFor(lastModified, fontsettings, 0);
+
+            var stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(filename);
+            stackpanel.Children.Add(filelength);
+            stackpanel.Children.Add(lastModified);
+
+            ListBoxItem fileitem = new ListBoxItem
+            {
+                Content = stackpanel,
+                Tag = filepath
+            };
+            return fileitem;
+        }
+        private static void ReturnNewFolderItem(MainWindow window, string filepath)
+        {
+            var folderinfo = new DirectoryInfo(filepath);
+
+            var image = new Image
+            {
+                Source = setBitmapImage(ImagePaths.FOLDER_IMG),
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 30
+            };
+
+            var foldername = new TextBlock
+            {
+                Text = "  " + folderinfo.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 180
+            };
+
+            var whenCreated = new TextBlock
+            {
+                Text = folderinfo.CreationTimeUtc.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            var lastAcces = new TextBlock
+            {
+                Text = folderinfo.LastAccessTimeUtc.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            string[] fontsettings = GetFontSettingsFromCfont();
+            SetItemFontStylesFor(foldername, fontsettings, 1);
+            SetItemFontStylesFor(whenCreated, fontsettings, 1);
+            SetItemFontStylesFor(lastAcces, fontsettings, 1);
+
+            var stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(foldername);
+            stackpanel.Children.Add(whenCreated);
+            stackpanel.Children.Add(lastAcces);
+
+            ListBoxItem folderitem = new ListBoxItem
+            {
+                BorderThickness = new Thickness(0),
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[1])),
+                Content = stackpanel,
+                Tag = filepath
+            };
+
+            folderitem.ContextMenu = SetShortKeyOptionsForFolders(window, Path.GetFileName(filepath));
+            window.listDesktop.Items.Add(folderitem);
+        }
+        private static void CompleteItem(MainWindow window, string filepath, string copyicon, string deleteicon, string imageicon)
+        {
+            var fileitem = ReturnNewFileItem(filepath, imageicon);
+
+            fileitem.ContextMenu = SetShortKeyOptions(window, copyicon, deleteicon, filepath, imageicon);
+            window.listDesktop.Items.Add(fileitem);
         }
         #endregion
 
@@ -1193,9 +1379,19 @@ namespace WPFFrameworkApp
         #endregion
 
         #region Window Reload functions
-        public static void ReloadWindow(MainWindow window)
+        public static void ReloadWindow(MainWindow window, string displayMode)
         {
             if (window == null) return; // If window is null, then no reload needed
+
+            switch (displayMode)
+            {
+                case "0": ReloadForDisplayMode_Zero(window); break;
+                case "1": ReloadForDisplayMode_One(window); break;
+            }
+        }
+        private static void ReloadForDisplayMode_Zero(MainWindow window)
+        {
+            PrepareForReload(window, "0");
 
             window.desktop.Children.Clear();
             window.folderdesktop.Children.Clear();
@@ -1241,10 +1437,61 @@ namespace WPFFrameworkApp
                 MainWindowManuallyReloadNeeded(window);
             }
         }
+        private static void ReloadForDisplayMode_One(MainWindow window)
+        {
+            PrepareForReload(window, "1");
+
+            window.listDesktop.Items.Clear();
+            SetWindowSettings(window);
+            try
+            {
+                string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
+                IEnumerable<string> folders = Directory.EnumerateDirectories(window.currentDesktop);
+                foreach (var folderpath in folders)
+                {
+                    string foldername = Path.GetFileName(folderpath);
+                    if (foldername == hiddenfolders[1])
+                    {
+                        Grid.SetColumnSpan(window.safari, 1);
+                        window.trashApp.Visibility = Visibility.Visible;
+                        window.trashimage.Source = InitTrashBacket();
+                        continue;
+                    }
+                    else if (hiddenfolders.Contains(foldername)) continue;
+
+                    ReturnNewFolderItem(window, folderpath);
+                }
+
+                IEnumerable<string> files = Directory.EnumerateFiles(window.currentDesktop);
+                foreach (string filepath in files)
+                {
+                    switch (Path.GetExtension(filepath))
+                    {
+                        case SupportedFiles.TXT: CreateTextItem(window, filepath); break;
+                        case SupportedFiles.RTF: CreateRTFItem(window, filepath); break;
+                        case SupportedFiles.WAV: CreateWAVItem(window, filepath); break;
+                        case SupportedFiles.MP3: CreateMP3Item(window, filepath); break;
+                        case SupportedFiles.EXE: CreateEXEItem(window, filepath); break;
+                        case SupportedFiles.PNG: CreatePNGItem(window, filepath); break;
+                        case SupportedFiles.JPG: CreateJPGItem(window, filepath); break;
+                        case SupportedFiles.MP4: CreateMP4Item(window, filepath); break;
+                        default: ErrorMessage(Errors.UNSUPP_ERR, Path.GetFileName(filepath), " is not supported for ", Versions.GOS_VRS); File.Delete(filepath); break;
+                    }
+                }
+                if (window.searchComboBox != null) AddEveryItemIntoSearch(window);
+                SetApplications(window);
+                window.Show();
+            }
+            catch (Exception e)
+            {
+                ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, "Main Window\n", e.Message);
+                MainWindowManuallyReloadNeeded(window);
+            }
+        }
         public static void WindowReloadNeeded(string directoryName)
         {
             MainWindow directionFolder = GetMainWindow(directoryName);
-            if (directionFolder != null && directoryName != null) ReloadWindow(directionFolder);
+            if (directionFolder != null && directoryName != null) ReloadWindow(directionFolder, MainWindow.CDesktopDisplayMode);
         }
         public static void ReloadNeededForEveryWindow()
         {
@@ -1484,7 +1731,7 @@ namespace WPFFrameworkApp
             addtogenmuic.Click += (sender, e) =>
             {
                 MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.MusicAppPath, filename));
-                ReloadWindow(window);
+                ReloadWindow(window, MainWindow.CDesktopDisplayMode);
                 GenMusicApp genmusicapp = GetMusicAppWindow();
                 genmusicapp?.IsReloadNeeded(true);
             };
@@ -1498,7 +1745,7 @@ namespace WPFFrameworkApp
             addtopicmovie.Click += (sender, e) =>
             {
                 MoveAnythingWithoutQuery(currentdesktop, filename, Path.Combine(MainWindow.PicVideoPath, filename));
-                ReloadWindow(window);
+                ReloadWindow(window, MainWindow.CDesktopDisplayMode);
                 PicMovie picmovie = GetPicMovieWindow();
                 picmovie?.ReloadWindow();
             };
@@ -1514,7 +1761,7 @@ namespace WPFFrameworkApp
                 try
                 {
                     Directory.Move(Path.Combine(window.currentDesktop, filename), Path.Combine(window.currentDesktop, newfilename));
-                    ReloadWindow(window);
+                    ReloadWindow(window, MainWindow.CDesktopDisplayMode);
                 }
                 catch (Exception ex)
                 {
@@ -1529,12 +1776,40 @@ namespace WPFFrameworkApp
                 try
                 {
                     Directory.Delete(Path.Combine(window.currentDesktop, filename));
-                    ReloadWindow(window);
+                    ReloadWindow(window, MainWindow.CDesktopDisplayMode);
                 }
                 catch (Exception ex)
                 {
                     ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, filename ?? "null Folder", "\n", ex.Message);
                 }
+            }
+        }
+        private static void PrepareForReload(MainWindow window, string mode)
+        {
+            if (mode == "0")
+            {
+                window?.listDesktop?.Items.Clear();
+                window.listDesktop.Visibility = Visibility.Collapsed;
+
+                window.desktop.Visibility = Visibility.Visible;
+                window.folderdesktop.Visibility = Visibility.Visible;
+                window.expander.Visibility = Visibility.Visible;
+
+                Grid grid = (Grid)window.gridSplitter.Parent;
+                grid.ColumnDefinitions[2].Width = GridLength.Auto;
+            }
+            else if (mode == "1")
+            {
+                window.desktop?.Children.Clear();
+                window.folderdesktop?.Children.Clear();
+                window.desktop.Visibility= Visibility.Collapsed;
+                window.folderdesktop.Visibility= Visibility.Collapsed;
+                window.expander.Visibility = Visibility.Collapsed;
+
+                Grid grid = (Grid)window.gridSplitter.Parent;
+                grid.ColumnDefinitions[2].Width = new GridLength(0);
+
+                window.listDesktop.Visibility= Visibility.Visible;
             }
         }
         #endregion

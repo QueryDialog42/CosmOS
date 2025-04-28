@@ -199,7 +199,7 @@ namespace WPFFrameworkApp
                     {
                         writer.WriteLine(noteapp.note.Text);
                     }
-                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, MainWindow.CDesktopDisplayMode);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -242,7 +242,7 @@ namespace WPFFrameworkApp
                     {
                         textrange.Save(filestream, DataFormats.Rtf);
                     }
-                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
+                    if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, MainWindow.CDesktopDisplayMode);
                     noteapp.Close();
                 }
                 catch (Exception ex)
@@ -255,14 +255,14 @@ namespace WPFFrameworkApp
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote);
             noteapp.Close();
-            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, MainWindow.CDesktopDisplayMode);
 
         }
         public static void MoveNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, string filter, dynamic noteapp)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Note", filter, noteapp.Title, currentDesktopForNote, currentDesktopForNote, 1);
             noteapp.Close();
-            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
+            if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, MainWindow.CDesktopDisplayMode);
 
         }
         public static void DeleteNote_Wanted(MainWindow windowForNote, string currentDesktopForNote, dynamic noteapp)
@@ -273,7 +273,7 @@ namespace WPFFrameworkApp
 
                 RoutineLogics.MoveAnythingWithoutQuery(currentDesktopForNote, filename, Path.Combine(MainWindow.TrashPath, filename));
                 noteapp.Close();
-                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote);
+                if (windowForNote != null) RoutineLogics.ReloadWindow(windowForNote, MainWindow.CDesktopDisplayMode);
             }
         }
         #endregion

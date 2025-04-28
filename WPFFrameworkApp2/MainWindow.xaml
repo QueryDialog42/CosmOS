@@ -96,6 +96,13 @@
                         <TextBlock Text="Disable" />
                     </RadioButton>
                 </MenuItem>
+                <MenuItem x:Name="menuitem11" Header="_Display Settings">
+                    <MenuItem.Icon>
+                        <Image Source="/DesktopImages/display.png" />
+                    </MenuItem.Icon>
+                    <RadioButton x:Name="iconMode" Content="Icon" Checked="DisplayMode_Zero_Checked"/>
+                    <RadioButton x:Name="lineMode" Content="Lines" Checked="DisplayMode_One_Checked" />
+                </MenuItem>
             </MenuItem>
         </Menu>
         
@@ -104,18 +111,19 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Grid x:Name="splitterGrid" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="5"/>
-                    <RowDefinition Height="0"/>
+                    <RowDefinition x:Name="historyHeight" Height="0"/>
                 </Grid.RowDefinitions>
  
                 <GridSplitter x:Name="historySplitter" Grid.Row="1" HorizontalAlignment="Stretch"/>
-
+                
+                <!--Display Mode 0-->
                 <ScrollViewer Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="desktop" Grid.Column="0" Background="LightGray">
                         <WrapPanel.ContextMenu>
@@ -139,6 +147,11 @@
                         </WrapPanel.ContextMenu>
                     </WrapPanel>
                 </ScrollViewer>
+                
+                <!--DisplayMode 1-->
+                <ListBox x:Name="listDesktop" BorderThickness="0" Background="Transparent" Visibility="Collapsed" SelectionChanged="listDesktop_Selected">
+                    
+                </ListBox>
 
                 <Grid Grid.Row="2" >
                     <Grid.RowDefinitions>

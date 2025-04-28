@@ -65,7 +65,7 @@ namespace WPFFrameworkApp
         public void RenameFile(object sender, RoutedEventArgs e)
         {
             RoutineLogics.RenameFile_Wanted(Path.Combine(currentDesktopForNote, Title), ImagePaths.TXT_IMG);
-            RoutineLogics.ReloadWindow(windowForNote);
+            RoutineLogics.ReloadWindow(windowForNote, MainWindow.CDesktopDisplayMode);
             Close();
         }
         public void DeleteFile(object sender, RoutedEventArgs e)

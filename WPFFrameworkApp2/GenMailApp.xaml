@@ -4,44 +4,52 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Icon="/DesktopImages/Mail128x128.png"
         Title="GenMailApp" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <!-- Başlık için -->
-        <RowDefinition Height="*"/>
-        <!-- İçerik alanı için -->
-        <RowDefinition Height="Auto"/>
-        <!-- Düğmeler için -->
+            <RowDefinition Height="Auto"/>
+            <!-- Başlık için -->
+            <RowDefinition Height="*"/>
+            <!-- İçerik alanı için -->
+            <RowDefinition Height="Auto"/>
+            <!-- Düğmeler için -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Başlık -->
-        <TextBlock Text="GenMailApp" FontSize="35" HorizontalAlignment="Center" Grid.Row="0" Margin="0,10,0,0"/>
+        <TextBlock Name="GItem1" Text="GenMailApp" FontSize="35" HorizontalAlignment="Center" Grid.Row="0" Margin="0,10,0,0"/>
 
         <!-- Gönderen E-posta -->
-        <TextBlock Text="From Email:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,10,0,0"/>
-        <TextBox Name="FromEmailTextBox" Grid.Row="1" Margin="158,10,20,0" VerticalAlignment="Top" Height="35" />
+        <TextBlock x:Name="GItem2" Text="From Email:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,10,0,0" Width="133"/>
+        <TextBox Name="FromEmailTextBox" FontSize="22" Grid.Row="1" Margin="186,10,20,0" VerticalAlignment="Top" Height="35" />
 
         <!-- Alıcı E-posta -->
-        <TextBlock Text="Email:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,50,0,0"/>
-        <TextBox Name="EmailTextBox" Grid.Row="1" Margin="158,50,20,0" VerticalAlignment="Top" Height="35" />
+        <TextBlock x:Name="GItem3" Text="To Email:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,50,0,0"/>
+        <TextBox Name="ToEmailTextBox" FontSize="22" Grid.Row="1" Margin="186,50,20,0" VerticalAlignment="Top" Height="35" />
 
         <!-- Konu -->
-        <TextBlock Text="Topic:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,90,0,0"/>
-        <TextBox Name="TopicTextBox" Grid.Row="1" Margin="158,90,20,0" VerticalAlignment="Top" Height="35" />
+        <TextBlock x:Name="GItem4" Text="Topic:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,127,0,0"/>
+        <TextBox Name="TopicTextBox" FontSize="22" Grid.Row="1" Margin="186,127,20,0" VerticalAlignment="Top" Height="33" />
 
         <!-- Açıklama -->
-        <TextBlock Text="Explanation:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,130,0,0"/>
-        <TextBox Name="ExplanationTextBox" Grid.Row="1" Margin="158,141,20,10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        <TextBlock x:Name="GItem5" Text="Explanation:" FontSize="25" Grid.Row="1" HorizontalAlignment="Left" Margin="20,167,0,0"/>
+        <TextBox Name="ExplanationTextBox" FontSize="22" Grid.Row="1" Margin="186,167,20,10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
 
         <!-- Düğmeler -->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,10">
             <Button Name="SendButton" Content="Send" Width="75" Margin="5" Click="SendButton_Click" Height="22" />
             <Button Name="CancelButton" Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click" Height="21" />
         </StackPanel>
+
+        <!-- AppPassword  -->
+        <TextBlock x:Name="GItem6" HorizontalAlignment="Left" Margin="20,90,0,10" Grid.Row="1" TextWrapping="Wrap" FontSize="25"  Width="161">
+            <Hyperlink NavigateUri="https://myaccount.google.com/apppasswords" RequestNavigate="Hyperlink_Navigate">
+                AppPassword: 
+            </Hyperlink>
+        </TextBlock>
+        <TextBox Name="AppPasswordTextBox" FontSize="22" Margin="186,90,20,0" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" Height="32" VerticalAlignment="Top"/>
     </Grid>
 </Window>

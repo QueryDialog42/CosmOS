@@ -187,7 +187,7 @@ namespace WPFFrameworkApp2
         {
             RoutineLogics.GetPicMovieWindow()?.ReloadWindow();
             MainWindow window = RoutineLogics.GetMainWindow(desktopPath);
-            RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window, MainWindow.CDesktopDisplayMode);
         }
         private void StartUp()
         {

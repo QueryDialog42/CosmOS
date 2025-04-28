@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Net.Mail;
-using MessageBox = System.Windows.MessageBox; // Use the WPF MessageBox
+using MessageBox = System.Windows.MessageBox;
+using System.Diagnostics;
+using System.Windows.Navigation;
+using System.Windows.Media;
+using System.Windows.Controls; // Use the WPF MessageBox
 
 
 namespace WPFFrameworkApp
@@ -11,6 +15,7 @@ namespace WPFFrameworkApp
         public GenMailApp()
         {
             InitializeComponent();
+            setStyles();
             Show();
         }
 
@@ -19,27 +24,28 @@ namespace WPFFrameworkApp
         {
             // TextBox'lardaki bilgileri alıyoruz
             string fromEmail = FromEmailTextBox.Text; // Gönderen e-posta adresi
-            string email = EmailTextBox.Text;        // Alıcı e-posta adresi
+            string toEmail = ToEmailTextBox.Text;        // Alıcı e-posta adresi
             string topic = TopicTextBox.Text;        // Konu
             string explanation = ExplanationTextBox.Text; // Açıklama
+            string appPassword = AppPasswordTextBox.Text; // Uygulama şifresi
 
             // Boş alanları kontrol et
-            if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(topic) || string.IsNullOrWhiteSpace(explanation))
+            if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(toEmail) || string.IsNullOrWhiteSpace(topic) || string.IsNullOrWhiteSpace(explanation))
             {
-                MessageBox.Show("Lütfen tüm alanları doldurun.", "UYARI!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please fill in all fields.", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             // Gönderen ve Alıcı e-posta adreslerinin geçerlilik kontrolü
-            if (!IsValidEmail(fromEmail))
+            if (!IsValidEmail(toEmail))
             {
-                MessageBox.Show("Geçerli bir gönderen e-posta adresi giriniz.", "UYARI!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please enter a valid sender email address.", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (!IsValidEmail(email))
+            if (!IsValidEmail(fromEmail))
             {
-                MessageBox.Show("Geçerli bir alıcı e-posta adresi giriniz.", "UYARI!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please enter a valid recipient email address.", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -49,7 +55,7 @@ namespace WPFFrameworkApp
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new System.Net.NetworkCredential(fromEmail, ""), // Gönderen e-posta şifresi (Güvenlik için app.config kullanılabilir)
+                    Credentials = new System.Net.NetworkCredential(fromEmail, appPassword.Trim()),
                     EnableSsl = true
                 };
 
@@ -61,35 +67,34 @@ namespace WPFFrameworkApp
                     Body = explanation,                // Açıklama
                     IsBodyHtml = false                 // HTML formatında değil
                 };
-                mailMessage.To.Add(email); // Alıcı adresi
+                mailMessage.To.Add(toEmail); // Alıcı adresi
 
                 smtpClient.Send(mailMessage); // Mail gönder
-                MessageBox.Show("Mail başarıyla gönderildi!", "Başarılı!", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Mail has been sent successfully!", "SUCCEED!", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Mail gönderiminde bir hata oluştu: {ex.Message}", "UYARI!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred in sending an e-mail: {ex.Message}", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         // CancelButton_Click: İptal Butonu İşlemleri
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Alanları temizlemek istediğinize emin misiniz?", "Onay", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to clean up the fields?", "APPROVED!", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes)
             {
                 // Tüm TextBox'ları temizle
-                EmailTextBox.Clear();
+                ToEmailTextBox.Clear();
                 FromEmailTextBox.Clear();
                 TopicTextBox.Clear();
                 ExplanationTextBox.Clear();
-
-                MessageBox.Show("Alanlar temizlendi.", "Bilgilendirme", MessageBoxButton.OK, MessageBoxImage.Information);
+                AppPasswordTextBox.Clear();
             }
             else
             {
-                MessageBox.Show("Temizlik işlemi iptal edildi.", "Bilgilendirme", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("The cleaning process has been canceled.", "INFORMATION", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -106,6 +111,30 @@ namespace WPFFrameworkApp
                 return false;
             }
         }
+
+        private void Hyperlink_Navigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+            e.Handled = true;
+        }
+
+        private void setStyles()
+        {
+            string[] colorsettings = RoutineLogics.GetColorSettingsFromCcol();
+            string[] fontsettings = RoutineLogics.GetFontSettingsFromCfont();
+
+            var desktopColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorsettings[0]));
+            var desktopFontColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1]));
+            Background = desktopColor;
+
+            TextBlock[] textblocks = { GItem1, GItem2, GItem3, GItem4, GItem5, GItem6};
+            TextBox[] textboxes = {ToEmailTextBox, FromEmailTextBox, TopicTextBox, ExplanationTextBox, AppPasswordTextBox };
+            foreach (TextBlock textblock in textblocks) textblock.Foreground = desktopFontColor;
+            foreach(TextBox textbox in textboxes)
+            {
+                textbox.Background = Brushes.Transparent;
+                textbox.Foreground = desktopFontColor;
+            }
+        }
     }
 }
-

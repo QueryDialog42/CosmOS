@@ -11,7 +11,7 @@ namespace WPFFrameworkApp
 {
     public partial class MainWindow : Window
     {
-        private SolidColorBrush menufontcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.menuFontColor));
+        private readonly SolidColorBrush menufontcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.menuFontColor));
         private DispatcherTimer clocktimer;
 
         public string currentDesktop; // path to unique desktop
@@ -21,6 +21,7 @@ namespace WPFFrameworkApp
         public static string MusicAppPath;
         public static string PicVideoPath;
         public static string CDesktopPath; // C_DESKTOP folder path
+        public static string CDesktopDisplayMode;
 
         public MainWindow()
         {
@@ -68,7 +69,7 @@ namespace WPFFrameworkApp
             Grid.SetColumnSpan(splitterGrid, 1);
 
             Grid grid = (Grid)gridSplitter.Parent;
-            grid.ColumnDefinitions[2].Width = GridLength.Auto;
+            grid.ColumnDefinitions[2].Width = new GridLength(115);
         }
         private void expander_Collapsed(object sender, RoutedEventArgs e)
         {
@@ -135,6 +136,34 @@ namespace WPFFrameworkApp
         }
         #endregion
 
+        #region Display Mode functions
+        private void DisplayMode_Zero_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveDisplaySetting("0");
+        }
+        private void DisplayMode_One_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveDisplaySetting("1");
+        }
+        private void SaveDisplaySetting(string mode)
+        {
+            try
+            {
+                string CDesktopFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH);
+
+                string[] desktopDisplay = File.ReadAllLines(CDesktopFilePath);
+                desktopDisplay[1] = mode;
+                File.WriteAllLinesAsync(CDesktopFilePath, desktopDisplay);
+                CDesktopDisplayMode = mode;
+                RoutineLogics.ReloadNeededForEveryWindow();
+            }
+            catch (Exception ex)
+            {
+                RoutineLogics.ErrorMessage("Setting Write Error", "Something went wrong while saving settings.\n", ex.Message);
+            }
+        }
+        #endregion
+
         #region Configuration functions
         private string ConfigurePath(string CDesktopFile)
         {
@@ -181,15 +210,15 @@ namespace WPFFrameworkApp
             try
             {
                 currentDesktop = TempPath.Trim();
-                CDesktopPath = File.ReadAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH)).Trim();
+                CDesktopPath = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH))[0].Trim();
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
                 PicVideoPath = Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
 
-                if (currentDesktop != null) RoutineLogics.ReloadWindow(this);
-
                 SetTimeLogics();
-                SetHistoryListener();
+                SetHistoryListenerAndDesktopDisplay();
+
+                if (currentDesktop != null) RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
             }
             catch (Exception ex)
             {
@@ -216,6 +245,7 @@ namespace WPFFrameworkApp
             using (StreamWriter writer = new StreamWriter(File.Create(CDesktopFile)))
             {
                 writer.WriteLineAsync(input);
+                writer.WriteLineAsync('0'); // default display mode
             }
             //C desktop colors
             using (StreamWriter writer = new StreamWriter(Path.Combine(C_CONFIGS, Configs.CCOL)))
@@ -297,7 +327,9 @@ namespace WPFFrameworkApp
         {
             try
             {
-                TempPath = File.ReadAllText(CDesktopFile).Trim();
+                string[] lines = File.ReadAllLines(CDesktopFile);
+                TempPath = lines[0];
+                CDesktopDisplayMode = lines[1];
 
                 if (Directory.Exists(TempPath) == false)
                 {
@@ -338,7 +370,7 @@ namespace WPFFrameworkApp
         #endregion
 
         #region History Settings functions
-        private void SetHistoryListener()
+        private void SetHistoryListenerAndDesktopDisplay()
         {
             enableButton.Checked += (sender, e) =>
             {
@@ -350,6 +382,21 @@ namespace WPFFrameworkApp
                 RoutineLogics.IsHistoryEnabled = false;
                 RoutineLogics.MainWindowManuallyReloadNeeded(this);
             };
+
+            string mode = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH))[1].Trim();
+            switch (mode)
+            {
+                case "0":
+                    iconMode.Checked -= DisplayMode_Zero_Checked;
+                    iconMode.IsChecked = true;
+                    iconMode.Checked += DisplayMode_Zero_Checked;
+                    break;
+                case "1":
+                    lineMode.Checked -= DisplayMode_One_Checked;
+                    lineMode.IsChecked = true;
+                    lineMode.Checked += DisplayMode_One_Checked;
+                    break;  
+            }
         }
         #endregion
 
@@ -366,7 +413,7 @@ namespace WPFFrameworkApp
             string filter = $"Text Files (*{SupportedFiles.TXT})|*{SupportedFiles.TXT}|RTF Files (*{SupportedFiles.RTF})|*{SupportedFiles.RTF}|WAV Files (*{SupportedFiles.WAV})|*{SupportedFiles.WAV}|MP3 Files (*{SupportedFiles.MP3})|*{SupportedFiles.MP3}|EXE Files (*{SupportedFiles.EXE})|*{SupportedFiles.EXE}|PNG Files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG Files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}";
             RoutineLogics.MoveAnythingWithQuery("Import File", filter, null, desktopPath, desktopPath, 4);
 
-            RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window, CDesktopDisplayMode);
 
         }
         private void NewFolder(object sender, RoutedEventArgs e)
@@ -380,7 +427,7 @@ namespace WPFFrameworkApp
                     if (Directory.Exists(folderpath) == false)
                     {
                         Directory.CreateDirectory(folderpath);
-                        RoutineLogics.ReloadWindow(this);
+                        RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
                     }
                     else RoutineLogics.ErrorMessage(Errors.CRT_ERR, foldername, " already exists.");
                 }
@@ -445,7 +492,7 @@ namespace WPFFrameworkApp
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ReloadWindow(this);
+            RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
         }
         private void ImportFile_Wanted(object sender, RoutedEventArgs e)
         {
@@ -511,6 +558,51 @@ namespace WPFFrameworkApp
                 new CalendarApp();
             }
         }
+        #endregion
+
+        #region Unclassified private functions
+        private void listDesktop_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            ListBoxItem item = (ListBoxItem)listDesktop.SelectedItem;
+            if (item == null) return;
+            string filepath = item.Tag.ToString();
+            switch (Path.GetExtension(item.Tag.ToString()))
+            {
+                case SupportedFiles.TXT: 
+                    RoutineLogics.AddTextListener(this, currentDesktop, filepath);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.TXT_IMG, filepath);
+                    break;
+                case SupportedFiles.RTF: 
+                    RoutineLogics.AddRTFListener(this, currentDesktop, filepath);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.RTF_IMG, filepath);
+                    break;
+                case SupportedFiles.WAV: 
+                    RoutineLogics.AddAudioListener(this, filepath, ImagePaths.WAV_IMG);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.WAV_IMG, filepath);
+                    break;
+                case SupportedFiles.MP3: 
+                    RoutineLogics.AddAudioListener(this, filepath, ImagePaths.MP3_IMG);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.MP3_IMG, filepath);
+                    break;
+                case SupportedFiles.EXE: 
+                    RoutineLogics.AddEXEListener(this, filepath);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.EXE_IMG, filepath);
+                    break;
+                case SupportedFiles.PNG: 
+                    RoutineLogics.AddPictureListener(this, currentDesktop, filepath, ImagePaths.PNG_IMG);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.PNG_IMG, filepath);
+                    break;
+                case SupportedFiles.JPG: 
+                    RoutineLogics.AddPictureListener(this, currentDesktop, filepath, ImagePaths.JPG_IMG);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.JPG_IMG, filepath);
+                    break;
+                case SupportedFiles.MP4: 
+                    RoutineLogics.AddMP4Listener(this, filepath);
+                    RoutineLogics.AddFileToHistoryListener(this, ImagePaths.MP4_IMG, filepath);
+                    break;
+                default: RoutineLogics.AddFolderListener(filepath); break;
+                }
+            }
         #endregion
     }
 }

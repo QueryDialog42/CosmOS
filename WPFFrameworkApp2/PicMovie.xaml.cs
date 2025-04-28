@@ -105,25 +105,25 @@ namespace WPFFrameworkApp
         private void AddPicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Add Picture/Video", picVideoFilter, null, desktopPath, desktopPath, 5);
-            RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             ReloadWindow();
         }
         private void MovePicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Move Picture/Video", picVideoFilter, null, MainWindow.PicVideoPath, MainWindow.PicVideoPath, 1);
-            RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             ReloadWindow(); 
         }
         private void CopyPicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.CopyAnythingWithQuery("Copy Picture/Video", picVideoFilter, null, MainWindow.PicVideoPath, MainWindow.PicVideoPath);
-            RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             ReloadWindow();
         }
         private void DeletePicVideo_Wanted(object sender, RoutedEventArgs e)
         {
             RoutineLogics.MoveAnythingWithQuery("Delete PicVideo", picVideoFilter, null, MainWindow.PicVideoPath, desktopPath, 3);
-            RoutineLogics.ReloadWindow(window);
+            RoutineLogics.ReloadWindow(window, MainWindow.CDesktopDisplayMode);
             ReloadWindow();
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
