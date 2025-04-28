@@ -312,8 +312,8 @@
                 <Setter Property="Background" Value="#696969" />
             </Trigger>
         </Style.Triggers>
-        
     </Style>
+    
     <Style TargetType="Slider" x:Key="ControlableSliderStyle">
         <Setter Property="Width" Value="300" />
         <Setter Property="VerticalAlignment" Value="Center" />
