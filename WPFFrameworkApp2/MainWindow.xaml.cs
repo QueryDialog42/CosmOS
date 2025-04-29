@@ -3,10 +3,10 @@ using System.IO;
 using System.Windows;
 using WPFFrameworkApp2;
 using System.Windows.Media;
+using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Collections.Generic;
-using System.Windows.Input;
 
 namespace WPFFrameworkApp
 {
@@ -26,6 +26,8 @@ namespace WPFFrameworkApp
 
         public MainWindow()
         {
+            LoginWindow loginWindow = new LoginWindow();
+
             InitializeComponent();
             if (TempPath == null) CheckConfigurationIsRight();
 
