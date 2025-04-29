@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace WPFFrameworkApp
 {
@@ -561,7 +562,7 @@ namespace WPFFrameworkApp
         #endregion
 
         #region Unclassified private functions
-        private void listDesktop_Selected(object sender, SelectionChangedEventArgs e)
+        private void listDesktop_Selected(object sender, MouseButtonEventArgs e)
         {
             ListBoxItem item = (ListBoxItem)listDesktop.SelectedItem;
             if (item == null) return;

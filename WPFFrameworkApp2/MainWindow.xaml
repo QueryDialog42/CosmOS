@@ -149,7 +149,7 @@
                 </ScrollViewer>
                 
                 <!--DisplayMode 1-->
-                <ListBox x:Name="listDesktop" BorderThickness="0" Background="Transparent" Visibility="Collapsed" SelectionChanged="listDesktop_Selected">
+                <ListBox x:Name="listDesktop" BorderThickness="0" Background="Transparent" Visibility="Collapsed" PreviewMouseLeftButtonUp="listDesktop_Selected">
                     
                 </ListBox>
 
