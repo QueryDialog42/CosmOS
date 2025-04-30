@@ -5,12 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp2" Icon="/DesktopImages/paperplane2.png"
         xmlns:UserControl="clr-namespace:WPFFrameworkApp2.UserControls"
+        Closing="Window_Closing" WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" Background="DarkGray" ResizeMode="NoResize"
-        Title="LoginWindow" Height="450" Width="400">
+        Title="LoginWindow" Height="520" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="70"/>
             <RowDefinition Height="70"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="50"/>
@@ -21,20 +24,34 @@
                    HorizontalAlignment="Center" Height="160" Width="156"
                Margin="0, 0, 20, 0"
                />
+        <TextBlock Grid.Row="1"
+                   x:Name="time"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="40"
+                   Foreground="LightGray"/>
+        
+        <TextBlock Grid.Row="2"
+                   x:Name="date"
+                   Foreground="Gray"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="15"
+                   />
 
-        <UserControl:TextBoxControls Grid.Row="1"
+        <UserControl:TextBoxControls Grid.Row="3"
                                      HorizontalAlignment="Center"
                                      Width="300"
                                      Height="50"
                                      PlaceHolder="  Username here"/>
-        <UserControl:TextBoxControls Grid.Row="2"
+        <UserControl:TextBoxControls Grid.Row="4"
                                      HorizontalAlignment="Center"
                                      Width="300"
                                      Height="50"
                                      PlaceHolder="  Password here"
         />
 
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -59,7 +76,7 @@
                     Width="110"
                     Click="Button_Click"/>
         </Grid>
-        <TextBlock Grid.Row="4" Foreground="DarkRed" 
+        <TextBlock Grid.Row="6" Foreground="DarkRed" 
            Text="Error massge if you need"
            FontSize="20"
            HorizontalAlignment="Center"

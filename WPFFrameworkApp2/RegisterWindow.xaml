@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp2" Icon="/DesktopImages/paperplane2.png"
         xmlns:UserControl="clr-namespace:WPFFrameworkApp2.UserControls"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" Background="DarkGray" ResizeMode="NoResize"
         Title="RegisterWindow" Height="470" Width="400">
     <Grid>
