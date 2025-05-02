@@ -23,6 +23,44 @@ namespace WPFFrameworkApp
             Show();
         }
 
+        #region Trash creation functions
+        private Button CreateButtonForTrashBacket(string filename)
+        {
+            return new Button()
+            {
+                Width = 80,
+                Height = 80,
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.Transparent,
+                ToolTip = filename,
+            };
+        }
+        private void AddListener(Button app, string trash, string trashname, string[] options, string Image)
+        {
+            app.Click += (sender, e) =>
+            {
+                try
+                {
+                    switch (QueryDialog.ShowQueryDialog(trashname, "Deleted Item Options", options, Image, ImagePaths.FULL_IMG))
+                    {
+                        case 0:
+                            File.Delete(trash); // delete selected
+                            ReloadWindow();
+                            break;
+                        case 1:
+                            RoutineLogics.MoveAnythingWithoutQuery(MainWindow.TrashPath, trashname, Path.Combine(MainWindow.CDesktopPath, trashname)); // rescue selected
+                            ReloadWindow();
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    RoutineLogics.ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, trashname, "\n", ex.Message);
+                }
+            };
+        }
+        #endregion
+
         #region Reload Operation functions
         public void ReloadWindow()
         {
@@ -82,41 +120,15 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region Trash creation functions
-        private Button CreateButtonForTrashBacket(string filename)
+        #region TrashBacket style functions
+        private void SetMenuStyles()
         {
-            return new Button()
-            {
-                Width = 80,
-                Height = 80,
-                Background = Brushes.Transparent,
-                BorderBrush = Brushes.Transparent,
-                ToolTip = filename,
-            };
+            MenuItem[] menuitems = { TItem1, TItem2, TItem3 };
+            RoutineLogics.SetWindowStyles(fileMenu, menuitems);
         }
-        private void AddListener(Button app, string trash, string trashname, string[] options, string Image)
+        private void SetDesktopStyle()
         {
-            app.Click += (sender, e) =>
-            {
-                try
-                {
-                    switch (QueryDialog.ShowQueryDialog(trashname, "Deleted Item Options", options, Image, ImagePaths.FULL_IMG))
-                    {
-                        case 0:
-                            File.Delete(trash); // delete selected
-                            ReloadWindow();
-                            break;
-                        case 1:
-                            RoutineLogics.MoveAnythingWithoutQuery(MainWindow.TrashPath, trashname, Path.Combine(MainWindow.CDesktopPath, trashname)); // rescue selected
-                            ReloadWindow();
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    RoutineLogics.ErrorMessage(Errors.DEL_ERR, Errors.DEL_ERR_MSG, trashname, "\n", ex.Message);
-                }
-            };
+            trashPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0])); ;
         }
         #endregion
 
@@ -157,18 +169,6 @@ namespace WPFFrameworkApp
         private void TrashBacketReload_Wanted(object sender, RoutedEventArgs e)
         {
             ReloadWindow();
-        }
-        #endregion
-
-        #region TrashBacket style functions
-        private void SetMenuStyles()
-        {
-            MenuItem[] menuitems = { TItem1, TItem2, TItem3 };
-            RoutineLogics.SetWindowStyles(fileMenu, menuitems);
-        }
-        private void SetDesktopStyle()
-        {
-            trashPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0])); ;
         }
         #endregion
     }

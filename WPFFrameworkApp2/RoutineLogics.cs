@@ -1382,6 +1382,7 @@ namespace WPFFrameworkApp
         public static void ReloadWindow(MainWindow window, string displayMode)
         {
             if (window == null) return; // If window is null, then no reload needed
+            if (window.Title != MainItems.MAIN_WIN) IsHistoryEnabled = false;
 
             switch (displayMode)
             {

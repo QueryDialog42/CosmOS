@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Windows;
+using WPFFrameworkApp;
 using System.Windows.Threading;
 
 namespace WPFFrameworkApp2
@@ -23,6 +24,7 @@ namespace WPFFrameworkApp2
         {
             timer.Stop();
             timer = null;
+            MainWindow.LoggedIn = true; // temporary, remove after adding database
         }
         #endregion
 
@@ -52,6 +54,17 @@ namespace WPFFrameworkApp2
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // login codes here
+        }
+        #endregion
+
+        #region PasswordBox Placeholder functions
+        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            passwordPlaceholder.Text = string.Empty;
+        }
+        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(passwordBox.Password)) passwordPlaceholder.Text = "Password here";
         }
         #endregion
     }

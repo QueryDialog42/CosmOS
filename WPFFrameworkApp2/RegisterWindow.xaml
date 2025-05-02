@@ -32,7 +32,7 @@
                                  Width="300"
                                  Height="50"
                                  PlaceHolder="  Create A Password"
-    />
+        />
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

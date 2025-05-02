@@ -17,6 +17,7 @@ namespace WPFFrameworkApp
 
         public string currentDesktop; // path to unique desktop
 
+        public static bool LoggedIn = false;
         public static string TempPath; // Temporary path to store currentDesktop path
         public static string TrashPath;
         public static string MusicAppPath;
@@ -26,7 +27,7 @@ namespace WPFFrameworkApp
 
         public MainWindow()
         {
-            LoginWindow loginWindow = new LoginWindow();
+            if (LoggedIn == false) new LoginWindow();
 
             InitializeComponent();
             if (TempPath == null) CheckConfigurationIsRight();
