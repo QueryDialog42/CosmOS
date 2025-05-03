@@ -12,7 +12,6 @@ namespace WPFFrameworkApp
 {
     public partial class MainWindow : Window
     {
-        private readonly SolidColorBrush menufontcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.menuFontColor));
         private DispatcherTimer clocktimer;
 
         public string currentDesktop; // path to unique desktop
@@ -23,7 +22,7 @@ namespace WPFFrameworkApp
         public static string MusicAppPath;
         public static string PicVideoPath;
         public static string CDesktopPath; // C_DESKTOP folder path
-        public static string CDesktopDisplayMode;
+        public static string CDesktopDisplayMode = "0"; // default display mode is 0
 
         public MainWindow()
         {
@@ -61,7 +60,7 @@ namespace WPFFrameworkApp
         private void DeleteComboBoxPlaceHolders(object sender, RoutedEventArgs e)
         {
             searchComboBox.Text = string.Empty;
-            searchComboBox.Foreground = menufontcolor;
+            searchComboBox.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
             searchComboBox.IsTextSearchEnabled = true;
         }
         #endregion
