@@ -128,7 +128,7 @@ namespace WPFFrameworkApp
         }
         private void SetDesktopStyle()
         {
-            trashPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0])); ;
+            trashPanel.Background = RoutineLogics.ConvertHexColor(colors[0]);
         }
         #endregion
 

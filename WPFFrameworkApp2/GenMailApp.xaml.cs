@@ -123,8 +123,8 @@ namespace WPFFrameworkApp
             string[] colorsettings = RoutineLogics.GetColorSettingsFromCcol();
             string[] fontsettings = RoutineLogics.GetFontSettingsFromCfont();
 
-            var desktopColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorsettings[0]));
-            var desktopFontColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1]));
+            var desktopColor = RoutineLogics.ConvertHexColor(colorsettings[0]);
+            var desktopFontColor = RoutineLogics.ConvertHexColor(fontsettings[1]);
             Background = desktopColor;
 
             TextBlock[] textblocks = { GItem1, GItem2, GItem3, GItem4, GItem5, GItem6};

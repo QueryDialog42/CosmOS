@@ -18,40 +18,20 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        #region ColorSettings menuitems functions
-        private void ApplyChanges_Clicked(object sender, RoutedEventArgs e)
+        #region Panel Style functions
+        private void SetStyles()
         {
-            string[] newcolors = new string[4];
-            newcolors[0] = mainDesktopColor.Text;
-            newcolors[1] = folderDesktopColor.Text;
-            newcolors[2] = safariColor.Text;
-            newcolors[3] = menuColor.Text;
-            File.WriteAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL), newcolors);
-            RoutineLogics.ReloadNeededForEveryWindow();
-            Close();
+            MenuItem[] items = { CItem1, CItem2, CItem3 };
+            RoutineLogics.SetWindowStyles(colorMenu, items);
         }
-        private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
+        private void SetFontPreviewStyles()
         {
+            string[] colors = File.ReadAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL));
 
-            if (MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                Close();
-            }
-        }
-        private void RestoreDefaults_Wanted(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Do you really want to restore default settings?", "Restore Defaults", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                mainDesktopColor.Text = Defaults.MAIN_DESK_COl;
-                folderDesktopColor.Text = Defaults.FOL_DESK_COL;
-                safariColor.Text = Defaults.SAFARI_COL;
-                menuColor.Text = Defaults.MENU_COL;
-
-                mainDesktopColor.Foreground = Brushes.Black;
-                folderDesktopColor.Foreground = Brushes.Black;
-                safariColor.Foreground = Brushes.Black;
-                menuColor.Foreground = Brushes.Black;
-            }
+            mainDesktopColor.Text = colors[0];
+            folderDesktopColor.Text = colors[1];
+            safariColor.Text = colors[2];
+            menuColor.Text = colors[3];
         }
         #endregion
 
@@ -86,20 +66,40 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region Panel Style functions
-        private void SetStyles()
+        #region ColorSettings menuitems functions
+        private void ApplyChanges_Clicked(object sender, RoutedEventArgs e)
         {
-            MenuItem[] items = { CItem1, CItem2, CItem3 };
-            RoutineLogics.SetWindowStyles(colorMenu, items);
+            string[] newcolors = new string[4];
+            newcolors[0] = mainDesktopColor.Text;
+            newcolors[1] = folderDesktopColor.Text;
+            newcolors[2] = safariColor.Text;
+            newcolors[3] = menuColor.Text;
+            File.WriteAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL), newcolors);
+            RoutineLogics.ReloadNeededForEveryWindow();
+            Close();
         }
-        private void SetFontPreviewStyles()
+        private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
         {
-            string[] colors = File.ReadAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CCOL));
 
-            mainDesktopColor.Text = colors[0];
-            folderDesktopColor.Text = colors[1];
-            safariColor.Text = colors[2];
-            menuColor.Text = colors[3];
+            if (MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                Close();
+            }
+        }
+        private void RestoreDefaults_Wanted(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Do you really want to restore default settings?", "Restore Defaults", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                mainDesktopColor.Text = Defaults.MAIN_DESK_COL;
+                folderDesktopColor.Text = Defaults.FOL_DESK_COL;
+                safariColor.Text = Defaults.SAFARI_COL;
+                menuColor.Text = Defaults.MENU_COL;
+
+                mainDesktopColor.Foreground = Brushes.Black;
+                folderDesktopColor.Foreground = Brushes.Black;
+                safariColor.Foreground = Brushes.Black;
+                menuColor.Foreground = Brushes.Black;
+            }
         }
         #endregion
     }

@@ -38,39 +38,11 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        #region FontSettings menuitems functions
-        private void ApplyChanges_Clicked(object sender, RoutedEventArgs e)
+        #region MenuStyle functions
+        private void SetStyles()
         {
-            if (string.IsNullOrEmpty(selectedDesktopFont) || string.IsNullOrEmpty(selectedFolderFont) || string.IsNullOrEmpty(selectedMenuFont))
-            {
-                System.Windows.MessageBox.Show("You can not apply emtpy font", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            string[] fontsSettings = new string[15];
-
-            fontsSettings = GetDeskopFontSettings(fontsSettings);
-            fontsSettings = GetFolderFontSettings(fontsSettings);
-            fontsSettings = GetMenuFontSettings(fontsSettings);
-
-            File.WriteAllLines(Path.Combine(configFolder, Configs.CFONT), fontsSettings);
-
-            RoutineLogics.ReloadNeededForEveryWindow();
-            Close();
-        }
-        private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (System.Windows.MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                Close();
-            }
-        }
-        private void RestoreDefaults_Wanted(object sender, RoutedEventArgs e)
-        {
-            if (System.Windows.MessageBox.Show("Do you really want to restore default settings?", "Restore Defaults", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                SetFontSettingsDefaults();
-            }
+            System.Windows.Controls.MenuItem[] items = { FItem1, FItem2, FItem3 };
+            RoutineLogics.SetWindowStyles(fontmenu, items);
         }
         #endregion
 
@@ -111,6 +83,92 @@ namespace WPFFrameworkApp
                     }
 
                 }
+            }
+        }
+        #endregion
+
+        #region Apply settings functions
+        private void ApplyAllFontSettings()
+        {
+            string[] fontsSettings = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
+            ApplyCurrentDesktopFontSettings(fontsSettings);
+            ApplyCurrentFolderFontSettings(fontsSettings);
+            ApplyCurrentMenuFontSettings(fontsSettings);
+        }
+        private void ApplyCurrentDesktopFontSettings(string[] fontsettings)
+        {
+            try
+            {
+                desktopFontPreview.FontFamily = new FontFamily(fontsettings[0]);
+                desktopFontPreview.Foreground = RoutineLogics.ConvertHexColor(fontsettings[1]);
+                desktopFontPreview.FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+                desktopFontPreview.FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+                desktopFontPreview.FontSize = float.Parse(fontsettings[4]);
+                desktopFontPreview.Text = $"{fontsettings[0]}, {fontsettings[4]}pt";
+
+                selectedDesktopFont = fontsettings[0];
+                selectedDesktopFontColor = fontsettings[1];
+                selectedDesktopFontWeight = fontsettings[2];
+                selectedDesktopFontStyle = fontsettings[3];
+                selectedDesktopFontSize = float.Parse(fontsettings[4]);
+
+                RoutineLogics.desktopFontcolor = fontsettings[1];
+
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show("An error occured while configuring desktop font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                SetFontSettingsDefaults();
+            }
+        }
+        private void ApplyCurrentFolderFontSettings(string[] fontsettings)
+        {
+            try
+            {
+                folderFontPreview.FontFamily = new FontFamily(fontsettings[5]);
+                folderFontPreview.Foreground = RoutineLogics.ConvertHexColor(fontsettings[6]);
+                folderFontPreview.FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+                folderFontPreview.FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+                folderFontPreview.FontSize = float.Parse(fontsettings[9]);
+                folderFontPreview.Text = $"{fontsettings[5]}, {fontsettings[9]}pt";
+
+                selectedFolderFont = fontsettings[5];
+                selectedFolderFontColor = fontsettings[6];
+                selectedFolderFontWeight = fontsettings[7];
+                selectedFolderFontStyle = fontsettings[8];
+                selectedFolderFontSize = float.Parse(fontsettings[9]);
+
+                RoutineLogics.folderFontcolor = fontsettings[6];
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show("An error occured while configuring folder font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                SetFontSettingsDefaults();
+            }
+        }
+        private void ApplyCurrentMenuFontSettings(string[] fontsettings)
+        {
+            try
+            {
+                menuFontPreview.FontFamily = new FontFamily(fontsettings[10]);
+                menuFontPreview.Foreground = RoutineLogics.ConvertHexColor(fontsettings[11]);
+                menuFontPreview.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
+                menuFontPreview.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
+                menuFontPreview.FontSize = float.Parse(fontsettings[14]);
+                menuFontPreview.Text = $"{fontsettings[10]}, {fontsettings[14]}pt";
+
+                selectedMenuFont = fontsettings[10];
+                selectedMenuFontColor = fontsettings[11];
+                selectedMenuFontWeight = fontsettings[12];
+                selectedMenuFontStyle = fontsettings[13];
+                selectedMenuFontSize = float.Parse(fontsettings[14]);
+
+                RoutineLogics.menuFontColor = fontsettings[11];
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show("An error occured while configuring menu font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                SetFontSettingsDefaults();
             }
         }
         #endregion
@@ -249,97 +307,39 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region Apply settings functions
-        private void ApplyAllFontSettings()
+        #region FontSettings menuitems functions
+        private void ApplyChanges_Clicked(object sender, RoutedEventArgs e)
         {
-            string[] fontsSettings = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
-            ApplyCurrentDesktopFontSettings(fontsSettings);
-            ApplyCurrentFolderFontSettings(fontsSettings);
-            ApplyCurrentMenuFontSettings(fontsSettings);
-        }
-        private void ApplyCurrentDesktopFontSettings(string[] fontsettings)
-        {
-            try
+            if (string.IsNullOrEmpty(selectedDesktopFont) || string.IsNullOrEmpty(selectedFolderFont) || string.IsNullOrEmpty(selectedMenuFont))
             {
-                desktopFontPreview.FontFamily = new FontFamily(fontsettings[0]);
-                desktopFontPreview.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1]));
-                desktopFontPreview.FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
-                desktopFontPreview.FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
-                desktopFontPreview.FontSize = float.Parse(fontsettings[4]);
-                desktopFontPreview.Text = $"{fontsettings[0]}, {fontsettings[4]}pt";
-
-                selectedDesktopFont = fontsettings[0];
-                selectedDesktopFontColor = fontsettings[1];
-                selectedDesktopFontWeight = fontsettings[2];
-                selectedDesktopFontStyle = fontsettings[3];
-                selectedDesktopFontSize = float.Parse(fontsettings[4]);
-
-                RoutineLogics.desktopFontcolor = fontsettings[1];
-
+                System.Windows.MessageBox.Show("You can not apply emtpy font", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            catch (Exception)
+
+            string[] fontsSettings = new string[15];
+
+            fontsSettings = GetDeskopFontSettings(fontsSettings);
+            fontsSettings = GetFolderFontSettings(fontsSettings);
+            fontsSettings = GetMenuFontSettings(fontsSettings);
+
+            File.WriteAllLines(Path.Combine(configFolder, Configs.CFONT), fontsSettings);
+
+            RoutineLogics.ReloadNeededForEveryWindow();
+            Close();
+        }
+        private void CancelChanges_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (System.Windows.MessageBox.Show("Are you sure to quit without saving?", "Cancel Changes", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                System.Windows.MessageBox.Show("An error occured while configuring desktop font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Close();
+            }
+        }
+        private void RestoreDefaults_Wanted(object sender, RoutedEventArgs e)
+        {
+            if (System.Windows.MessageBox.Show("Do you really want to restore default settings?", "Restore Defaults", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
                 SetFontSettingsDefaults();
             }
-        }
-        private void ApplyCurrentFolderFontSettings(string[] fontsettings)
-        {
-            try
-            {
-                folderFontPreview.FontFamily = new FontFamily(fontsettings[5]);
-                folderFontPreview.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6]));
-                folderFontPreview.FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
-                folderFontPreview.FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
-                folderFontPreview.FontSize = float.Parse(fontsettings[9]);
-                folderFontPreview.Text = $"{fontsettings[5]}, {fontsettings[9]}pt";
-
-                selectedFolderFont = fontsettings[5];
-                selectedFolderFontColor = fontsettings[6];
-                selectedFolderFontWeight = fontsettings[7];
-                selectedFolderFontStyle = fontsettings[8];
-                selectedFolderFontSize = float.Parse(fontsettings[9]);
-
-                RoutineLogics.folderFontcolor = fontsettings[6];
-            }
-            catch (Exception)
-            {
-                System.Windows.MessageBox.Show("An error occured while configuring folder font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                SetFontSettingsDefaults();
-            }
-        }
-        private void ApplyCurrentMenuFontSettings(string[] fontsettings)
-        {
-            try
-            {
-                menuFontPreview.FontFamily = new FontFamily(fontsettings[10]);
-                menuFontPreview.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[11]));
-                menuFontPreview.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
-                menuFontPreview.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
-                menuFontPreview.FontSize = float.Parse(fontsettings[14]);
-                menuFontPreview.Text = $"{fontsettings[10]}, {fontsettings[14]}pt";
-
-                selectedMenuFont = fontsettings[10];
-                selectedMenuFontColor = fontsettings[11];
-                selectedMenuFontWeight = fontsettings[12];
-                selectedMenuFontStyle = fontsettings[13];
-                selectedMenuFontSize = float.Parse(fontsettings[14]);
-
-                RoutineLogics.menuFontColor = fontsettings[11];
-            }
-            catch (Exception)
-            {
-                System.Windows.MessageBox.Show("An error occured while configuring menu font settings.\nDefault font settings will be used.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                SetFontSettingsDefaults();
-            }
-        }
-        #endregion
-
-        #region MenuStyle functions
-        private void SetStyles()
-        {
-            System.Windows.Controls.MenuItem[] items = { FItem1, FItem2, FItem3 };
-            RoutineLogics.SetWindowStyles(fontmenu, items);
         }
         #endregion
     }

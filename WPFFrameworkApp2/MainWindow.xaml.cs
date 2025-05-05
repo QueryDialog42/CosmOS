@@ -60,7 +60,7 @@ namespace WPFFrameworkApp
         private void DeleteComboBoxPlaceHolders(object sender, RoutedEventArgs e)
         {
             searchComboBox.Text = string.Empty;
-            searchComboBox.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(RoutineLogics.GetColorSettingsFromCcol()[3]));
+            searchComboBox.Foreground = RoutineLogics.ConvertHexColor(RoutineLogics.GetFontSettingsFromCfont()[11]);
             searchComboBox.IsTextSearchEnabled = true;
         }
         #endregion
@@ -261,7 +261,7 @@ namespace WPFFrameworkApp
         }
         private void CreateColorConfig(StreamWriter writer)
         {
-            writer.WriteLineAsync(Defaults.MAIN_DESK_COl);
+            writer.WriteLineAsync(Defaults.MAIN_DESK_COL);
             writer.WriteLineAsync(Defaults.FOL_DESK_COL);
             writer.WriteLineAsync(Defaults.SAFARI_COL);
             writer.WriteLineAsync(Defaults.MENU_COL);

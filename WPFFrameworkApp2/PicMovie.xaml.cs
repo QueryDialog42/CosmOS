@@ -16,7 +16,6 @@ namespace WPFFrameworkApp
         public MainWindow window;
         public string desktopPath;
         private string picVideoFilter = $"PNG files (*{SupportedFiles.PNG})|*{SupportedFiles.PNG}|JPG files (*{SupportedFiles.JPG})|*{SupportedFiles.JPG}|MP4 files (*{SupportedFiles.MP4})|*{SupportedFiles.MP4}";
-        private string[] fontsettings = RoutineLogics.GetFontSettingsFromCfont();
         public PicMovie()
         {
             InitializeComponent();

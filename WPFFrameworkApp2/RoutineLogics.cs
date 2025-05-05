@@ -29,13 +29,11 @@ namespace WPFFrameworkApp
         public static void SetWindowStyles(dynamic menu, dynamic[] menuitems)
         {
             string[] fontsettings = GetFontSettingsFromCfont();
-            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
             SetSettingsForAllMenu(menu, fontsettings);
 
             foreach (var item in menuitems)
             {
-                item.Background = menucolor;
-                item.BorderThickness = new Thickness(0);
+                SetSettingsForAllMenu(item, fontsettings);
             }
         }
         #endregion
@@ -332,7 +330,7 @@ namespace WPFFrameworkApp
             return new MenuItem
             {
                 Header = header,
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color)),
+                Background = ConvertHexColor(color),
                 BorderThickness = new Thickness(0),
                 Icon = new Image
                 {
@@ -543,10 +541,10 @@ namespace WPFFrameworkApp
         #region SetSettings functions
         public static void SetSettingsForAllMenu(dynamic menu, string[] fontsettings)
         {
-            menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[3]));
+            menu.Background = ConvertHexColor(GetColorSettingsFromCcol()[3]);
             menu.BorderThickness = new Thickness(0);
             menu.FontFamily = new FontFamily(fontsettings[10]);
-            menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[11]));
+            menu.Foreground = ConvertHexColor(fontsettings[11]);
             menu.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
             menu.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
             menu.FontSize = Convert.ToDouble(fontsettings[14]);
@@ -561,7 +559,7 @@ namespace WPFFrameworkApp
                 SetMenuFontSettings(window, fonts);
                 SetHistorySettings(window);
 
-                window.clockTime.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fonts[11]));
+                window.clockTime.Foreground = ConvertHexColor(fonts[11]);
             }
             catch (Exception)
             {
@@ -576,24 +574,24 @@ namespace WPFFrameworkApp
         }
         private static void SetDefaultsForBackgroundColor(MainWindow window)
         {
-            window.desktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MAIN_DESK_COl));
-            window.folderdesktop.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FOL_DESK_COL));
-            window.safari.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.SAFARI_COL));
-            window.trashApp.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.SAFARI_COL));
-            window.menu.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.MENU_COL));
+            window.desktop.Background = ConvertHexColor(Defaults.MAIN_DESK_COL);
+            window.folderdesktop.Background = ConvertHexColor(Defaults.FOL_DESK_COL);
+            window.safari.Background = ConvertHexColor(Defaults.SAFARI_COL);
+            window.trashApp.Background = ConvertHexColor(Defaults.SAFARI_COL);
+            window.menu.Background = ConvertHexColor(Defaults.MENU_COL);
         }
         private static void SetDefaultForFonts(MainWindow window)
         {
             window.FontFamily = new FontFamily(Defaults.FONT);
             window.menu.FontFamily = new FontFamily(Defaults.FONT);
-            window.menu.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Defaults.FONT_COL));
+            window.menu.Foreground = ConvertHexColor(Defaults.FONT_COL);
             window.FontWeight = FontWeights.Regular;
             window.FontStyle = FontStyles.Normal;
             window.FontSize = float.Parse(Defaults.FONT_SIZE);
         }
         private static void SetSettingsDefault()
         {
-            string[] colors = { Defaults.MAIN_DESK_COl, Defaults.FOL_DESK_COL, Defaults.SAFARI_COL, Defaults.MENU_COL };
+            string[] colors = { Defaults.MAIN_DESK_COL, Defaults.FOL_DESK_COL, Defaults.SAFARI_COL, Defaults.MENU_COL };
             string[] fonts = { Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE,
                                Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE,
                                Defaults.FONT, Defaults.FONT_COL, Defaults.FONT_WEIGHT, Defaults.FONT_STYLE, Defaults.FONT_SIZE};
@@ -636,10 +634,10 @@ namespace WPFFrameworkApp
         }
         private static void SetBackgroundSettings(MainWindow window, string[] colors)
         {
-            SolidColorBrush menucolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3]));
-            SolidColorBrush safaricolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2]));
-            SolidColorBrush folderdesktopcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
-            var maindesktopcolor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+            SolidColorBrush menucolor = ConvertHexColor(colors[3]);
+            SolidColorBrush safaricolor = ConvertHexColor(colors[2]);
+            SolidColorBrush folderdesktopcolor = ConvertHexColor(colors[1]);
+            var maindesktopcolor = ConvertHexColor(colors[0]);
 
             window.Background = maindesktopcolor;
             window.desktop.Background = Brushes.Transparent;
@@ -719,14 +717,14 @@ namespace WPFFrameworkApp
             {
                 case 0:
                     item.FontFamily = new FontFamily(fontsettings[0]);
-                    item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1]));
+                    item.Foreground = ConvertHexColor(fontsettings[1]);
                     item.FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
                     item.FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
                     item.FontSize = Convert.ToDouble(fontsettings[4]);
                     break;
                 case 1:
                     item.FontFamily = new FontFamily(fontsettings[5]);
-                    item.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6]));
+                    item.Foreground = ConvertHexColor(fontsettings[6]);
                     item.FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
                     item.FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
                     item.FontSize = Convert.ToDouble(fontsettings[9]);
@@ -871,7 +869,7 @@ namespace WPFFrameworkApp
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Text = filename,
                 FontFamily = new FontFamily(fontsettings[0]),
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[1])),
+                Foreground = ConvertHexColor(fontsettings[1]),
                 FontWeight = fontsettings[2] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
                 FontStyle = fontsettings[3] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
                 FontSize = float.Parse(fontsettings[4])
@@ -884,7 +882,7 @@ namespace WPFFrameworkApp
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Text = filename,
                 FontFamily = new FontFamily(fontsettings[5]),
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(fontsettings[6])),
+                Foreground = ConvertHexColor(fontsettings[6]),
                 FontWeight = fontsettings[7] == "Bold" ? FontWeights.Bold : FontWeights.Regular,
                 FontStyle = fontsettings[8] == "Italic" ? FontStyles.Italic : FontStyles.Normal,
                 FontSize = float.Parse(fontsettings[9])
@@ -1093,157 +1091,7 @@ namespace WPFFrameworkApp
 
             app.Click += (sender, e) => AddFolderListener(filepath);
         }
-        private static void CreateTextItem(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, ImagePaths.TXT_IMG);
-        }
-        private static void CreateRTFItem(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, ImagePaths.RTF_IMG);
-        }
-        private static void CreateWAVItem(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, ImagePaths.WAV_IMG);
-        }
-        private static void CreateMP3Item(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, ImagePaths.MP3_IMG);
-        }
-        private static void CreateEXEItem(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.EXE_IMG, ImagePaths.DELEXE_IMG, ImagePaths.EXE_IMG);
-        }
-        private static void CreatePNGItem(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, ImagePaths.PNG_IMG);
-        }
-        private static void CreateJPGItem(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, ImagePaths.JPG_IMG);
-        }
-        private static void CreateMP4Item(MainWindow window, string filepath)
-        {
-            CompleteItem(window, filepath, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, ImagePaths.MP4_IMG);
-        } 
-        private static ListBoxItem ReturnNewFileItem(string filepath, string imagepath)
-        {
-            var fileinfo = new FileInfo(filepath);
 
-            var image = new Image
-            {
-                Source = setBitmapImage(imagepath),
-                VerticalAlignment = VerticalAlignment.Center,
-                Height = 30
-            };
-
-            var filename = new TextBlock
-            {
-                Text = "   " + fileinfo.Name,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 180
-            };
-
-            var filelength = new TextBlock
-            {
-                Text = $"{fileinfo.Length / 1024} KB",
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 150
-            };
-
-            var lastModified = new TextBlock
-            {
-                Text = fileinfo.LastWriteTime.ToString(),
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 150
-            };
-
-            string[] fontsettings = GetFontSettingsFromCfont();
-            SetItemFontStylesFor(filename, fontsettings, 0);
-            SetItemFontStylesFor(filelength, fontsettings, 0);
-            SetItemFontStylesFor(lastModified, fontsettings, 0);
-
-            var stackpanel = new StackPanel
-            {
-                Orientation = Orientation.Horizontal
-            };
-
-            stackpanel.Children.Add(image);
-            stackpanel.Children.Add(filename);
-            stackpanel.Children.Add(filelength);
-            stackpanel.Children.Add(lastModified);
-
-            ListBoxItem fileitem = new ListBoxItem
-            {
-                Content = stackpanel,
-                Tag = filepath
-            };
-            return fileitem;
-        }
-        private static void ReturnNewFolderItem(MainWindow window, string filepath)
-        {
-            var folderinfo = new DirectoryInfo(filepath);
-
-            var image = new Image
-            {
-                Source = setBitmapImage(ImagePaths.FOLDER_IMG),
-                VerticalAlignment = VerticalAlignment.Center,
-                Height = 30
-            };
-
-            var foldername = new TextBlock
-            {
-                Text = "  " + folderinfo.Name,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 180
-            };
-
-            var whenCreated = new TextBlock
-            {
-                Text = folderinfo.CreationTimeUtc.ToString(),
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 150
-            };
-
-            var lastAcces = new TextBlock
-            {
-                Text = folderinfo.LastAccessTimeUtc.ToString(),
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 150
-            };
-
-            string[] fontsettings = GetFontSettingsFromCfont();
-            SetItemFontStylesFor(foldername, fontsettings, 1);
-            SetItemFontStylesFor(whenCreated, fontsettings, 1);
-            SetItemFontStylesFor(lastAcces, fontsettings, 1);
-
-            var stackpanel = new StackPanel
-            {
-                Orientation = Orientation.Horizontal
-            };
-
-            stackpanel.Children.Add(image);
-            stackpanel.Children.Add(foldername);
-            stackpanel.Children.Add(whenCreated);
-            stackpanel.Children.Add(lastAcces);
-
-            ListBoxItem folderitem = new ListBoxItem
-            {
-                BorderThickness = new Thickness(0),
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(GetColorSettingsFromCcol()[1])),
-                Content = stackpanel,
-                Tag = filepath
-            };
-
-            folderitem.ContextMenu = SetShortKeyOptionsForFolders(window, Path.GetFileName(filepath));
-            window.listDesktop.Items.Add(folderitem);
-        }
-        private static void CompleteItem(MainWindow window, string filepath, string copyicon, string deleteicon, string imageicon)
-        {
-            var fileitem = ReturnNewFileItem(filepath, imageicon);
-
-            fileitem.ContextMenu = SetShortKeyOptions(window, copyicon, deleteicon, filepath, imageicon);
-            window.listDesktop.Items.Add(fileitem);
-        }
         #endregion
 
         #region App Listener functions
@@ -1660,6 +1508,160 @@ namespace WPFFrameworkApp
         }
         #endregion
 
+        #region Item App Creation functions
+        private static void CreateTextItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, ImagePaths.TXT_IMG);
+        }
+        private static void CreateRTFItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.NCOPY_IMG, ImagePaths.NDEL_IMG, ImagePaths.RTF_IMG);
+        }
+        private static void CreateWAVItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, ImagePaths.WAV_IMG);
+        }
+        private static void CreateMP3Item(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.SCOPY_IMG, ImagePaths.SDEL_IMG, ImagePaths.MP3_IMG);
+        }
+        private static void CreateEXEItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.EXE_IMG, ImagePaths.DELEXE_IMG, ImagePaths.EXE_IMG);
+        }
+        private static void CreatePNGItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, ImagePaths.PNG_IMG);
+        }
+        private static void CreateJPGItem(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.COPYPIC, ImagePaths.DELPNG_IMG, ImagePaths.JPG_IMG);
+        }
+        private static void CreateMP4Item(MainWindow window, string filepath)
+        {
+            CompleteItem(window, filepath, ImagePaths.COPYMP4_IMG, ImagePaths.DELMP4_IMG, ImagePaths.MP4_IMG);
+        }
+        private static ListBoxItem ReturnNewFileItem(string filepath, string imagepath)
+        {
+            var fileinfo = new FileInfo(filepath);
+
+            var image = new Image
+            {
+                Source = setBitmapImage(imagepath),
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 30
+            };
+
+            var filename = new TextBlock
+            {
+                Text = "   " + fileinfo.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 180
+            };
+
+            var filelength = new TextBlock
+            {
+                Text = $"{fileinfo.Length / 1024} KB",
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            var lastModified = new TextBlock
+            {
+                Text = fileinfo.LastWriteTime.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            string[] fontsettings = GetFontSettingsFromCfont();
+            SetItemFontStylesFor(filename, fontsettings, 0);
+            SetItemFontStylesFor(filelength, fontsettings, 0);
+            SetItemFontStylesFor(lastModified, fontsettings, 0);
+
+            var stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(filename);
+            stackpanel.Children.Add(filelength);
+            stackpanel.Children.Add(lastModified);
+
+            ListBoxItem fileitem = new ListBoxItem
+            {
+                Content = stackpanel,
+                Tag = filepath
+            };
+            return fileitem;
+        }
+        private static void ReturnNewFolderItem(MainWindow window, string filepath)
+        {
+            var folderinfo = new DirectoryInfo(filepath);
+
+            var image = new Image
+            {
+                Source = setBitmapImage(ImagePaths.FOLDER_IMG),
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 30
+            };
+
+            var foldername = new TextBlock
+            {
+                Text = "  " + folderinfo.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 180
+            };
+
+            var whenCreated = new TextBlock
+            {
+                Text = folderinfo.CreationTimeUtc.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            var lastAcces = new TextBlock
+            {
+                Text = folderinfo.LastAccessTimeUtc.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 150
+            };
+
+            string[] fontsettings = GetFontSettingsFromCfont();
+            SetItemFontStylesFor(foldername, fontsettings, 1);
+            SetItemFontStylesFor(whenCreated, fontsettings, 1);
+            SetItemFontStylesFor(lastAcces, fontsettings, 1);
+
+            var stackpanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(foldername);
+            stackpanel.Children.Add(whenCreated);
+            stackpanel.Children.Add(lastAcces);
+
+            ListBoxItem folderitem = new ListBoxItem
+            {
+                BorderThickness = new Thickness(0),
+                Background = ConvertHexColor(GetColorSettingsFromCcol()[1]),
+                Content = stackpanel,
+                Tag = filepath
+            };
+
+            folderitem.ContextMenu = SetShortKeyOptionsForFolders(window, Path.GetFileName(filepath));
+            window.listDesktop.Items.Add(folderitem);
+        }
+        private static void CompleteItem(MainWindow window, string filepath, string copyicon, string deleteicon, string imageicon)
+        {
+            var fileitem = ReturnNewFileItem(filepath, imageicon);
+
+            fileitem.ContextMenu = SetShortKeyOptions(window, copyicon, deleteicon, filepath, imageicon);
+            window.listDesktop.Items.Add(fileitem);
+        }
+        #endregion
+
         #region Unclassified public functions
         public static void ErrorMessage(string errtitle, params string[] errmessage)
         {
@@ -1687,6 +1689,10 @@ namespace WPFFrameworkApp
             int seconds = (int)(totaltime % 60);
 
             return string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+        public static SolidColorBrush ConvertHexColor(string hexcolor)
+        {
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(hexcolor));
         }
         #endregion
 
