@@ -24,6 +24,7 @@ namespace WPFFrameworkApp
             inputdialog.ImageIcon.Source = new BitmapImage(new Uri(ImagePath, UriKind.RelativeOrAbsolute));
             inputdialog.OKButton.Content = OKOption;
             inputdialog.CancelButton.Content = CancelOption;
+            inputdialog.Input.Width = double.NaN; // Auto width
             inputdialog.ShowDialog();
             return inputdialog.UserInput;
         }

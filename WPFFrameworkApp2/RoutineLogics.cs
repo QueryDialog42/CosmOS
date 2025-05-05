@@ -528,12 +528,19 @@ namespace WPFFrameworkApp
         }
         private static string GetFontColor(string[] fontcolor, short which)
         {
-            switch (which)
+            try
             {
-                case 0: return fontcolor[1]; // desktop font color
-                case 1: return fontcolor[6]; // folder font color
-                case 2: return fontcolor[11]; // menu font color
-                default: return null;
+                switch (which)
+                {
+                    case 0: return fontcolor[1]; // desktop font color
+                    case 1: return fontcolor[6]; // folder font color
+                    case 2: return fontcolor[11]; // menu font color
+                    default: return null;
+                }
+            } catch (IndexOutOfRangeException)
+            {
+                return null;
+                // do nothing
             }
         }
         #endregion
@@ -551,10 +558,11 @@ namespace WPFFrameworkApp
         }
         private static void SetWindowSettings(MainWindow window)
         {
-            string[] colors = File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
-            string[] fonts = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
             try
             {
+                string[] colors = File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
+                string[] fonts = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
+
                 SetBackgroundSettings(window, colors);
                 SetMenuFontSettings(window, fonts);
                 SetHistorySettings(window);

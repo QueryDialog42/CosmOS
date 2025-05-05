@@ -170,13 +170,16 @@ namespace WPFFrameworkApp
         #region Configuration functions
         private string ConfigurePath(string CDesktopFile)
         {
-            string input = InputDialog.ShowInputDialog("Please enter " + Configs.CDESK + " path", "Path Needed");
+            string input = InputDialog.ShowInputDialog("  Please enter " + Configs.CDESK + " path\n\n" +
+                "  What is C_DESKTOP?\n\n  C_DESKTOP is a folder that contains\n  your folders, musics, videos etc. and the base of GencOS.\n" +
+                "  You have to create one folder named C_DESKTOP regardless of where it is\n  and paste the path of this folder to the given blank in order to continue.\n" +
+                "  Other configurations (such as creating C_CONFIGS folder)\n  will be automatically completed.", "Path Needed");
             //Resumes until valid path is entered
             while (true)
             {
                 if (InputDialog.Result == true)
                 {
-                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nIf {Configs.CDESK} folder does not exists, create one\nand enter the path of the folder", "Invalid path", ImagePaths.WRNG_IMG);
+                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nCheck if the folder is named correctly.\n(Folder should be named as C_DESKTOP)", "Invalid path", ImagePaths.WRNG_IMG);
                     else if (Directory.Exists(input) == false) input = InputDialog.ShowInputDialog($"Path to {Configs.CDESK} does not exists.\nPlease check if the path is correct.", "Incorrect path", ImagePaths.WRNG_IMG);
                     else
                     {
@@ -332,7 +335,6 @@ namespace WPFFrameworkApp
             {
                 string[] lines = File.ReadAllLines(CDesktopFile);
                 TempPath = lines[0];
-                CDesktopDisplayMode = lines[1];
 
                 if (Directory.Exists(TempPath) == false)
                 {
@@ -341,6 +343,11 @@ namespace WPFFrameworkApp
                         TempPath = ConfigurePath(CDesktopFile);
                     }
                     else Environment.Exit(0);
+                }
+                else if (lines.Length < 2)
+                {
+                    string[] newlines = {TempPath, "0"};
+                    File.WriteAllLines(CDesktopFile, newlines);
                 }
                 else CheckHiddenFolders(TempPath);
             }
