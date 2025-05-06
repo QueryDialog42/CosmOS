@@ -216,7 +216,9 @@ namespace WPFFrameworkApp
             try
             {
                 currentDesktop = TempPath.Trim();
-                CDesktopPath = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH))[0].Trim();
+                string[] CDesktopFilelines = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH));
+                CDesktopPath = CDesktopFilelines[0].Trim();
+                CDesktopDisplayMode = CDesktopFilelines[1].Trim();
                 MusicAppPath = Path.Combine(CDesktopPath, HiddenFolders.HAUD_FOL);
                 PicVideoPath = Path.Combine(CDesktopPath, HiddenFolders.HPV_FOL);
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);

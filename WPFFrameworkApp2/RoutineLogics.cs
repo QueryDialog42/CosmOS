@@ -1811,6 +1811,7 @@ namespace WPFFrameworkApp
                 window.expander.Visibility = Visibility.Visible;
 
                 Grid grid = (Grid)window.gridSplitter.Parent;
+                grid.ColumnDefinitions[1].Width = new GridLength(5);
                 grid.ColumnDefinitions[2].Width = GridLength.Auto;
             }
             else if (mode == "1")
@@ -1820,8 +1821,10 @@ namespace WPFFrameworkApp
                 window.desktop.Visibility= Visibility.Collapsed;
                 window.folderdesktop.Visibility= Visibility.Collapsed;
                 window.expander.Visibility = Visibility.Collapsed;
+                window.gridSplitter.Visibility = Visibility.Collapsed;
 
                 Grid grid = (Grid)window.gridSplitter.Parent;
+                grid.ColumnDefinitions[1].Width = new GridLength(0);
                 grid.ColumnDefinitions[2].Width = new GridLength(0);
 
                 window.listDesktop.Visibility= Visibility.Visible;
