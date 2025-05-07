@@ -24,6 +24,8 @@ namespace WPFFrameworkApp
         public static string CDesktopPath; // C_DESKTOP folder path
         public static string CDesktopDisplayMode = "0"; // default display mode is 0
 
+        public bool IsHistoryEnabled = true;
+
         public MainWindow()
         {
             if (LoggedIn == false) new LoginWindow();
@@ -224,7 +226,8 @@ namespace WPFFrameworkApp
                 TrashPath = Path.Combine(CDesktopPath, HiddenFolders.HTRSH_FOL);
 
                 SetTimeLogics();
-                SetHistoryListenerAndDesktopDisplay();
+                SetDisplaySetting();
+                SetHistorySettingsButton();
 
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
             }
@@ -381,20 +384,29 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region History Settings functions
-        private void SetHistoryListenerAndDesktopDisplay()
+        #region SearchBox menuitem functions
+        private void ClearHistory_Wanted(object sender, RoutedEventArgs e)
+        {
+            historyList.Items.Clear();
+        }
+        #endregion
+
+        #region History And Display functions
+        private void SetHistorySettingsButton()
         {
             enableButton.Checked += (sender, e) =>
             {
-                RoutineLogics.IsHistoryEnabled = true;
+                IsHistoryEnabled = true;
                 RoutineLogics.MainWindowManuallyReloadNeeded(this);
             };
             disableButton.Checked += (sender, e) =>
             {
-                RoutineLogics.IsHistoryEnabled = false;
+                IsHistoryEnabled = false;
                 RoutineLogics.MainWindowManuallyReloadNeeded(this);
             };
-
+        }
+        private void SetDisplaySetting()
+        {
             string mode = File.ReadAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CPATH))[1].Trim();
             switch (mode)
             {
@@ -407,15 +419,8 @@ namespace WPFFrameworkApp
                     lineMode.Checked -= DisplayMode_One_Checked;
                     lineMode.IsChecked = true;
                     lineMode.Checked += DisplayMode_One_Checked;
-                    break;  
+                    break;
             }
-        }
-        #endregion
-
-        #region SearchBox menuitem functions
-        private void ClearHistory_Wanted(object sender, RoutedEventArgs e)
-        {
-            historyList.Items.Clear();
         }
         #endregion
 

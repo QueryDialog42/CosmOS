@@ -23,8 +23,6 @@ namespace WPFFrameworkApp
         public static string folderFontcolor = GetFontColor(fontcolor, 1);
         public static string desktopFontcolor = GetFontColor(fontcolor, 0);
 
-        public static bool IsHistoryEnabled = true;
-
         #region Style functions
         public static void SetWindowStyles(dynamic menu, dynamic[] menuitems)
         {
@@ -437,8 +435,6 @@ namespace WPFFrameworkApp
         #region Add History functions
         public static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
         {
-            if (IsHistoryEnabled == false) return;
-
             Image image = new()
             {
                 Source = setBitmapImage(imagepath),
@@ -486,15 +482,17 @@ namespace WPFFrameworkApp
 
             historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, window.currentDesktop, filepath);
 
-            foreach (ListBoxItem item in window.historyList.Items)
+            MainWindow gencosmain = GetMainWindow(MainWindow.CDesktopPath);
+
+            foreach (ListBoxItem item in gencosmain.historyList.Items)
             {
                 if (item?.Tag?.ToString() == filepath)
                 {
-                    window?.historyList?.Items?.Remove(item);
+                    gencosmain?.historyList?.Items?.Remove(item);
                     break;
                 }
             }
-            window?.historyList?.Items?.Insert(0, historyitem);
+            gencosmain?.historyList?.Items?.Insert(0, historyitem);
         }
         private static ContextMenu CreateContextMenuForHistoryItems(MainWindow window, ListBoxItem historyitem)
         {
@@ -609,7 +607,7 @@ namespace WPFFrameworkApp
         }
         private static void SetHistorySettings(MainWindow window)
         {
-            if (IsHistoryEnabled)
+            if (window.IsHistoryEnabled)
             {
                 Grid.SetRowSpan(window.listDesktop, 1);
 
@@ -1238,7 +1236,7 @@ namespace WPFFrameworkApp
         public static void ReloadWindow(MainWindow window, string displayMode)
         {
             if (window == null) return; // If window is null, then no reload needed
-            if (window.Title != MainItems.MAIN_WIN) IsHistoryEnabled = false;
+            if (window.Title != MainItems.MAIN_WIN) window.IsHistoryEnabled = false;
 
             switch (displayMode)
             {
