@@ -37,8 +37,8 @@ namespace WPFFrameworkApp2.UserControls
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(textbox.Text)) textblock.Visibility = Visibility.Visible;
-            else textblock.Visibility = Visibility.Hidden;
+            if (string.IsNullOrEmpty(usertextbox.Text)) usertextblock.Visibility = Visibility.Visible;
+            else usertextblock.Visibility = Visibility.Hidden;
         }
     }
 }

@@ -90,7 +90,7 @@ namespace WPFFrameworkApp
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             if (Title == MainItems.MAIN_WIN) Application.Current.Shutdown();
-            clocktimer.Stop();
+            clocktimer?.Stop();
             clocktimer = null;
         }
         #endregion

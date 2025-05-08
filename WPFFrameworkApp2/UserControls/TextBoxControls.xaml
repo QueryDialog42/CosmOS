@@ -7,8 +7,8 @@
              mc:Ignorable="d"
              d:DesignHeight="80" d:DesignWidth="400">
     <Grid Background="LightGray" >
-        <TextBlock x:Name="textblock" Text="{Binding PlaceHolder}" Foreground="Gray" VerticalAlignment="Center" FontSize="20"/>
-        <TextBox x:Name="textbox" Background="Transparent"
+        <TextBlock x:Name="usertextblock" Text="{Binding PlaceHolder}" Foreground="Gray" VerticalAlignment="Center" FontSize="20"/>
+        <TextBox x:Name="usertextbox" Background="Transparent"
                  VerticalContentAlignment="Center"
                  FontSize="20"
                  TextChanged="TextBox_TextChanged"/>

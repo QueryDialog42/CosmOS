@@ -40,6 +40,7 @@
                    />
 
         <UserControl:TextBoxControls Grid.Row="3"
+                                     x:Name="usernamebox"
                                      HorizontalAlignment="Center"
                                      Width="300"
                                      Height="50"

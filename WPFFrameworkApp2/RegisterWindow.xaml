@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WPFFrameworkApp2" Icon="/DesktopImages/paperplane2.png"
         xmlns:UserControl="clr-namespace:WPFFrameworkApp2.UserControls"
         WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing"
         mc:Ignorable="d" Background="DarkGray" ResizeMode="NoResize"
         Title="RegisterWindow" Height="470" Width="400">
     <Grid>
@@ -22,11 +23,13 @@
            />
 
         <UserControl:TextBoxControls Grid.Row="1"
+                                     x:Name="usernamebox"
                                  HorizontalAlignment="Center"
                                  Width="300"
                                  Height="50"
                                  PlaceHolder="  Create An Username"/>
         <UserControl:TextBoxControls Grid.Row="2"
+                                     x:Name="passwordbox"
                                  HorizontalAlignment="Center"
                                      VerticalAlignment="Top"
                                  Width="300"
