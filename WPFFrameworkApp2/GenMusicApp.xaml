@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Background="#424242" Icon="/DesktopImages/genmusic32x32.png"
+        mc:Ignorable="d" Background="#424242" Icon="SystemSources/DesktopImages/genmusic32x32.png"
         Title="GenMusic" Height="340" Width="460">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,40 +22,40 @@
             <MenuItem x:Name="AudioItem" Header="_Audio" Background="#2b2b2b" Width="50" Height="20">
                 <MenuItem x:Name="AItem1" Header="_Add Audio" Background="#2b2b2b" Click="AddAudio" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/MusicImages/soundadd.png" />
+                        <Image Source="SystemSources/MusicImages/soundadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem  x:Name="AItem2" Header="_Move Audio" Background="#2b2b2b" Click="MoveAudio" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/move.png" />
+                        <Image Source="SystemSources/NoteImages/move.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="AItem3" Header="_Copy Audio" Background="#2b2b2b" Click="CopyAudio" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/MusicImages/soundbutcopy.png" />
+                        <Image Source="SystemSources/MusicImages/soundbutcopy.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="AItem4" Header="_Delete Audio" Background="#2b2b2b" Click="DeleteAudio" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/MusicImages/sounddelete.png" />
+                        <Image Source="SystemSources/MusicImages/sounddelete.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="AItem5" Header="_Reload GenMusic" Background="#2b2b2b" Click="ReloadWindow_Wanted" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/refresh.png" />
+                        <Image Source="SystemSources/DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem x:Name="AItem6" Header="About GenMusic" Background="#2b2b2b" Click="AboutGenmusicPage_Wanted" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/genmusic32x32.png" />
+                        <Image Source="SystemSources/DesktopImages/genmusic32x32.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
         </Menu>
         <ListBox x:Name="listbox" Grid.Row="1" Grid.Column="0" Background="Black" BorderThickness="0" Foreground="White" Grid.RowSpan="4" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged"/>
         <StackPanel x:Name="currentPanel" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Background="#3d2e26">
-            <Image Source="DesktopImages/Genmusic.png" Width="120" VerticalAlignment="Top"/>
+            <Image Source="SystemSources/DesktopImages/Genmusic.png" Width="120" VerticalAlignment="Top"/>
             <TextBlock x:Name="currentMusic" Foreground="White" FontWeight="Bold" Margin="0, 15, 0, 0"  HorizontalAlignment="Center"/>
         </StackPanel>
         <StackPanel x:Name="musicSliderPanel" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
@@ -73,7 +73,7 @@
         </StackPanel>
         <Button x:Name="reloadNeeded" Grid.Row="3" Grid.ColumnSpan="2" Width="180" HorizontalAlignment="Center" Visibility="Collapsed" Background="#262626" BorderThickness="0" Foreground="white" Click="ReloadDesktopNeeded">
             <StackPanel Orientation="Horizontal">
-                <Image  Source="/DesktopImages/refresh.png" Width="20" VerticalAlignment="Center"/>
+                <Image  Source="SystemSources/DesktopImages/refresh.png" Width="20" VerticalAlignment="Center"/>
                 <TextBlock Text="  Reload desktop needed" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>

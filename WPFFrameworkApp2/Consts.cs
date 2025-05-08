@@ -32,50 +32,50 @@
 
     public struct ImagePaths
     {
-        public const string NSAVE_IMG = "NoteImages/Save.png";
-        public const string NMOVE_IMG = "NoteImages/move.png";
-        public const string RENM_IMG = "NoteImages/rename.png";
-        public const string NOTE_IMG = "NoteImages/gennote.png";
-        public const string NADD_IMG = "NoteImages/noteadd.png";
-        public const string JPG_IMG = "DesktopImages/JPGpic.png";
-        public const string RTF_IMG = "DesktopImages/rtffile.png";
-        public const string SADD_IMG = "MusicImages/soundadd.png";
-        public const string NCOPY_IMG = "NoteImages/notecopy.png";
-        public const string FRSH_IMG = "DesktopImages/refresh.png";
-        public const string TXT_IMG = "DesktopImages/textfile.png";
-        public const string WAV_IMG = "DesktopImages/soundwav.png";
-        public const string MSC_IMG = "DesktopImages/Genmusic.png";
-        public const string COPYPIC = "DesktopImages/copypict.png";
-        public const string NDEL_IMG = "NoteImages/notedelete.png";
-        public const string WRNG_IMG = "DesktopImages/warning1.png";
-        public const string QST_IMG = "DesktopImages/question2.png";
-        public const string MP4_IMG = "DesktopImages/Videoicon.png";
-        public const string ROTATE_IMG = "DesktopImages/Rotate.png";
-        public const string PVAPP_IMG = "DesktopImages/picmovie.png";
-        public const string FULL_IMG = "DesktopImages/trashfull.png";
-        public const string EXE_IMG = "DesktopImages/exepenguin.png";
-        public const string FOLDER_IMG = "DesktopImages/folder2.png";
-        public const string SDEL_IMG = "MusicImages/sounddelete.png";
-        public const string EMPT_IMG = "DesktopImages/trashempty.png";
-        public const string ADDMP4_IMG = "DesktopImages/movieadd.png";
-        public const string UNKNOWN_IMG = "DesktopImages/unknown.png";
-        public const string NEWFOL_IMG = "DesktopImages/newfolder.png";
-        public const string LOGO_IMG = "DesktopImages/paperplane2.png";
-        public const string MP3_IMG = "DesktopImages/sound128x128.png";
-        public const string DELEXE_IMG = "DesktopImages/deleteexe.png";
-        public const string PNG_IMG = "DesktopImages/Picture96x96.png";
-        public const string SCOPY_IMG = "MusicImages/soundbutcopy.png";
-        public const string INFO_IMG = "DesktopImages/information.png";
-        public const string DELPNG_IMG = "DesktopImages/delpicture.png";
-        public const string ADDPIC_IMG = "DesktopImages/addpicture.png";
-        public const string LMSC_IMG = "DesktopImages/genmusic32x32.png";
-        public const string LWAV_IMG = "DesktopImages/soundwav48x48.png";
-        public const string LMP3_IMG = "DesktopImages/soundmp348x48.png";
-        public const string FDEL_IMG = "DesktopImages/folderdelete2.png";
-        public const string DELMP4_IMG = "DesktopImages/videodelete.png";
-        public const string COPYMP4_IMG = "DesktopImages/moviebutcopy.png";
-        public const string HLOGO_IMG = "DesktopImages/paperplane128x128.png";
-        public const string GEN_DEL_IMG = "DesktopImages/generaldeleteicon.png";
+        public const string NSAVE_IMG = "SystemSources/NoteImages/Save.png";
+        public const string NMOVE_IMG = "SystemSources/NoteImages/move.png";
+        public const string RENM_IMG = "SystemSources/NoteImages/rename.png";
+        public const string NOTE_IMG = "SystemSources/NoteImages/gennote.png";
+        public const string NADD_IMG = "SystemSources/NoteImages/noteadd.png";
+        public const string JPG_IMG = "SystemSources/DesktopImages/JPGpic.png";
+        public const string RTF_IMG = "SystemSources/DesktopImages/rtffile.png";
+        public const string SADD_IMG = "SystemSources/MusicImages/soundadd.png";
+        public const string NCOPY_IMG = "SystemSources/NoteImages/notecopy.png";
+        public const string FRSH_IMG = "SystemSources/DesktopImages/refresh.png";
+        public const string TXT_IMG = "SystemSources/DesktopImages/textfile.png";
+        public const string WAV_IMG = "SystemSources/DesktopImages/soundwav.png";
+        public const string MSC_IMG = "SystemSources/DesktopImages/Genmusic.png";
+        public const string COPYPIC = "SystemSources/DesktopImages/copypict.png";
+        public const string NDEL_IMG = "SystemSources/NoteImages/notedelete.png";
+        public const string WRNG_IMG = "SystemSources/DesktopImages/warning1.png";
+        public const string QST_IMG = "SystemSources/DesktopImages/question2.png";
+        public const string MP4_IMG = "SystemSources/DesktopImages/Videoicon.png";
+        public const string ROTATE_IMG = "SystemSources/DesktopImages/Rotate.png";
+        public const string PVAPP_IMG = "SystemSources/DesktopImages/picmovie.png";
+        public const string FULL_IMG = "SystemSources/DesktopImages/trashfull.png";
+        public const string EXE_IMG = "SystemSources/DesktopImages/exepenguin.png";
+        public const string FOLDER_IMG = "SystemSources/DesktopImages/folder2.png";
+        public const string SDEL_IMG = "SystemSources/MusicImages/sounddelete.png";
+        public const string EMPT_IMG = "SystemSources/DesktopImages/trashempty.png";
+        public const string ADDMP4_IMG = "SystemSources/DesktopImages/movieadd.png";
+        public const string UNKNOWN_IMG = "SystemSources/DesktopImages/unknown.png";
+        public const string NEWFOL_IMG = "SystemSources/DesktopImages/newfolder.png";
+        public const string LOGO_IMG = "SystemSources/DesktopImages/paperplane2.png";
+        public const string MP3_IMG = "SystemSources/DesktopImages/sound128x128.png";
+        public const string DELEXE_IMG = "SystemSources/DesktopImages/deleteexe.png";
+        public const string PNG_IMG = "SystemSources/DesktopImages/Picture96x96.png";
+        public const string SCOPY_IMG = "SystemSources/MusicImages/soundbutcopy.png";
+        public const string INFO_IMG = "SystemSources/DesktopImages/information.png";
+        public const string DELPNG_IMG = "SystemSources/DesktopImages/delpicture.png";
+        public const string ADDPIC_IMG = "SystemSources/DesktopImages/addpicture.png";
+        public const string LMSC_IMG = "SystemSources/DesktopImages/genmusic32x32.png";
+        public const string LWAV_IMG = "SystemSources/DesktopImages/soundwav48x48.png";
+        public const string LMP3_IMG = "SystemSources/DesktopImages/soundmp348x48.png";
+        public const string FDEL_IMG = "SystemSources/DesktopImages/folderdelete2.png";
+        public const string DELMP4_IMG = "SystemSources/DesktopImages/videodelete.png";
+        public const string COPYMP4_IMG = "SystemSources/DesktopImages/moviebutcopy.png";
+        public const string HLOGO_IMG = "SystemSources/DesktopImages/paperplane128x128.png";
+        public const string GEN_DEL_IMG = "SystemSources/DesktopImages/generaldeleteicon.png";
     }
 
     public struct HiddenFolders
@@ -108,7 +108,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.5.0";
+        public const string GOS_VRS = "GencOS v2.5.1";
         public const string MAIL_VRS = "GenMail v1.0.0";
         public const string NOTE_VRS = "GenNote v1.5.0";
         public const string MUSIC_VRS = "GenMusic v1.7.1";

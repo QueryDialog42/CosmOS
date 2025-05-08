@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Background="Gray" Icon="/DesktopImages/Settings.png"
+        mc:Ignorable="d" Background="Gray" Icon="SystemSources/DesktopImages/Settings.png"
         Title="Font Settings" Height="300" Width="483">
     <Grid>
         <Grid.RowDefinitions>
@@ -21,17 +21,17 @@
             <MenuItem Header="Result" Height="20">
                 <MenuItem x:Name="FItem1" Header="Apply Changes" BorderThickness="0" Click="ApplyChanges_Clicked">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/Save.png"/>
+                        <Image Source="SystemSources/NoteImages/Save.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="FItem2" Header="Quit without saving" BorderThickness="0" Click="CancelChanges_Clicked">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/Quit.png"/>
+                        <Image Source="SystemSources/DesktopImages/Quit.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="FItem3" Header="Restore default settings" BorderThickness="0" Click="RestoreDefaults_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/restore.png"/>
+                        <Image Source="SystemSources/DesktopImages/restore.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

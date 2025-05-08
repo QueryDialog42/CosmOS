@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Icon="NoteImages/gennote.png"
+        mc:Ignorable="d" Icon="SystemSources/NoteImages/gennote.png"
         Title="NoteApp" Height="450" Width="298">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,48 +15,48 @@
             <MenuItem Header="_File" Height="20">
                 <MenuItem x:Name="filemenu" Header="_New Note" BorderThickness="0" Click="NewFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/noteadd.png" />
+                        <Image Source="SystemSources/NoteImages/noteadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="openmenu" Header="_Open Note" BorderThickness="0" Click="OpenFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/noteopen.png" />
+                        <Image Source="SystemSources/NoteImages/noteopen.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="save" Header="_Save" BorderThickness="0" Click="SaveFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/Save.png" />
+                        <Image Source="SystemSources/NoteImages/Save.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="saveasmenu" Header="Save _As" BorderThickness="0" Click="SaveAsFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/Saveas.png" />
+                        <Image Source="SystemSources/NoteImages/Saveas.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="copy" Header="_Copy" BorderThickness="0" Click="CopyFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/notecopy.png" />
+                        <Image Source="SystemSources/NoteImages/notecopy.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="move" Header="_Move" BorderThickness="0" Click="MoveFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/move.png" />
+                        <Image Source="SystemSources/NoteImages/move.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="rename" Header="Rename" BorderThickness="0" Click="RenameFile">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/rename.png" />
+                        <Image Source="SystemSources/NoteImages/rename.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="delete" Header="_Delete" BorderThickness="0" Click="DeleteFile">
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/notedelete.png" />
+                        <Image Source="SystemSources/NoteImages/notedelete.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem x:Name="aboutmenu" Header="About GenNote" BorderThickness="0" Click="AboutPage">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/gennote.png" />
+                        <Image Source="SystemSources/NoteImages/gennote.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

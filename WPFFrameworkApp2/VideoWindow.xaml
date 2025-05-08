@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp2"
-        mc:Ignorable="d" Background="#1f1f1f" Icon="/DesktopImages/Videoicon.png"
+        mc:Ignorable="d" Background="#1f1f1f" Icon="SystemSources/DesktopImages/Videoicon.png"
         MouseEnter="MouseEntered" MouseLeave="MouseLeaved"
         Title="VideoWindow" Height="450" Width="800">
     <Grid>
@@ -20,29 +20,29 @@
             <MenuItem Header="Video" Height="20">
                 <MenuItem x:Name="VItem1" Header="Rename Video" BorderThickness="0" Click="RenameVideo">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/rename.png"/>
+                        <Image Source="SystemSources/NoteImages/rename.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="VItem2" Header="Move Video" BorderThickness="0" Click="MoveVideo">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/move.png"/>
+                        <Image Source="SystemSources/NoteImages/move.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="VItem3" Header="Copy Video" BorderThickness="0" Click="CopyVideo">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/moviebutcopy.png"/>
+                        <Image Source="SystemSources/DesktopImages/moviebutcopy.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="VItem4" Header="Delete Video" BorderThickness="0" Click="DeleteVideo">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/videodelete.png"/>
+                        <Image Source="SystemSources/DesktopImages/videodelete.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Edit" Height="20">
                 <MenuItem x:Name="VItem5" Header="Rotate" Click="RotateVideo" BorderThickness="0">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/Rotate.png" />
+                        <Image Source="SystemSources/DesktopImages/Rotate.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

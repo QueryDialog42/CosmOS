@@ -14,7 +14,7 @@ namespace WPFFrameworkApp2
     {
         DispatcherTimer timer;
         private bool continueAllowed = false;
-        public static string connectionString = "Data source=systemusers.db;Versions=3;";
+        public static string connectionString = "Data source=SystemSources/systemusers.db;Versions=3;";
         public LoginWindow()
         {
             InitializeComponent();

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Icon="DesktopImages/paperplane2.png"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" Icon="SystemSources/DesktopImages/paperplane2.png"
         Title="GencOS main" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -37,57 +37,57 @@
             <MenuItem Header="_New" Height="20">
                 <MenuItem x:Name="menuitem1" Header="_Import File" Click="ImportFile_Wanted" >
                     <MenuItem.Icon >
-                        <Image Source="DesktopImages/importfile.png"/>
+                        <Image Source="SystemSources/DesktopImages/importfile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="menuitem2" Header="New _File" Click="NoteApp_Clicked" >
                     <MenuItem.Icon>
-                        <Image Source="NoteImages/noteadd.png" />
+                        <Image Source="SystemSources/NoteImages/noteadd.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="menuitem3" Header="New F_older" Click="NewFolder">
                     <MenuItem.Icon>
-                        <Image Source="DesktopImages/newfolder.png" />
+                        <Image Source="SystemSources/DesktopImages/newfolder.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Desktop" Height="20">
                 <MenuItem x:Name="menuitem4" Header="_Reload Desktop" Click="ReloadWindow_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="DesktopImages/refresh.png" />
+                        <Image Source="SystemSources/DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="menuitem5" Header="_Delete Current Folder" Click="DeleteFolder" >
                     <MenuItem.Icon>
-                        <Image Source="DesktopImages/folderdelete2.png" />
+                        <Image Source="SystemSources/DesktopImages/folderdelete2.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="menuitem6" Header="_Rename Current Folder" Click="RenameFolderName">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/rename.png"/>
+                        <Image Source="SystemSources/NoteImages/rename.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem x:Name="menuitem7" Header="_About GencOS" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/paperplane2.png"/>
+                        <Image Source="SystemSources/DesktopImages/paperplane2.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings" Height="20">
                 <MenuItem x:Name="menuitem8" Header="_Color Settings" Click="ColorSettings_Clicked">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/colors.png"/>
+                        <Image Source="SystemSources/NoteImages/colors.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="menuitem9" Header="_Font Settings" Click="FontSettings_Clicked" >
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/font.png"/>
+                        <Image Source="SystemSources/DesktopImages/font.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="menuitem10" Header="_History Settings">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/history.png" />
+                        <Image Source="SystemSources/DesktopImages/history.png" />
                     </MenuItem.Icon>
                     <RadioButton x:Name="enableButton" IsChecked="True">
                         <TextBlock Text="Enable" />
@@ -98,7 +98,7 @@
                 </MenuItem>
                 <MenuItem x:Name="menuitem11" Header="_Display Settings">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/display.png" />
+                        <Image Source="SystemSources/DesktopImages/display.png" />
                     </MenuItem.Icon>
                     <RadioButton x:Name="iconMode" Content="Icon" Checked="DisplayMode_Zero_Checked"/>
                     <RadioButton x:Name="lineMode" Content="Lines" Checked="DisplayMode_One_Checked" />
@@ -130,17 +130,17 @@
                             <ContextMenu x:Name="mainContextMenu" BorderThickness="0">
                                 <MenuItem x:Name="itemmenu1" Header="New File" BorderThickness="0" Click="NoteApp_Clicked">
                                     <MenuItem.Icon>
-                                        <Image Source="/NoteImages/noteadd.png"/>
+                                        <Image Source="SystemSources/NoteImages/noteadd.png"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem x:Name="itemmenu2" Header="New Folder" BorderThickness="0" Click="NewFolder">
                                     <MenuItem.Icon>
-                                        <Image Source="/DesktopImages/newfolder.png"/>
+                                        <Image Source="SystemSources/DesktopImages/newfolder.png"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem x:Name="itemmenu3" Header="Reload desktop" BorderThickness="0" Click="ReloadWindow_Wanted">
                                     <MenuItem.Icon>
-                                        <Image Source="/DesktopImages/refresh.png"/>
+                                        <Image Source="SystemSources/DesktopImages/refresh.png"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
@@ -162,7 +162,7 @@
                         <MenuItem Header="History" Height="20">
                             <MenuItem Header="Clear History" Click="ClearHistory_Wanted">
                                 <MenuItem.Icon>
-                                    <Image Source="/NoteImages/clearstyle.png" />
+                                    <Image Source="SystemSources/NoteImages/clearstyle.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
@@ -206,29 +206,29 @@
                 </StackPanel.Resources>
                 
                 <Button x:Name="NoteApp" ToolTip="GenNote" Width="60" Height="60" Click="NoteApp_Clicked">
-                    <Image Source="NoteImages/gennote.png" />
+                    <Image Source="SystemSources/NoteImages/gennote.png" />
                 </Button>
                 <Button x:Name="MusicApp" ToolTip="GenMusic" Click="MusicAppStart">
-                    <Image Source="DesktopImages/Genmusic.png"/>
+                    <Image Source="SystemSources/DesktopImages/Genmusic.png"/>
                 </Button>
 
                 <!--only when reload desktop needed-->
                 <Button x:Name="reloadNeed" Width="190" Height="35" Background="#4a4a4a" Foreground="White" Visibility="Collapsed" Click="ReloadWindow_Wanted">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
+                        <Image Source="SystemSources/DesktopImages/refresh.png" Margin="10, 5, 10, 5"/>
                         <TextBlock Text="Reload desktop needed" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
                     </StackPanel>
                 </Button>
 
                 <Button x:Name="PicMovie" Height="48" Width="48" Click="PicMovieApp_Clicked">
-                    <Image Source="/DesktopImages/picmovie.png"/>
+                    <Image Source="SystemSources/DesktopImages/picmovie.png"/>
                 </Button>
 
                 <Button x:Name="MailApp" Click="GenMailApp_Clicked">
-                    <Image Source="/DesktopImages/Mail128x128.png"/>
+                    <Image Source="SystemSources/DesktopImages/Mail128x128.png"/>
                 </Button>
                 <Button x:Name="CalculatorApp" Click="GenCalculatorApp_Clicked">
-                    <Image Source="/DesktopImages/calculator.png"/>
+                    <Image Source="SystemSources/DesktopImages/calculator.png"/>
                 </Button>
             </StackPanel>
 
@@ -237,17 +237,17 @@
                     <ContextMenu x:Name="trashContextMenu" BorderThickness="0">
                         <MenuItem x:Name="trashitem1" Header="Empty Trash" BorderThickness="0" Click="EmptyTrash_Wanted">
                             <MenuItem.Icon>
-                                <Image Source="/DesktopImages/trashempty.png" />
+                                <Image Source="SystemSources/DesktopImages/trashempty.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="trashitem2" Header="Rescue All" BorderThickness="0" Click="RescueTrashes_Wanted">
                             <MenuItem.Icon>
-                                <Image Source="/DesktopImages/rescueme.png"/>
+                                <Image Source="SystemSources/DesktopImages/rescueme.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </Button.ContextMenu>
-                <Image x:Name="trashimage" Source="DesktopImages/trashempty.png"/>
+                <Image x:Name="trashimage" Source="SystemSources/DesktopImages/trashempty.png"/>
             </Button>
             
         </Grid>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFFrameworkApp2" Icon="/DesktopImages/paperplane2.png"
+        xmlns:local="clr-namespace:WPFFrameworkApp2" Icon="SystemSources/DesktopImages/paperplane2.png"
         xmlns:UserControl="clr-namespace:WPFFrameworkApp2.UserControls"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
@@ -17,7 +17,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <Image Source="/DesktopImages/useradd.png"
+        <Image Source="SystemSources/DesktopImages/useradd.png"
                VerticalAlignment="Bottom"
                HorizontalAlignment="Center" Height="160" Width="156"
            />

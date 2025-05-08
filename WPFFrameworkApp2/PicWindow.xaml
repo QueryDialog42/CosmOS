@@ -15,27 +15,27 @@
             <MenuItem x:Name="PItem1" Header="_Picture" Height="20">
                 <MenuItem x:Name="PItem2" Header="_Add Picture" BorderThickness="0" Click="PictureAdd_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/addpicture.png" />
+                        <Image Source="SystemSources/DesktopImages/addpicture.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="PItem3" Header="_Move Picture" BorderThickness="0" Click="PictureMove_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/move.png" />
+                        <Image Source="SystemSources/NoteImages/move.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="PItem4" Header="_Copy Picture" BorderThickness="0" Click="PictureCopy_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/copypict.png" />
+                        <Image Source="SystemSources/DesktopImages/copypict.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="PItem5" Header="_Rename Picture" BorderThickness="0" Click="PictureRename_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/NoteImages/rename.png" />
+                        <Image Source="SystemSources/NoteImages/rename.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="PItem6" Header="_Delete Picture" BorderThickness="0" Click="PictureDelete_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/delpicture.png" />
+                        <Image Source="SystemSources/DesktopImages/delpicture.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

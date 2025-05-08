@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Icon="/DesktopImages/Mail128x128.png"
+        mc:Ignorable="d" Icon="SystemSources/DesktopImages/Mail128x128.png"
         Title="GenMailApp" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>

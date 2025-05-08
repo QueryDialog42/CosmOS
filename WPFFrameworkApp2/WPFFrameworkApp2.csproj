@@ -8,195 +8,158 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="DesktopImages\calculator.png" />
-    <None Remove="DesktopImages\calendar.png" />
-    <None Remove="DesktopImages\display.png" />
-    <None Remove="DesktopImages\generaldeleteicon.png" />
-    <None Remove="DesktopImages\history.png" />
-    <None Remove="DesktopImages\movieadd.png" />
-    <None Remove="DesktopImages\moviebutcopy.png" />
-    <None Remove="DesktopImages\Rotate.png" />
-    <None Remove="DesktopImages\useradd.png" />
-    <None Remove="DesktopImages\videodelete.png" />
+    <Compile Remove="DesktopImages\**" />
+    <Compile Remove="MusicImages\**" />
+    <Compile Remove="NoteImages\**" />
+    <EmbeddedResource Remove="DesktopImages\**" />
+    <EmbeddedResource Remove="MusicImages\**" />
+    <EmbeddedResource Remove="NoteImages\**" />
+    <None Remove="DesktopImages\**" />
+    <None Remove="MusicImages\**" />
+    <None Remove="NoteImages\**" />
+    <Page Remove="DesktopImages\**" />
+    <Page Remove="MusicImages\**" />
+    <Page Remove="NoteImages\**" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="DesktopImages\calculator.png" />
-    <Resource Include="DesktopImages\calendar.png" />
-    <Resource Include="DesktopImages\display.png" />
-    <Resource Include="DesktopImages\generaldeleteicon.png" />
-    <Resource Include="DesktopImages\history.png" />
-    <Resource Include="DesktopImages\moviebutcopy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\movieadd.png" />
-    <Resource Include="DesktopImages\Rotate.png" />
-    <Resource Include="DesktopImages\textfile.png" />
-    <Resource Include="DesktopImages\useradd.png" />
-    <Resource Include="DesktopImages\videodelete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\gennote.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\Saveas.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\Save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\move.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\newfolder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\folderdelete2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\noteopen.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\notecopy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\notedelete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\noteadd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\question2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\warning1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\paperplane2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\fontitalic1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\fontunderline1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\fontbold1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\colors.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\rtffile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\fontup.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\fontdown.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\Genmusic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\trashempty.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\trashfull.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\sound128x128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\exepenguin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\folder2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\importfile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\soundwav.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="MusicImages\sounddelete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="MusicImages\soundadd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="MusicImages\soundbutcopy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\Mail128x128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\rescueme.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\soundwav48x48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\soundmp348x48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\paperplane128x128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\genmusic32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\clearstyle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="NoteImages\rename.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\Settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\Quit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\restore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\deleteexe.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\font.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\addpicture.png" />
-    <Resource Include="DesktopImages\delpicture.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\normalpicture.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\Picture96x96.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\copypict.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\JPGpic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\information.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\picmovie.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="DesktopImages\Videoicon.png" />
+    <None Remove="SystemSources\DesktopImages\addpicture.png" />
+    <None Remove="SystemSources\DesktopImages\calculator.png" />
+    <None Remove="SystemSources\DesktopImages\calendar.png" />
+    <None Remove="SystemSources\DesktopImages\copypict.png" />
+    <None Remove="SystemSources\DesktopImages\deleteexe.png" />
+    <None Remove="SystemSources\DesktopImages\delpicture.png" />
+    <None Remove="SystemSources\DesktopImages\display.png" />
+    <None Remove="SystemSources\DesktopImages\exepenguin.png" />
+    <None Remove="SystemSources\DesktopImages\folder2.png" />
+    <None Remove="SystemSources\DesktopImages\folderdelete2.png" />
+    <None Remove="SystemSources\DesktopImages\font.png" />
+    <None Remove="SystemSources\DesktopImages\generaldeleteicon.png" />
+    <None Remove="SystemSources\DesktopImages\Genmusic.png" />
+    <None Remove="SystemSources\DesktopImages\genmusic32x32.png" />
+    <None Remove="SystemSources\DesktopImages\history.png" />
+    <None Remove="SystemSources\DesktopImages\importfile.png" />
+    <None Remove="SystemSources\DesktopImages\information.png" />
+    <None Remove="SystemSources\DesktopImages\JPGpic.png" />
+    <None Remove="SystemSources\DesktopImages\Mail128x128.png" />
+    <None Remove="SystemSources\DesktopImages\movieadd.png" />
+    <None Remove="SystemSources\DesktopImages\moviebutcopy.png" />
+    <None Remove="SystemSources\DesktopImages\newfolder.png" />
+    <None Remove="SystemSources\DesktopImages\normalpicture.png" />
+    <None Remove="SystemSources\DesktopImages\paperplane128x128.png" />
+    <None Remove="SystemSources\DesktopImages\paperplane2.png" />
+    <None Remove="SystemSources\DesktopImages\picmovie.png" />
+    <None Remove="SystemSources\DesktopImages\Picture96x96.png" />
+    <None Remove="SystemSources\DesktopImages\question2.png" />
+    <None Remove="SystemSources\DesktopImages\Quit.png" />
+    <None Remove="SystemSources\DesktopImages\refresh.png" />
+    <None Remove="SystemSources\DesktopImages\rescueme.png" />
+    <None Remove="SystemSources\DesktopImages\restore.png" />
+    <None Remove="SystemSources\DesktopImages\Rotate.png" />
+    <None Remove="SystemSources\DesktopImages\rtffile.png" />
+    <None Remove="SystemSources\DesktopImages\Settings.png" />
+    <None Remove="SystemSources\DesktopImages\sound128x128.png" />
+    <None Remove="SystemSources\DesktopImages\soundmp348x48.png" />
+    <None Remove="SystemSources\DesktopImages\soundwav.png" />
+    <None Remove="SystemSources\DesktopImages\soundwav48x48.png" />
+    <None Remove="SystemSources\DesktopImages\textfile.png" />
+    <None Remove="SystemSources\DesktopImages\trashempty.png" />
+    <None Remove="SystemSources\DesktopImages\trashfull.png" />
+    <None Remove="SystemSources\DesktopImages\unknown.png" />
+    <None Remove="SystemSources\DesktopImages\useradd.png" />
+    <None Remove="SystemSources\DesktopImages\videodelete.png" />
+    <None Remove="SystemSources\DesktopImages\Videoicon.png" />
+    <None Remove="SystemSources\DesktopImages\warning1.png" />
+    <None Remove="SystemSources\MusicImages\soundadd.png" />
+    <None Remove="SystemSources\MusicImages\soundbutcopy.png" />
+    <None Remove="SystemSources\MusicImages\sounddelete.png" />
+    <None Remove="SystemSources\NoteImages\clearstyle.png" />
+    <None Remove="SystemSources\NoteImages\colors.png" />
+    <None Remove="SystemSources\NoteImages\fontbold1.png" />
+    <None Remove="SystemSources\NoteImages\fontdown.png" />
+    <None Remove="SystemSources\NoteImages\fontitalic1.png" />
+    <None Remove="SystemSources\NoteImages\fontunderline1.png" />
+    <None Remove="SystemSources\NoteImages\fontup.png" />
+    <None Remove="SystemSources\NoteImages\gennote.png" />
+    <None Remove="SystemSources\NoteImages\move.png" />
+    <None Remove="SystemSources\NoteImages\noteadd.png" />
+    <None Remove="SystemSources\NoteImages\notecopy.png" />
+    <None Remove="SystemSources\NoteImages\notedelete.png" />
+    <None Remove="SystemSources\NoteImages\noteopen.png" />
+    <None Remove="SystemSources\NoteImages\rename.png" />
+    <None Remove="SystemSources\NoteImages\Save.png" />
+    <None Remove="SystemSources\NoteImages\Saveas.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SystemSources\DesktopImages\addpicture.png" />
+    <Resource Include="SystemSources\DesktopImages\calculator.png" />
+    <Resource Include="SystemSources\DesktopImages\calendar.png" />
+    <Resource Include="SystemSources\DesktopImages\copypict.png" />
+    <Resource Include="SystemSources\DesktopImages\deleteexe.png" />
+    <Resource Include="SystemSources\DesktopImages\delpicture.png" />
+    <Resource Include="SystemSources\DesktopImages\display.png" />
+    <Resource Include="SystemSources\DesktopImages\exepenguin.png" />
+    <Resource Include="SystemSources\DesktopImages\folder2.png" />
+    <Resource Include="SystemSources\DesktopImages\folderdelete2.png" />
+    <Resource Include="SystemSources\DesktopImages\font.png" />
+    <Resource Include="SystemSources\DesktopImages\generaldeleteicon.png" />
+    <Resource Include="SystemSources\DesktopImages\Genmusic.png" />
+    <Resource Include="SystemSources\DesktopImages\genmusic32x32.png" />
+    <Resource Include="SystemSources\DesktopImages\history.png" />
+    <Resource Include="SystemSources\DesktopImages\importfile.png" />
+    <Resource Include="SystemSources\DesktopImages\information.png" />
+    <Resource Include="SystemSources\DesktopImages\JPGpic.png" />
+    <Resource Include="SystemSources\DesktopImages\Mail128x128.png" />
+    <Resource Include="SystemSources\DesktopImages\movieadd.png" />
+    <Resource Include="SystemSources\DesktopImages\moviebutcopy.png" />
+    <Resource Include="SystemSources\DesktopImages\newfolder.png" />
+    <Resource Include="SystemSources\DesktopImages\normalpicture.png" />
+    <Resource Include="SystemSources\DesktopImages\paperplane128x128.png" />
+    <Resource Include="SystemSources\DesktopImages\paperplane2.png" />
+    <Resource Include="SystemSources\DesktopImages\picmovie.png" />
+    <Resource Include="SystemSources\DesktopImages\Picture96x96.png" />
+    <Resource Include="SystemSources\DesktopImages\question2.png" />
+    <Resource Include="SystemSources\DesktopImages\Quit.png" />
+    <Resource Include="SystemSources\DesktopImages\refresh.png" />
+    <Resource Include="SystemSources\DesktopImages\rescueme.png" />
+    <Resource Include="SystemSources\DesktopImages\restore.png" />
+    <Resource Include="SystemSources\DesktopImages\Rotate.png" />
+    <Resource Include="SystemSources\DesktopImages\rtffile.png" />
+    <Resource Include="SystemSources\DesktopImages\Settings.png" />
+    <Resource Include="SystemSources\DesktopImages\sound128x128.png" />
+    <Resource Include="SystemSources\DesktopImages\soundmp348x48.png" />
+    <Resource Include="SystemSources\DesktopImages\soundwav.png" />
+    <Resource Include="SystemSources\DesktopImages\soundwav48x48.png" />
+    <Resource Include="SystemSources\DesktopImages\textfile.png" />
+    <Resource Include="SystemSources\DesktopImages\trashempty.png" />
+    <Resource Include="SystemSources\DesktopImages\trashfull.png" />
+    <Resource Include="SystemSources\DesktopImages\unknown.png" />
+    <Resource Include="SystemSources\DesktopImages\useradd.png" />
+    <Resource Include="SystemSources\DesktopImages\videodelete.png" />
+    <Resource Include="SystemSources\DesktopImages\Videoicon.png" />
+    <Resource Include="SystemSources\DesktopImages\warning1.png" />
+    <Resource Include="SystemSources\MusicImages\soundadd.png" />
+    <Resource Include="SystemSources\MusicImages\soundbutcopy.png" />
+    <Resource Include="SystemSources\MusicImages\sounddelete.png" />
+    <Resource Include="SystemSources\NoteImages\clearstyle.png" />
+    <Resource Include="SystemSources\NoteImages\colors.png" />
+    <Resource Include="SystemSources\NoteImages\fontbold1.png" />
+    <Resource Include="SystemSources\NoteImages\fontdown.png" />
+    <Resource Include="SystemSources\NoteImages\fontitalic1.png" />
+    <Resource Include="SystemSources\NoteImages\fontunderline1.png" />
+    <Resource Include="SystemSources\NoteImages\fontup.png" />
+    <Resource Include="SystemSources\NoteImages\gennote.png" />
+    <Resource Include="SystemSources\NoteImages\move.png" />
+    <Resource Include="SystemSources\NoteImages\noteadd.png" />
+    <Resource Include="SystemSources\NoteImages\notecopy.png" />
+    <Resource Include="SystemSources\NoteImages\notedelete.png" />
+    <Resource Include="SystemSources\NoteImages\noteopen.png" />
+    <Resource Include="SystemSources\NoteImages\rename.png" />
+    <Resource Include="SystemSources\NoteImages\Save.png" />
+    <Resource Include="SystemSources\NoteImages\Saveas.png" />
   </ItemGroup>
 </Project>

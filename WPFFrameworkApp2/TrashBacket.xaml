@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
-        mc:Ignorable="d" Icon="DesktopImages/trashfull.png"
+        mc:Ignorable="d" Icon="SystemSources/DesktopImages/trashfull.png"
         Title="TrashBacket" Height="400" Width="400">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,17 +15,17 @@
             <MenuItem Header="_Trash" Height="20">
                 <MenuItem x:Name="TItem1" Header="_Empty Trash" BorderThickness="0" Click="EmptyTrash">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/trashempty.png" />
+                        <Image Source="SystemSources/DesktopImages/trashempty.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="TItem2" Header="_Rescue All" BorderThickness="0" Click="RescueAll">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/rescueme.png"/>
+                        <Image Source="SystemSources/DesktopImages/rescueme.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem x:Name="TItem3" Header="_Reload TrashBacket" BorderThickness="0" Click="TrashBacketReload_Wanted">
                     <MenuItem.Icon>
-                        <Image Source="/DesktopImages/refresh.png" />
+                        <Image Source="SystemSources/DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
