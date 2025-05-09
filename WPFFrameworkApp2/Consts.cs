@@ -91,6 +91,7 @@
         public const string CCOL = "Ccolor.txt";
         public const string CFONT = "Cfont.txt";
         public const string CPATH = "CDesktop.txt";
+        public const string CHIST = "CHistory.txt";
         public const string C_CONFIGS = "C_CONFIGS";
     }
 
@@ -108,7 +109,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.5.3";
+        public const string GOS_VRS = "GencOS v2.5.4";
         public const string MAIL_VRS = "GenMail v1.0.0";
         public const string NOTE_VRS = "GenNote v1.5.0";
         public const string MUSIC_VRS = "GenMusic v1.7.1";

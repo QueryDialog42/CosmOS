@@ -247,6 +247,109 @@ namespace WPFFrameworkApp
         }
         #endregion
 
+        #region History functions
+        public static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
+        {
+            Image image = new()
+            {
+                Source = setBitmapImage(imagepath),
+                VerticalAlignment = VerticalAlignment.Center,
+                Height = 30
+            };
+            FileInfo fileinfo = new FileInfo(filepath);
+
+            TextBlock filename = new()
+            {
+                Text = "   " + fileinfo.Name,
+                Width = 200,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+            TextBlock lastAccess = new()
+            {
+                Text = fileinfo.LastAccessTime.ToString(),
+                Width = 200,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            TextBlock location = new()
+            {
+                Text = fileinfo.DirectoryName,
+                Width = Double.NaN,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            StackPanel stackpanel = new()
+            {
+                Orientation = Orientation.Horizontal,
+            };
+
+            stackpanel.Children.Add(image);
+            stackpanel.Children.Add(filename);
+            stackpanel.Children.Add(lastAccess);
+            stackpanel.Children.Add(location);
+
+            ListBoxItem historyitem = new()
+            {
+                Content = stackpanel,
+                Tag = filepath
+            };
+
+            historyitem.ContextMenu = CreateContextMenuForHistoryItems(window, historyitem);
+
+            historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, window.currentDesktop, filepath);
+
+            MainWindow gencosmain = GetMainWindow(MainWindow.CDesktopPath);
+
+            foreach (ListBoxItem item in gencosmain.historyList.Items)
+            {
+                if (item?.Tag?.ToString() == filepath)
+                {
+                    gencosmain?.historyList?.Items?.Remove(item);
+                    break;
+                }
+            }
+            gencosmain?.historyList?.Items?.Insert(0, historyitem);
+        }
+        private static ContextMenu CreateContextMenuForHistoryItems(MainWindow window, ListBoxItem historyitem)
+        {
+            MenuItem deleteitem = new()
+            {
+                Header = "Delete History",
+                Icon = new Image
+                {
+                    Source = setBitmapImage(ImagePaths.GEN_DEL_IMG)
+                }
+            };
+            deleteitem.Click += (sender, e) => window.historyList.Items.Remove(historyitem);
+
+            ContextMenu contextMenu = new();
+            contextMenu.Items.Add(deleteitem);
+
+            return contextMenu;
+        }
+        public static void AddHistoriesFromCHistory(MainWindow window, string CHistory)
+        {
+            string[] histories = File.ReadAllLines(Path.Combine(configFolder, CHistory));
+            foreach (string history in histories)
+            {
+                string imagepath;
+                switch (Path.GetExtension(history))
+                {
+                    case SupportedFiles.TXT: imagepath = ImagePaths.TXT_IMG; break;
+                    case SupportedFiles.RTF: imagepath = ImagePaths.RTF_IMG; break;
+                    case SupportedFiles.WAV: imagepath = ImagePaths.WAV_IMG; break;
+                    case SupportedFiles.MP3: imagepath = ImagePaths.MP3_IMG; break;
+                    case SupportedFiles.EXE: imagepath = ImagePaths.EXE_IMG; break;
+                    case SupportedFiles.PNG: imagepath = ImagePaths.PNG_IMG; break;
+                    case SupportedFiles.JPG: imagepath = ImagePaths.JPG_IMG; break;
+                    case SupportedFiles.MP4: imagepath = ImagePaths.MP4_IMG; break;
+                    default: imagepath = ImagePaths.UNKNOWN_IMG; break;
+                }
+
+                AddFileToHistoryListener(window, imagepath, history);
+            }
+        }
+        #endregion
+
         #region ShortKeys functions
         private static ContextMenu SetShortKeyOptions(MainWindow window, string copyicon, string deleteicon, string filepath, string imageicon)
         {
@@ -430,87 +533,6 @@ namespace WPFFrameworkApp
             }
             return null;
         }
-        #endregion
-
-        #region Add History functions
-        public static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
-        {
-            Image image = new()
-            {
-                Source = setBitmapImage(imagepath),
-                VerticalAlignment = VerticalAlignment.Center,
-                Height = 30
-            };
-            FileInfo fileinfo = new FileInfo(filepath);
-
-            TextBlock filename = new()
-            {
-                Text = "   " + fileinfo.Name,
-                Width = 200,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-            TextBlock lastAccess = new()
-            {
-                Text = fileinfo.LastAccessTime.ToString(),
-                Width = 200,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            TextBlock location = new()
-            {
-                Text = fileinfo.DirectoryName,
-                Width = Double.NaN,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-
-            StackPanel stackpanel = new()
-            {
-                Orientation = Orientation.Horizontal,
-            };
-
-            stackpanel.Children.Add(image);
-            stackpanel.Children.Add(filename);
-            stackpanel.Children.Add(lastAccess);
-            stackpanel.Children.Add(location);
-
-            ListBoxItem historyitem = new()
-            {
-                Content = stackpanel,
-                Tag = filepath
-            };
-
-            historyitem.ContextMenu = CreateContextMenuForHistoryItems(window, historyitem);
-
-            historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, window.currentDesktop, filepath);
-
-            MainWindow gencosmain = GetMainWindow(MainWindow.CDesktopPath);
-
-            foreach (ListBoxItem item in gencosmain.historyList.Items)
-            {
-                if (item?.Tag?.ToString() == filepath)
-                {
-                    gencosmain?.historyList?.Items?.Remove(item);
-                    break;
-                }
-            }
-            gencosmain?.historyList?.Items?.Insert(0, historyitem);
-        }
-        private static ContextMenu CreateContextMenuForHistoryItems(MainWindow window, ListBoxItem historyitem)
-        {
-            MenuItem deleteitem = new()
-            {
-                Header = "Delete History",
-                Icon = new Image
-                {
-                    Source = setBitmapImage(ImagePaths.GEN_DEL_IMG)
-                }
-            };
-            deleteitem.Click += (sender, e) => window.historyList.Items.Remove(historyitem);
-
-            ContextMenu contextMenu = new();
-            contextMenu.Items.Add(deleteitem); 
-
-            return contextMenu;
-        } 
         #endregion
 
         #region GetSettings functions
@@ -1127,8 +1149,9 @@ namespace WPFFrameworkApp
             MainWindow.TempPath = filepath;
             MainWindow newWindow = new MainWindow
             {
-                Title = Path.GetFileName(filepath),
+                Title = Path.GetFileName(filepath)
             };
+            newWindow.historySplitter.Visibility = Visibility.Collapsed;
         }
         public static void AddRTFListener(MainWindow window, string desktopPath, string filepath)
         {

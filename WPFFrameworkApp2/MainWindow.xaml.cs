@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using WPFFrameworkApp2;
 using System.Windows.Media;
@@ -89,7 +90,17 @@ namespace WPFFrameworkApp
         #region OnClosing functions
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            if (Title == MainItems.MAIN_WIN) Application.Current.Shutdown();
+            if (Title == MainItems.MAIN_WIN)
+            {
+                // Convert ListBox items to an array
+                string[] histories = historyList.Items
+                    .Cast<ListBoxItem>() 
+                    .Select(item => item.Tag.ToString()) // Extract the content as string
+                    .ToArray();
+
+                File.WriteAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST), histories);
+                Application.Current.Shutdown();
+            }
             clocktimer?.Stop();
             clocktimer = null;
         }
@@ -228,6 +239,7 @@ namespace WPFFrameworkApp
                 SetTimeLogics();
                 SetDisplaySetting();
                 SetHistorySettingsButton();
+                RoutineLogics.AddHistoriesFromCHistory(this, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST));
 
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
             }
@@ -246,6 +258,7 @@ namespace WPFFrameworkApp
             CheckCDesktopPathFile(CDesktopFile);
             CheckCcolorFile(C_CONFIGS);
             CheckCfontFile(C_CONFIGS);
+            CheckCHistoryFile(C_CONFIGS);
 
             TryReadCDesktopPath(CDesktopFile);
 
@@ -332,6 +345,14 @@ namespace WPFFrameworkApp
             {
                 MessageBox.Show($"{Configs.CFONT} file not found. Creating with default settings", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
                 CreateFontConfig(C_CONFIGS);
+            }
+        }
+        private void CheckCHistoryFile(string C_CONFIGS)
+        {
+            if (File.Exists(Path.Combine(C_CONFIGS, Configs.CHIST)) == false)
+            {
+                MessageBox.Show($"{Configs.CHIST} file not found. Creating.", "Creating configuration files", MessageBoxButton.OK, MessageBoxImage.Information);
+                File.Create(Path.Combine(C_CONFIGS, Configs.CHIST)).Close();
             }
         }
         private void TryReadCDesktopPath(string CDesktopFile)
