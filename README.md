@@ -8,8 +8,8 @@ When you open this project first time, do these in order to run app:
 # Paste them into GencOS-main\WPFFrameworkApp2\bin\Debug\net8.0-windows
 
 # if not installed, install these packages 
-System.Data.SQLite
-Newtonsoft.Json
+1) System.Data.SQLite
+2) Newtonsoft.Json
 
 you can install them from -> open solution WPFFrameworkApp2.sln -> right click WPFFrameworkApp2 -> Manage NuGet packages
 
