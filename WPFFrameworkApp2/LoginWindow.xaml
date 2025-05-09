@@ -30,7 +30,7 @@
                    HorizontalAlignment="Center"
                    FontSize="40"
                    Foreground="LightGray"/>
-        
+
         <TextBlock Grid.Row="2"
                    x:Name="date"
                    Foreground="Gray"
@@ -39,8 +39,7 @@
                    FontSize="15"
                    />
 
-        <UserControl:TextBoxControls Grid.Row="3"
-                                     x:Name="usernamebox"
+        <UserControl:TextBoxControls x:Name ="usernameBox" Grid.Row="3"
                                      HorizontalAlignment="Center"
                                      Width="300"
                                      Height="50"
@@ -95,10 +94,9 @@
                     Margin="20, 0, 0, 0"
                     Content="Login"
                     Width="110"
-                    Click="Button_Click"/>
+                    Click="LoginButton_Click"/>
         </Grid>
-        <TextBlock Grid.Row="6" Foreground="DarkRed" 
-           Text="Error massge if you need"
+        <TextBlock x:Name="txtLoginErrorMessage" Grid.Row="6" Foreground="DarkRed" 
            FontSize="20"
            HorizontalAlignment="Center"
            VerticalAlignment="Center"/>

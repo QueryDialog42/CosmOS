@@ -1,10 +1,6 @@
-﻿using System;
-using System.Data.SQLite;
-using System.Security.Cryptography;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using WPFFrameworkApp;
+using WPFFrameworkApp2.Database;
 
 namespace WPFFrameworkApp2
 {
@@ -14,62 +10,56 @@ namespace WPFFrameworkApp2
     public partial class RegisterWindow : Window
     {
         private bool continueAllowed = false;
-
         public RegisterWindow()
         {
             InitializeComponent();
             ShowDialog();
         }
 
+        #region Closing functions
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (continueAllowed == false) Application.Current.Shutdown();
+        }
+        #endregion
+
+        #region Button event functions
         private void HaveAnAccount_ButtonClicked(object sender, MouseButtonEventArgs e)
         {
             continueAllowed = true;
             Close();
             new LoginWindow();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            string username = txtUsername.usertextbox.Text;
+            string password = txtPassword.usertextbox.Text;
+
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                var connection = new SQLiteConnection(LoginWindow.connectionString);
-                
-                connection.Open();
-                // var delete = new SQLiteCommand("DELETE FROM users;", connection);
-                var insert = new SQLiteCommand($"INSERT INTO users VALUES ('{usernamebox.usertextbox.Text}', '{HashPassword(passwordbox.usertextbox.Text)}');", connection);
-                insert.ExecuteNonQuery();
+                txtErrorMessage.Text = "Please fill all blanks";
+                txtErrorMessage.Visibility = Visibility.Visible;
+                return;
+            }
 
-                connection.Close();
 
-                MessageBox.Show("Now try to login with your username and password!", "Registered Succesfully", MessageBoxButton.OK, MessageBoxImage.Information);
+            txtErrorMessage.Visibility = Visibility.Collapsed;
 
+            bool success = DatabaseHelper.RegisterUser(username, password);
+            if (success)
+            {
+                MessageBox.Show("Now try to login with your username and password", "Registered Succesfully", MessageBoxButton.OK, MessageBoxImage.Information);
                 continueAllowed = true;
                 Close();
                 new LoginWindow();
-
-            } catch (Exception ex)
+            }
+            else
             {
-                RoutineLogics.ErrorMessage("Register Error", "An error occured while registering.\n", ex.Message);
+                txtErrorMessage.Text = "Username is already taken or an unkown error occured";
+                txtErrorMessage.Visibility = Visibility.Visible;
             }
         }
-
-        public static string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                foreach (byte b in bytes)
-                {
-                    builder.Append(b.ToString("x2")); // Convert to hexadecimal
-                }
-                return builder.ToString();
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (continueAllowed == false) Application.Current.Shutdown();
-        }
+        #endregion
     }
 }

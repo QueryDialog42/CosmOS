@@ -22,20 +22,18 @@
                HorizontalAlignment="Center" Height="160" Width="156"
            />
 
-        <UserControl:TextBoxControls Grid.Row="1"
-                                     x:Name="usernamebox"
+        <UserControl:TextBoxControls x:Name="txtUsername" Grid.Row="1"
                                  HorizontalAlignment="Center"
                                  Width="300"
                                  Height="50"
                                  PlaceHolder="  Create An Username"/>
-        <UserControl:TextBoxControls Grid.Row="2"
-                                     x:Name="passwordbox"
+        <UserControl:TextBoxControls x:Name="txtPassword" Grid.Row="2"
                                  HorizontalAlignment="Center"
                                      VerticalAlignment="Top"
                                  Width="300"
                                  Height="50"
                                  PlaceHolder="  Create A Password"
-        />
+    />
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -60,12 +58,14 @@
                 Margin="20, 0, 0, 0"
                 Content="Register"
                 Width="110"
-                Click="Button_Click"/>
+                Click="RegisterButton_Click"/>
         </Grid>
-        <TextBlock Grid.Row="4" Foreground="DarkRed" 
-                   Text="Error massge if you need"
-                   FontSize="20"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+        <TextBlock x:Name="txtErrorMessage"
+           Grid.Row="4"
+           Foreground="DarkRed"
+           FontSize="16"
+           Visibility="Collapsed"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"/>
     </Grid>
 </Window>

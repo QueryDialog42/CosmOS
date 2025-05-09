@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Windows;
-using WPFFrameworkApp;
-using System.Data.SQLite;
 using System.Windows.Threading;
+using WPFFrameworkApp;
 
 namespace WPFFrameworkApp2
 {
@@ -14,10 +13,10 @@ namespace WPFFrameworkApp2
     {
         DispatcherTimer timer;
         private bool continueAllowed = false;
-        public static string connectionString = "Data source=SystemSources/systemusers.db;Versions=3;";
         public LoginWindow()
         {
             InitializeComponent();
+            Database.DatabaseHelper.InitializeDatabase();
             InitTime();
             ShowDialog();
         }
@@ -56,37 +55,37 @@ namespace WPFFrameworkApp2
             Close();
             new RegisterWindow();
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            var connection = new SQLiteConnection(connectionString);
+            string username = usernameBox.usertextbox.Text.Trim();
+            string password = passwordBox.Password.Trim();
 
-            connection.Open();
+            txtLoginErrorMessage.Visibility = Visibility.Collapsed;
 
-            var query = new SQLiteCommand($"SELECT * FROM users WHERE username = '{usernamebox.usertextbox.Text}' AND password = '{RegisterWindow.HashPassword(passwordBox.Password)}';", connection);
-            using (var reader = query.ExecuteReader())
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                int rowCount = 0;
-                while (reader.Read())
-                {
-                    rowCount++;
-                }
-
-                if (rowCount > 0)
-                {
-                    MainWindow.LoggedIn = true;
-                    continueAllowed = true;
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("username or password is wrong");
-                }
+                txtLoginErrorMessage.Text = "Please fill all blanks";
+                txtLoginErrorMessage.Visibility = Visibility.Visible;
+                return;
             }
-            connection.Close();
+
+            bool isValid = Database.DatabaseHelper.ValidateUser(username, password);
+
+            if (isValid)
+            {
+                MainWindow.LoggedIn = true;
+                continueAllowed = true;
+                Close();
+            }
+            else
+            {
+                txtLoginErrorMessage.Text = "Invalid username or password";
+                txtLoginErrorMessage.Visibility = Visibility.Visible;
+            }
         }
         #endregion
 
-        #region PasswordBox Placeholder functions
+        #region PasswordBox placeholder functions
         private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
         {
             passwordPlaceholder.Text = string.Empty;
