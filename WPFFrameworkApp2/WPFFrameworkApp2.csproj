@@ -88,9 +88,20 @@
     <None Remove="SystemSources\NoteImages\rename.png" />
     <None Remove="SystemSources\NoteImages\Save.png" />
     <None Remove="SystemSources\NoteImages\Saveas.png" />
+    <None Remove="SystemSources\WeatherImages\clouddark.png" />
+    <None Remove="SystemSources\WeatherImages\clouddarkfog.png" />
+    <None Remove="SystemSources\WeatherImages\cloudfog.png" />
+    <None Remove="SystemSources\WeatherImages\darkrain.png" />
+    <None Remove="SystemSources\WeatherImages\drizzle.png" />
+    <None Remove="SystemSources\WeatherImages\lightning.png" />
+    <None Remove="SystemSources\WeatherImages\santino.png" />
+    <None Remove="SystemSources\WeatherImages\snowy.png" />
+    <None Remove="SystemSources\WeatherImages\softlightning.png" />
+    <None Remove="SystemSources\WeatherImages\thunderstorm.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
   </ItemGroup>
@@ -161,5 +172,15 @@
     <Resource Include="SystemSources\NoteImages\rename.png" />
     <Resource Include="SystemSources\NoteImages\Save.png" />
     <Resource Include="SystemSources\NoteImages\Saveas.png" />
+    <Resource Include="SystemSources\WeatherImages\clouddark.png" />
+    <Resource Include="SystemSources\WeatherImages\clouddarkfog.png" />
+    <Resource Include="SystemSources\WeatherImages\cloudfog.png" />
+    <Resource Include="SystemSources\WeatherImages\darkrain.png" />
+    <Resource Include="SystemSources\WeatherImages\drizzle.png" />
+    <Resource Include="SystemSources\WeatherImages\lightning.png" />
+    <Resource Include="SystemSources\WeatherImages\santino.png" />
+    <Resource Include="SystemSources\WeatherImages\snowy.png" />
+    <Resource Include="SystemSources\WeatherImages\softlightning.png" />
+    <Resource Include="SystemSources\WeatherImages\thunderstorm.png" />
   </ItemGroup>
 </Project>

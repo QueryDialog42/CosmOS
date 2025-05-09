@@ -6,11 +6,12 @@
              xmlns:local="clr-namespace:WPFFrameworkApp2.UserControls"
              mc:Ignorable="d"
              d:DesignHeight="80" d:DesignWidth="400">
-    <Grid Background="LightGray" >
+    <Grid x:Name="grid" Background="LightGray" >
         <TextBlock x:Name="usertextblock" Text="{Binding PlaceHolder}" Foreground="Gray" VerticalAlignment="Center" FontSize="20"/>
         <TextBox x:Name="usertextbox" Background="Transparent"
                  VerticalContentAlignment="Center"
                  FontSize="20"
-                 TextChanged="TextBox_TextChanged"/>
+                 TextChanged="TextBox_TextChanged"
+                 />
     </Grid>
 </UserControl>

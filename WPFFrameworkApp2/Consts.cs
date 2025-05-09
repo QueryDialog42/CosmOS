@@ -76,6 +76,16 @@
         public const string COPYMP4_IMG = "SystemSources/DesktopImages/moviebutcopy.png";
         public const string HLOGO_IMG = "SystemSources/DesktopImages/paperplane128x128.png";
         public const string GEN_DEL_IMG = "SystemSources/DesktopImages/generaldeleteicon.png";
+        public const string DARK_CLOUDY_IMG = "SystemSources/WeatherImages/clouddark.png";
+        public const string CLOUD_FOG_IMG = "SystemSources/WeatherImages/cloudfog.png";
+        public const string RAINY_IMG = "SystemSources/WeatherImages/darkrain.png";
+        public const string DRIZZLE_IMG = "SystemSources/WeatherImages/drizzle.png";
+        public const string STORM_IMG = "SystemSources/WeatherImages/lightning.png";
+        public const string SUNNY_IMG = "SystemSources/WeatherImages/santino.png";
+        public const string SNOWY_IMG = "SystemSources/WeatherImages/snowy.png";
+        public const string STORM_RAINNY = "SystemSources/WeatherImages/thunderstorm.png";
+        public const string CLOUD_DARK_FOG_IMG = "SystemSources/WeatherImages/clouddarkfog.png";
+        public const string LIGHTNING_IMG = "SystemSources/WeatherImages/softlightning.png";
     }
 
     public struct HiddenFolders
@@ -92,6 +102,7 @@
         public const string CFONT = "Cfont.txt";
         public const string CPATH = "CDesktop.txt";
         public const string CHIST = "CHistory.txt";
+        public const string CAPI = "CApiKey.txt";
         public const string C_CONFIGS = "C_CONFIGS";
     }
 
@@ -109,7 +120,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.5.4";
+        public const string GOS_VRS = "GencOS v2.5.6";
         public const string MAIL_VRS = "GenMail v1.0.0";
         public const string NOTE_VRS = "GenNote v1.5.0";
         public const string MUSIC_VRS = "GenMusic v1.7.1";
