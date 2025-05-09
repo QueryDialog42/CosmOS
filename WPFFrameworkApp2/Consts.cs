@@ -41,6 +41,7 @@
         public const string RTF_IMG = "SystemSources/DesktopImages/rtffile.png";
         public const string SADD_IMG = "SystemSources/MusicImages/soundadd.png";
         public const string NCOPY_IMG = "SystemSources/NoteImages/notecopy.png";
+        public const string SNOWY_IMG = "SystemSources/WeatherImages/snowy.png";
         public const string FRSH_IMG = "SystemSources/DesktopImages/refresh.png";
         public const string TXT_IMG = "SystemSources/DesktopImages/textfile.png";
         public const string WAV_IMG = "SystemSources/DesktopImages/soundwav.png";
@@ -51,11 +52,15 @@
         public const string QST_IMG = "SystemSources/DesktopImages/question2.png";
         public const string MP4_IMG = "SystemSources/DesktopImages/Videoicon.png";
         public const string ROTATE_IMG = "SystemSources/DesktopImages/Rotate.png";
+        public const string SUNNY_IMG = "SystemSources/WeatherImages/santino.png";
+        public const string RAINY_IMG = "SystemSources/WeatherImages/darkrain.png";
         public const string PVAPP_IMG = "SystemSources/DesktopImages/picmovie.png";
         public const string FULL_IMG = "SystemSources/DesktopImages/trashfull.png";
         public const string EXE_IMG = "SystemSources/DesktopImages/exepenguin.png";
         public const string FOLDER_IMG = "SystemSources/DesktopImages/folder2.png";
         public const string SDEL_IMG = "SystemSources/MusicImages/sounddelete.png";
+        public const string DRIZZLE_IMG = "SystemSources/WeatherImages/drizzle.png";
+        public const string STORM_IMG = "SystemSources/WeatherImages/lightning.png";
         public const string EMPT_IMG = "SystemSources/DesktopImages/trashempty.png";
         public const string ADDMP4_IMG = "SystemSources/DesktopImages/movieadd.png";
         public const string UNKNOWN_IMG = "SystemSources/DesktopImages/unknown.png";
@@ -73,19 +78,14 @@
         public const string LMP3_IMG = "SystemSources/DesktopImages/soundmp348x48.png";
         public const string FDEL_IMG = "SystemSources/DesktopImages/folderdelete2.png";
         public const string DELMP4_IMG = "SystemSources/DesktopImages/videodelete.png";
+        public const string CLOUD_FOG_IMG = "SystemSources/WeatherImages/cloudfog.png";
         public const string COPYMP4_IMG = "SystemSources/DesktopImages/moviebutcopy.png";
+        public const string STORM_RAINNY = "SystemSources/WeatherImages/thunderstorm.png";
+        public const string DARK_CLOUDY_IMG = "SystemSources/WeatherImages/clouddark.png";
+        public const string LIGHTNING_IMG = "SystemSources/WeatherImages/softlightning.png";
         public const string HLOGO_IMG = "SystemSources/DesktopImages/paperplane128x128.png";
         public const string GEN_DEL_IMG = "SystemSources/DesktopImages/generaldeleteicon.png";
-        public const string DARK_CLOUDY_IMG = "SystemSources/WeatherImages/clouddark.png";
-        public const string CLOUD_FOG_IMG = "SystemSources/WeatherImages/cloudfog.png";
-        public const string RAINY_IMG = "SystemSources/WeatherImages/darkrain.png";
-        public const string DRIZZLE_IMG = "SystemSources/WeatherImages/drizzle.png";
-        public const string STORM_IMG = "SystemSources/WeatherImages/lightning.png";
-        public const string SUNNY_IMG = "SystemSources/WeatherImages/santino.png";
-        public const string SNOWY_IMG = "SystemSources/WeatherImages/snowy.png";
-        public const string STORM_RAINNY = "SystemSources/WeatherImages/thunderstorm.png";
         public const string CLOUD_DARK_FOG_IMG = "SystemSources/WeatherImages/clouddarkfog.png";
-        public const string LIGHTNING_IMG = "SystemSources/WeatherImages/softlightning.png";
     }
 
     public struct HiddenFolders
@@ -100,9 +100,9 @@
         public const string CDESK = "C_DESKTOP";
         public const string CCOL = "Ccolor.txt";
         public const string CFONT = "Cfont.txt";
+        public const string CAPI = "CApiKey.txt";
         public const string CPATH = "CDesktop.txt";
         public const string CHIST = "CHistory.txt";
-        public const string CAPI = "CApiKey.txt";
         public const string C_CONFIGS = "C_CONFIGS";
     }
 
@@ -120,7 +120,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.5.6";
+        public const string GOS_VRS = "GencOS v2.5.7";
         public const string MAIL_VRS = "GenMail v1.0.0";
         public const string NOTE_VRS = "GenNote v1.5.0";
         public const string MUSIC_VRS = "GenMusic v1.7.1";
