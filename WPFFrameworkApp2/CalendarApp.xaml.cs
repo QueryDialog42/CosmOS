@@ -124,7 +124,8 @@ namespace WPFFrameworkApp2
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            GetWeatherInfo(usertexboxcontrol.usertextbox.Text);
+            string city = usertexboxcontrol.usertextbox.Text;
+            if (string.IsNullOrEmpty(city) == false) GetWeatherInfo(city);
         }
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
