@@ -3,7 +3,7 @@ When you open this project first time, do these in order to run app:
 
 # Open the solution (WPFFreamworkApp2.sln), It should create a 'bin' folder
 
-# Copy SystemSources folder
+# Copy 'SystemSources' folder
 
 # Paste them into GencOS-main\GencOS-main\WPFFrameworkApp2\bin\Debug\net8.0-windows
 
