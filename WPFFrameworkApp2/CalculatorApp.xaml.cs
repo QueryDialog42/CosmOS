@@ -17,6 +17,7 @@ namespace WPFFrameworkApp2
             Show();
         }
 
+
         private void Digit_Click(object sender, RoutedEventArgs e)
         {
             var d = ((Button)sender).Content.ToString();
@@ -52,7 +53,15 @@ namespace WPFFrameworkApp2
         {
             var op = ((Button)sender).Content.ToString();
             if (string.IsNullOrEmpty(_expression))
+            {
+
+                if (op == "-")
+                {
+                    _expression = op;
+                    Display.Text = _expression;
+                }
                 return;
+            }
 
 
             if (Regex.IsMatch(_expression[^1].ToString(), @"[\+\-\*/]"))
@@ -83,7 +92,7 @@ namespace WPFFrameworkApp2
             }
             catch (DivideByZeroException)
             {
-                Display.Text = "Invalid";
+                Display.Text = "Invalid operation";
                 _expression = "";
             }
             catch (Exception)
@@ -104,28 +113,25 @@ namespace WPFFrameworkApp2
 
         private double EvaluateExpression(string expr)
         {
-
-            var numberPattern = @"-?\d+(\.\d+)?";
-            var opPattern = @"[\+\-\*/]";
-            var tokenPattern = numberPattern + "|" + opPattern;
+            // Değişkenleri doğrudan kullanarak uyarıları gideriyoruz
+            var tokenPattern = @"(?<=[\+\-\/])-?\d+(\.\d+)?(E-?\d+)?|^-?\d+(\.\d+)?(E-?\d+)?|[\+\-\/]";
 
             var tokens = new List<string>();
             foreach (Match m in Regex.Matches(expr, tokenPattern))
                 tokens.Add(m.Value);
 
             if (tokens.Count == 0)
-                throw new Exception("No token");
+                throw new Exception("Token yok");
 
-
+            // Önce çarpma ve bölmeleri işle
             for (int i = 1; i < tokens.Count; i += 2)
             {
                 string op = tokens[i];
                 if (op == "*" || op == "/")
                 {
-                    double left = double.Parse(tokens[i - 1], CultureInfo.InvariantCulture);
-                    double right = double.Parse(tokens[i + 1], CultureInfo.InvariantCulture);
+                    double left = double.Parse(tokens[i - 1], NumberStyles.Float, CultureInfo.InvariantCulture);
+                    double right = double.Parse(tokens[i + 1], NumberStyles.Float, CultureInfo.InvariantCulture);
                     double result = Compute(left, op, right);
-
 
                     tokens[i - 1] = result.ToString(CultureInfo.InvariantCulture);
                     tokens.RemoveRange(i, 2);
@@ -133,11 +139,12 @@ namespace WPFFrameworkApp2
                 }
             }
 
-            double finalResult = double.Parse(tokens[0], CultureInfo.InvariantCulture);
+            // Sonra toplama ve çıkarmaları işle
+            double finalResult = double.Parse(tokens[0], NumberStyles.Float, CultureInfo.InvariantCulture);
             for (int i = 1; i < tokens.Count; i += 2)
             {
                 string op = tokens[i];
-                double right = double.Parse(tokens[i + 1], CultureInfo.InvariantCulture);
+                double right = double.Parse(tokens[i + 1], NumberStyles.Float, CultureInfo.InvariantCulture);
                 finalResult = Compute(finalResult, op, right);
             }
 

@@ -445,18 +445,18 @@ namespace WPFFrameworkApp
         }
         private static string setExtensionString(string extension)
         {
-            switch (extension)
+            return extension switch
             {
-                case SupportedFiles.TXT: return $"Text File ({SupportedFiles.TXT})";
-                case SupportedFiles.RTF: return $"Rich Text File ({SupportedFiles.RTF})";
-                case SupportedFiles.WAV: return $"Waveform Audio File ({SupportedFiles.WAV})";
-                case SupportedFiles.MP3: return $"MPEG-1 Audio Layer 3 Audio File ({SupportedFiles.MP3})";
-                case SupportedFiles.EXE: return $"Executable File ({SupportedFiles.EXE})";
-                case SupportedFiles.PNG: return $"Portable Network Graphics File ({SupportedFiles.PNG})";
-                case SupportedFiles.JPG: return $"JPEG Image File ({SupportedFiles.JPG})";
-                case SupportedFiles.MP4: return $"MPEG-4 Video File ({SupportedFiles.MP4})";
-                default: return "Unknown File (?.?)";
-            }
+                SupportedFiles.TXT => "Text File",
+                SupportedFiles.RTF => "Rich Text File",
+                SupportedFiles.WAV => "Waveform Audio File",
+                SupportedFiles.MP3 => "MPEG-1 Audio Layer 3 Audio File",
+                SupportedFiles.EXE => "Executable File",
+                SupportedFiles.PNG => "Portable Network Graphics File",
+                SupportedFiles.JPG => "JPEG Image File",
+                SupportedFiles.MP4 => "MPEG-4 Video File",
+                _ => "Unknown File (?.?)"
+            };
         }
         private static void setInfoWindow(InfoWindow infowindow, FileInfo fileInfo, string imageicon)
         {
@@ -553,13 +553,13 @@ namespace WPFFrameworkApp
         {
             try
             {
-                switch (which)
+                return which switch
                 {
-                    case 0: return fontcolor[1]; // desktop font color
-                    case 1: return fontcolor[6]; // folder font color
-                    case 2: return fontcolor[11]; // menu font color
-                    default: return null;
-                }
+                    0 => fontcolor[1], // desktop font color
+                    1 => fontcolor[6], // folder font color
+                    2 => fontcolor[11], // menu font color
+                    _ => null
+                };
             } catch (IndexOutOfRangeException)
             {
                 return null;
@@ -861,12 +861,12 @@ namespace WPFFrameworkApp
         {
             string[] fontsettings = GetFontSettingsFromCfont();
 
-            switch (which)
+            return which switch
             {
-                case 0: return CreateTextBlockForDesktop(filename, fontsettings);
-                case 1: return CreateTextBlockForFolder(filename, fontsettings);
-                default: return null;
-            }
+                0 => CreateTextBlockForDesktop(filename, fontsettings),
+                1 => CreateTextBlockForFolder(filename, fontsettings),
+                _ => null
+            };
         }
         public static void Appearence(Image image, StackPanel stackpanel, Button app, TextBlock appname, string logo)
         {

@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp2"
         mc:Ignorable="d"
+        Background="Black"
         Icon="/SystemSources/DesktopImages/calculator.png"
         Title="CalculatorApp" Height="500" Width="320">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#404040"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,33 +31,33 @@
                  Height="60"
                  IsReadOnly="True"
                  Text="0"
+                 Background="#7d7960"
                  VerticalContentAlignment="Center"/>
 
 
         <UniformGrid Grid.Row="1" Columns="4" Rows="4">
-
             <Button Content="7" Click="Digit_Click"/>
             <Button Content="8" Click="Digit_Click"/>
             <Button Content="9" Click="Digit_Click"/>
-            <Button Content="/" Click="Operator_Click"/>
+            <Button Content="/" Click="Operator_Click" Background="#2b2b2b"/>
 
 
             <Button Content="4" Click="Digit_Click"/>
             <Button Content="5" Click="Digit_Click"/>
             <Button Content="6" Click="Digit_Click"/>
-            <Button Content="*" Click="Operator_Click"/>
+            <Button Content="*" Click="Operator_Click" Background="#2b2b2b"/>
 
 
             <Button Content="1" Click="Digit_Click"/>
             <Button Content="2" Click="Digit_Click"/>
             <Button Content="3" Click="Digit_Click"/>
-            <Button Content="-" Click="Operator_Click"/>
+            <Button Content="-" Click="Operator_Click" Background="#2b2b2b"/>
 
 
-            <Button Content="," Click="Decimal_Click"/>
-            <Button Content="0" Click="Digit_Click"/>
-            <Button Content="=" Click="Equal_Click"/>
-            <Button Content="+" Click="Operator_Click"/>
+            <Button Content="," Click="Decimal_Click" Background="#2b2b2b"/>
+            <Button Content="0" Click="Digit_Click" Background="#2b2b2b"/>
+            <Button Content="=" Click="Equal_Click" Background="#c99834"/>
+            <Button Content="+" Click="Operator_Click" Background="#2b2b2b"/>
         </UniformGrid>
 
 
@@ -58,6 +65,7 @@
                 Content="C"
                 Click="Clear_Click"
                 Height="50"
+                Background="#2b2b2b"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"/>
     </Grid>
