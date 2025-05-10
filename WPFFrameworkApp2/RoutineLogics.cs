@@ -23,6 +23,8 @@ namespace WPFFrameworkApp
         public static string folderFontcolor = GetFontColor(fontcolor, 1);
         public static string desktopFontcolor = GetFontColor(fontcolor, 0);
 
+        public static bool historyLoaded = false;
+
         #region Style functions
         public static void SetWindowStyles(dynamic menu, dynamic[] menuitems)
         {
@@ -295,7 +297,7 @@ namespace WPFFrameworkApp
 
             historyitem.ContextMenu = CreateContextMenuForHistoryItems(window, historyitem);
 
-            historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, window.currentDesktop, filepath);
+            historyitem.PreviewMouseLeftButtonUp += (sender, e) => ChooseListenerFor(window, Path.GetDirectoryName(filepath), filepath);
 
             MainWindow gencosmain = GetMainWindow(MainWindow.CDesktopPath);
 
@@ -347,6 +349,7 @@ namespace WPFFrameworkApp
 
                 AddFileToHistoryListener(window, imagepath, history);
             }
+            historyLoaded = true;
         }
         #endregion
 
@@ -1358,7 +1361,7 @@ namespace WPFFrameworkApp
                 }
                 if (window.searchComboBox != null) AddEveryItemIntoSearch(window);
                 SetApplications(window);
-                window.Show();
+                window?.Show();
             }
             catch (Exception e)
             {

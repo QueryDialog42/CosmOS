@@ -6,7 +6,7 @@
         xmlns:UserControl="clr-namespace:WPFFrameworkApp2.UserControls"
         xmlns:local="clr-namespace:WPFFrameworkApp2" WindowStyle="SingleBorderWindow" Icon="SystemSources/DesktopImages/calendar.png"
         mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Title="CalendarApp" Height="210" Width="450">
+        Title="CalendarApp" Height="210" Width="460">
     <Grid x:Name="background" Background="DarkGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -45,7 +45,7 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <Image x:Name="weathericon" Source="/SystemSources/DesktopImages/unknown.png" />
                 <StackPanel>
-                    <TextBlock x:Name="derece" Text="00" FontSize="35" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="degree" Text="00" FontSize="35" FontWeight="Bold" VerticalAlignment="Center"/>
                     <TextBlock x:Name="explanation" Text="No information" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>

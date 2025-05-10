@@ -31,7 +31,7 @@ namespace WPFFrameworkApp2
 
             background.Background = RoutineLogics.ConvertHexColor(colors[1]);
 
-            TextBlock[] texts = { location, explanation, derece, apiwarning};
+            TextBlock[] texts = { location, explanation, degree, apiwarning};
             foreach (TextBlock text in texts)
             {
                 text.Foreground = RoutineLogics.ConvertHexColor(fonts[6]);
@@ -83,8 +83,8 @@ namespace WPFFrameworkApp2
 
                     WeatherInfo.root weatherInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<WeatherInfo.root>(json);
 
-                    derece.Text = (weatherInfo.main.temp - 273.15).ToString("0.00") + " °C";
-                    explanation.Text = weatherInfo.weather[0].description;
+                    degree.Text = (weatherInfo.main.temp - 273.15).ToString("0.00") + " °C";
+                    explanation.Text = "  " + weatherInfo.weather[0].description;
 
                     int id = weatherInfo.weather[0].id;
 

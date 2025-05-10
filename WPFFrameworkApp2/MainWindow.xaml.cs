@@ -239,7 +239,7 @@ namespace WPFFrameworkApp
                 SetTimeLogics();
                 SetDisplaySetting();
                 SetHistorySettingsButton();
-                RoutineLogics.AddHistoriesFromCHistory(this, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST));
+                if (RoutineLogics.historyLoaded == false) RoutineLogics.AddHistoriesFromCHistory(this, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST));
 
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
             }
