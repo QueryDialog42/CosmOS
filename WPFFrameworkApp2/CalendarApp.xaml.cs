@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace WPFFrameworkApp2
 {
@@ -76,11 +77,12 @@ namespace WPFFrameworkApp2
         {
             using (var httpclient = new HttpClient())
             {
+                string url = $"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}";
                 try
                 {
-                    string url = $"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}";
-                    string json = httpclient.GetStringAsync(url).Result;
+                    if (CheckInternetConnection() == false) return;
 
+                    string json = httpclient.GetStringAsync(url).Result;
                     WeatherInfo.root weatherInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<WeatherInfo.root>(json);
 
                     degree.Text = (weatherInfo.main.temp - 273.15).ToString("0.00") + " °C";
@@ -104,12 +106,25 @@ namespace WPFFrameworkApp2
 
                     string[] lines = {API_KEY, weatherInfo.name };
                     File.WriteAllLines(Path.Combine(RoutineLogics.configFolder, Configs.CAPI), lines);
+                    errorText.Text = string.Empty;
 
                     SetWeatherWindow();
-
-                } catch(Exception) 
+                }
+                catch(AggregateException)
                 {
-                    MessageBox.Show("Your API key is invalid or not activated yet.\nIf you sure about your API key is right,\nwait until it is activated.", "API key error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    HttpResponseMessage response = httpclient.GetAsync(url).Result;
+                    switch ((int)response.StatusCode)
+                    {
+                        case 400: errorText.Text = "Invalid city"; break; // Bad Request
+                        case 401: MessageBox.Show("Your API key is invalid or not activated yet.\nIf you are sure about your API key, wait until it is activated.", "API key error", MessageBoxButton.OK, MessageBoxImage.Warning); break;
+                        case 403: RoutineLogics.ErrorMessage("API Key blocked", "This API key is forbidden to use"); break; // Forbidden
+                        case 404: errorText.Text = "City not found"; break; // Not Found
+                        case 500: RoutineLogics.ErrorMessage("Server Error", "Server is down. Please try again later."); break; // Internal Server Error
+                        case 502: RoutineLogics.ErrorMessage("Bad Gateway", "Server is down. Please try again later."); break; // Bad Gateway
+                        case 503: RoutineLogics.ErrorMessage("Service Unavailable", "Server is down. Please try again later."); break; // Service Unavailable
+                        case 504: RoutineLogics.ErrorMessage("Gateway Timeout", "Timeout. Please try again later."); break; // Gateway Timeout
+                        default: RoutineLogics.ErrorMessage("Error", "Unknown HTTP error.\nWe recommend that you check your internet connection."); break;
+                    }    
                 }
             }
         }
@@ -131,6 +146,23 @@ namespace WPFFrameworkApp2
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
             e.Handled = true;
+        }
+        #endregion
+
+        #region Unclassified private functions
+        private bool CheckInternetConnection()
+        {
+            // Check if the network is available before making the request
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                RoutineLogics.ErrorMessage("No Internet", "Internet connection is not available. Please check your connection.");
+                apiwarning.Text = "No internet connection";
+                hyperlink.Visibility = Visibility.Collapsed;
+                Api_Key.Visibility = Visibility.Collapsed;
+                button.Visibility = Visibility.Collapsed;
+                return false;
+            }
+            return true;
         }
         #endregion
     }

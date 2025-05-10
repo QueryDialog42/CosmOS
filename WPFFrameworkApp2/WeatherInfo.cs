@@ -27,6 +27,7 @@ namespace WPFFrameworkApp2
             public main main { get; set; }
             public sys sys { get; set; }
             public string name { get; set; }
+            public int cod { get; set; }
         }
     }
 }
