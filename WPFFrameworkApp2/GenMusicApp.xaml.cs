@@ -243,6 +243,10 @@ namespace WPFFrameworkApp
         {
             MenuItem[] menuItems = { AudioItem, AItem1, AItem2, AItem3, AItem4, AItem5, AItem6 };
             RoutineLogics.SetWindowStyles(fileMenu, menuItems);
+
+            Title = AppTitles.APP_MUSIC;
+            AItem5.Header = "_Reload " + AppTitles.APP_MUSIC;
+            AItem6.Header = "About " + AppTitles.APP_MUSIC;
         }
         #endregion
 
@@ -349,53 +353,6 @@ namespace WPFFrameworkApp
         }
         #endregion
 
-        #region Unclassified public functions
-        public void MusicAppButton_Clicked(string musicpath, string musicname)
-        {
-            if (time != null)
-            {
-                time.Stop();
-                isPaused = true;
-            }
-
-            currentAudio = musicname;
-            currentMusic.Text = musicname;
-
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.Close();
-            mediaPlayer.Open(new Uri(musicpath, UriKind.Relative));
-            mediaPlayer.MediaOpened += InitializeMediaController;
-
-            ShowCurrentMusic();
-            PaintSelectedMusic();
-
-            if (time != null) time.Start();
-
-            mediaPlayer.Play();
-        }
-        #endregion
-
-        #region Unclassified private functions
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
-                TextBlock textblock = item.Tag as TextBlock;
-                string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
-                currentMusic.Text = itemname;
-                currentAudio = itemname;
-                InitializeMediaPlayer(itemname);
-            }
-            catch (NullReferenceException)
-            {
-                // do nothing on null exception
-                InitializeSliderLogics();
-                stopButton.IsEnabled = true; // to be avoid stop button is disabled forever
-            }
-        }
-        #endregion
-
         #region Music MenuItem options functions
         private void AddAudio(object sender, RoutedEventArgs e)
         {
@@ -444,7 +401,54 @@ namespace WPFFrameworkApp
         }
         private void AboutGenmusicPage_Wanted(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ShowAboutWindow("About GenMusic", ImagePaths.MSC_IMG, ImagePaths.LMSC_IMG, Versions.MUSIC_VRS, Messages.ABT_DFLT_MSG);
+            RoutineLogics.ShowAboutWindow("About " + AppTitles.APP_MUSIC, ImagePaths.MSC_IMG, ImagePaths.LMSC_IMG, Versions.MUSIC_VRS, Messages.ABT_DFLT_MSG);
+        }
+        #endregion
+
+        #region Unclassified public functions
+        public void MusicAppButton_Clicked(string musicpath, string musicname)
+        {
+            if (time != null)
+            {
+                time.Stop();
+                isPaused = true;
+            }
+
+            currentAudio = musicname;
+            currentMusic.Text = musicname;
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.Close();
+            mediaPlayer.Open(new Uri(musicpath, UriKind.Relative));
+            mediaPlayer.MediaOpened += InitializeMediaController;
+
+            ShowCurrentMusic();
+            PaintSelectedMusic();
+
+            if (time != null) time.Start();
+
+            mediaPlayer.Play();
+        }
+        #endregion
+
+        #region Unclassified private functions
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ListBoxItem item = listbox.SelectedItem as ListBoxItem ?? throw new NullReferenceException();
+                TextBlock textblock = item.Tag as TextBlock;
+                string itemname = textblock.Text.Trim(); // .Trim in order to remove spaces begin and last
+                currentMusic.Text = itemname;
+                currentAudio = itemname;
+                InitializeMediaPlayer(itemname);
+            }
+            catch (NullReferenceException)
+            {
+                // do nothing on null exception
+                InitializeSliderLogics();
+                stopButton.IsEnabled = true; // to be avoid stop button is disabled forever
+            }
         }
         #endregion
     }

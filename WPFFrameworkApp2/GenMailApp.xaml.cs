@@ -5,7 +5,7 @@ using MessageBox = System.Windows.MessageBox;
 using System.Diagnostics;
 using System.Windows.Navigation;
 using System.Windows.Media;
-using System.Windows.Controls; // Use the WPF MessageBox
+using System.Windows.Controls;
 
 
 namespace WPFFrameworkApp
@@ -19,24 +19,20 @@ namespace WPFFrameworkApp
             Show();
         }
 
-        // SendButton_Click: Gönder Butonu İşlemleri
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            // TextBox'lardaki bilgileri alıyoruz
-            string fromEmail = FromEmailTextBox.Text; // Gönderen e-posta adresi
-            string toEmail = ToEmailTextBox.Text;        // Alıcı e-posta adresi
-            string topic = TopicTextBox.Text;        // Konu
-            string explanation = ExplanationTextBox.Text; // Açıklama
+            string fromEmail = FromEmailTextBox.Text; 
+            string toEmail = ToEmailTextBox.Text;       
+            string topic = TopicTextBox.Text;        
+            string explanation = ExplanationTextBox.Text;
             string appPassword = AppPasswordTextBox.Text; // Uygulama şifresi
 
-            // Boş alanları kontrol et
             if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(toEmail) || string.IsNullOrWhiteSpace(topic) || string.IsNullOrWhiteSpace(explanation))
             {
                 MessageBox.Show("Please fill in all fields.", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // Gönderen ve Alıcı e-posta adreslerinin geçerlilik kontrolü
             if (!IsValidEmail(toEmail))
             {
                 MessageBox.Show("Please enter a valid sender email address.", "WARNING!", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -62,14 +58,14 @@ namespace WPFFrameworkApp
                 // Mail Ayarları
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress(fromEmail), // Gönderen adres
-                    Subject = topic,                   // Konu
-                    Body = explanation,                // Açıklama
-                    IsBodyHtml = false                 // HTML formatında değil
+                    From = new MailAddress(fromEmail), 
+                    Subject = topic,                   
+                    Body = explanation,                
+                    IsBodyHtml = false // HTML formatında değil
                 };
-                mailMessage.To.Add(toEmail); // Alıcı adresi
+                mailMessage.To.Add(toEmail); 
 
-                smtpClient.Send(mailMessage); // Mail gönder
+                smtpClient.Send(mailMessage); 
                 MessageBox.Show("Mail has been sent successfully!", "SUCCEED!", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -78,14 +74,12 @@ namespace WPFFrameworkApp
             }
         }
 
-        // CancelButton_Click: İptal Butonu İşlemleri
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to clean up the fields?", "APPROVED!", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes)
             {
-                // Tüm TextBox'ları temizle
                 ToEmailTextBox.Clear();
                 FromEmailTextBox.Clear();
                 TopicTextBox.Clear();
@@ -98,7 +92,6 @@ namespace WPFFrameworkApp
             }
         }
 
-        // E-posta Geçerlilik Kontrol Fonksiyonu
         private bool IsValidEmail(string email)
         {
             try
@@ -135,6 +128,9 @@ namespace WPFFrameworkApp
                 textbox.Background = Brushes.Transparent;
                 textbox.Foreground = desktopFontColor;
             }
+
+            Title = AppTitles.APP_MAIL;
+            GItem1.Text = AppTitles.APP_MAIL;
         }
     }
 }

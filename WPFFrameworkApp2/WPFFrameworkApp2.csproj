@@ -26,6 +26,7 @@
     <None Remove="SystemSources\DesktopImages\calculator.png" />
     <None Remove="SystemSources\DesktopImages\calendar.png" />
     <None Remove="SystemSources\DesktopImages\copypict.png" />
+    <None Remove="SystemSources\DesktopImages\cosmos.png" />
     <None Remove="SystemSources\DesktopImages\deleteexe.png" />
     <None Remove="SystemSources\DesktopImages\delpicture.png" />
     <None Remove="SystemSources\DesktopImages\display.png" />
@@ -110,6 +111,7 @@
     <Resource Include="SystemSources\DesktopImages\calculator.png" />
     <Resource Include="SystemSources\DesktopImages\calendar.png" />
     <Resource Include="SystemSources\DesktopImages\copypict.png" />
+    <Resource Include="SystemSources\DesktopImages\cosmos.png" />
     <Resource Include="SystemSources\DesktopImages\deleteexe.png" />
     <Resource Include="SystemSources\DesktopImages\delpicture.png" />
     <Resource Include="SystemSources\DesktopImages\display.png" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Linq;
 using System.Windows;
 using WPFFrameworkApp2;
@@ -92,6 +93,7 @@ namespace WPFFrameworkApp
         {
             if (Title == MainItems.MAIN_WIN)
             {
+                if (IsHistoryEnabled == false) return;
                 // Convert ListBox items to an array
                 string[] histories = historyList.Items
                     .Cast<ListBoxItem>() 
@@ -183,16 +185,20 @@ namespace WPFFrameworkApp
         #region Configuration functions
         private string ConfigurePath(string CDesktopFile)
         {
-            string input = InputDialog.ShowInputDialog("  Please enter " + Configs.CDESK + " path\n\n" +
-                "  What is C_DESKTOP?\n\n  C_DESKTOP is a folder that contains\n  your folders, musics, videos etc. and the base of GencOS.\n" +
-                "  You have to create one folder named C_DESKTOP regardless of where it is\n  and paste the path of this folder to the given blank in order to continue.\n" +
-                "  Other configurations (such as creating C_CONFIGS folder)\n  will be automatically completed.", "Path Needed");
+            StringBuilder stringbuilder = new StringBuilder();
+            stringbuilder.Append("  Please enter ").Append(Configs.CDESK).Append(" path.\n\n")
+                .Append("  What is ").Append(Configs.CDESK).Append("?\n\n  ").Append(Configs.CDESK)
+                .Append(" is a folder that contains\n  your folders, musics, videos etc. and the base of ").Append(AppTitles.APP_WIN).Append(".\n  You have to create one folder named ")
+                .Append(Configs.CDESK).Append(" regardless of where it is\n  and paste the path of this folder to the given blank in order to continue.\n  Other configurations (such as creating ")
+                .Append(Configs.C_CONFIGS).Append(" folder)\n  will be automatically completed.");
+
+            string input = InputDialog.ShowInputDialog(stringbuilder.ToString(), "Path Needed");
             //Resumes until valid path is entered
             while (true)
             {
                 if (InputDialog.Result == true)
                 {
-                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nCheck if the folder is named correctly.\n(Folder should be named as C_DESKTOP)", "Invalid path", ImagePaths.WRNG_IMG);
+                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nCheck if the folder is named correctly.\n(Folder should be named as {Configs.CDESK})", "Invalid path", ImagePaths.WRNG_IMG);
                     else if (Directory.Exists(input) == false) input = InputDialog.ShowInputDialog($"Path to {Configs.CDESK} does not exists.\nPlease check if the path is correct.", "Incorrect path", ImagePaths.WRNG_IMG);
                     else
                     {
@@ -238,9 +244,11 @@ namespace WPFFrameworkApp
 
                 SetTimeLogics();
                 SetDisplaySetting();
+                SetToolTipsOfApps();
                 SetHistorySettingsButton();
-                if (RoutineLogics.historyLoaded == false) RoutineLogics.AddHistoriesFromCHistory(this, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST));
+                menuitem7.Header = "About " + AppTitles.APP_WIN;
 
+                if (RoutineLogics.historyLoaded == false) RoutineLogics.AddHistoriesFromCHistory(this, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST));
                 if (currentDesktop != null) RoutineLogics.ReloadWindow(this, CDesktopDisplayMode);
             }
             catch (Exception ex)
@@ -461,6 +469,12 @@ namespace WPFFrameworkApp
                 string foldername = InputDialog.ShowInputDialog("Please enter the name of the folder:", "New Folder", ImagePaths.NEWFOL_IMG, ImagePaths.LOGO_IMG);
                 if (InputDialog.Result == true)
                 {
+                    string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL};
+                    if (hiddenfolders.Contains(foldername))
+                    {
+                        RoutineLogics.ErrorMessage("Not Allowed Folder Name", "You can not name your folders as hidden folders.");
+                        return;
+                    }
                     string folderpath = Path.Combine(currentDesktop, foldername);
                     if (Directory.Exists(folderpath) == false)
                     {
@@ -526,7 +540,7 @@ namespace WPFFrameworkApp
         }
         private void AboutGencosPage_Wanted(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ShowAboutWindow("About GencOS", ImagePaths.HLOGO_IMG, ImagePaths.LOGO_IMG, Versions.GOS_VRS, Messages.ABT_DFLT_MSG);
+            RoutineLogics.ShowAboutWindow("About " + AppTitles.APP_WIN, ImagePaths.HLOGO_IMG, ImagePaths.LOGO_IMG, Versions.GOS_VRS, Messages.ABT_DFLT_MSG);
         }
         private void ReloadWindow_Wanted(object sender, RoutedEventArgs e)
         {
@@ -641,6 +655,14 @@ namespace WPFFrameworkApp
                 default: RoutineLogics.AddFolderListener(filepath); break;
                 }
             }
+        private void SetToolTipsOfApps()
+        {
+            NoteApp.ToolTip = AppTitles.APP_NOTE;
+            MusicApp.ToolTip = AppTitles.APP_MUSIC;
+            PicMovie.ToolTip = AppTitles.APP_PICMOV;
+            MailApp.ToolTip = AppTitles.APP_MAIL;
+            CalculatorApp.ToolTip = AppTitles.APP_CALC;
+        }
         #endregion
     }
 }

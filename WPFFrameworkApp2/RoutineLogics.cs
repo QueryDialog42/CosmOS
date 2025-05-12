@@ -252,6 +252,8 @@ namespace WPFFrameworkApp
         #region History functions
         public static void AddFileToHistoryListener(MainWindow window, string imagepath, string filepath)
         {
+            if (window.IsHistoryEnabled == false) return;
+
             Image image = new()
             {
                 Source = setBitmapImage(imagepath),
@@ -819,12 +821,13 @@ namespace WPFFrameworkApp
         }
         private static bool CheckNewFolderNameIsAllowed(string newfoldername)
         {
+            string[] hiddenfolders = { HiddenFolders.HAUD_FOL, HiddenFolders.HTRSH_FOL, HiddenFolders.HPV_FOL };
             if (string.IsNullOrEmpty(newfoldername))
             {
                 ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as null"); // not allowed
                 return false;
             }
-            if (newfoldername == HiddenFolders.HTRSH_FOL || newfoldername == HiddenFolders.HAUD_FOL)
+            if (hiddenfolders.Contains(newfoldername))
             {
                 ErrorMessage(Errors.PRMS_ERR, "You can not rename folders as same as hidden folders.");
                 return false; // not allowed
@@ -1097,11 +1100,7 @@ namespace WPFFrameworkApp
                 Title = filename,
                 Icon = icon,
                 window = window,
-                desktopPath = desktopPath,
-                MaxHeight = SystemParameters.PrimaryScreenHeight * 0.8, // %80 of main screen height
-                MaxWidth = SystemParameters.PrimaryScreenWidth * 0.9, // %90 of main screen width
-                MinHeight = 200,
-                MinWidth = 200,
+                desktopPath = desktopPath
             };
 
             return pictureApp;
@@ -1767,7 +1766,7 @@ namespace WPFFrameworkApp
         }
         private static void AddIfSound(ContextMenu contextMenu, string color, MainWindow window, string currentdesktop, string filename)
         {
-            MenuItem addtogenmuic = CreateMenuItemForContextMenu("Add to GenMusic", color, ImagePaths.SADD_IMG);
+            MenuItem addtogenmuic = CreateMenuItemForContextMenu("Add to " + AppTitles.APP_MUSIC, color, ImagePaths.SADD_IMG);
 
             addtogenmuic.Click += (sender, e) =>
             {
@@ -1781,7 +1780,7 @@ namespace WPFFrameworkApp
         }
         private static void AddIfPicVideo(ContextMenu contextMenu, string color, MainWindow window, string currentdesktop, string filename, string addfilemenuicon)
         {
-            MenuItem addtopicmovie = CreateMenuItemForContextMenu("Add to PicMovie", color, addfilemenuicon);
+            MenuItem addtopicmovie = CreateMenuItemForContextMenu("Add to " + AppTitles.APP_PICMOV, color, addfilemenuicon);
 
             addtopicmovie.Click += (sender, e) =>
             {

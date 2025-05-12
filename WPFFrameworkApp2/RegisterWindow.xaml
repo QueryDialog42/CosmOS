@@ -20,7 +20,7 @@
         <Image Source="SystemSources/DesktopImages/useradd.png"
                VerticalAlignment="Bottom"
                HorizontalAlignment="Center" Height="160" Width="156"
-           />
+        />
 
         <UserControl:TextBoxControls x:Name="txtUsername" Grid.Row="1"
                                  HorizontalAlignment="Center"

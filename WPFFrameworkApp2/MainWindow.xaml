@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFFrameworkApp"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" Icon="SystemSources/DesktopImages/paperplane2.png"
-        Title="GencOS main" Height="450" Width="800">
+        Title="CosmOS main" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -68,7 +68,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="menuitem7" Header="_About GencOS" Click="AboutGencosPage_Wanted">
+                <MenuItem x:Name="menuitem7" Click="AboutGencosPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/DesktopImages/paperplane2.png"/>
                     </MenuItem.Icon>
@@ -205,10 +205,10 @@
                     </Style>
                 </StackPanel.Resources>
                 
-                <Button x:Name="NoteApp" ToolTip="GenNote" Width="60" Height="60" Click="NoteApp_Clicked">
+                <Button x:Name="NoteApp" Width="60" Height="60" Click="NoteApp_Clicked">
                     <Image Source="SystemSources/NoteImages/gennote.png" />
                 </Button>
-                <Button x:Name="MusicApp" ToolTip="GenMusic" Click="MusicAppStart">
+                <Button x:Name="MusicApp" Click="MusicAppStart">
                     <Image Source="SystemSources/DesktopImages/Genmusic.png"/>
                 </Button>
 

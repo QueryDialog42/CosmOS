@@ -54,7 +54,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="aboutmenu" Header="About GenNote" BorderThickness="0" Click="AboutPage">
+                <MenuItem x:Name="aboutmenu" BorderThickness="0" Click="AboutPage">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/NoteImages/gennote.png" />
                     </MenuItem.Icon>

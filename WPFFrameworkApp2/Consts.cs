@@ -118,18 +118,28 @@
         public const string MP4 = ".mp4";
     }
 
+    public struct AppTitles
+    {
+        public const string APP_WIN = "CosmOS"; // when you want to change this, change it in the MainWindow.xaml too
+        public const string APP_MAIL = "CosMail";
+        public const string APP_NOTE = "CosNote";
+        public const string APP_MUSIC = "CosMusic";
+        public const string APP_PICMOV = "CosMovie";
+        public const string APP_CALC = "CosCalculator";
+    }
+
     public struct Versions
     {
-        public const string GOS_VRS = "GencOS v2.6.7";
-        public const string MAIL_VRS = "GenMail v1.0.0";
-        public const string NOTE_VRS = "GenNote v1.5.0";
-        public const string MUSIC_VRS = "GenMusic v1.7.1";
-        public const string PICMOV_VRS = "GenMovie v0.0.6";
+        public const string GOS_VRS = AppTitles.APP_WIN + " v2.7.0";
+        public const string MAIL_VRS = AppTitles.APP_MAIL + " v1.0.0";
+        public const string NOTE_VRS = AppTitles.APP_NOTE + " v1.5.0";
+        public const string MUSIC_VRS = AppTitles.APP_MUSIC + " v1.7.1";
+        public const string PICMOV_VRS = AppTitles.APP_PICMOV + " v0.0.7";
     }
 
     public struct MainItems
     {
-        public const string MAIN_WIN = "GencOS main";
+        public const string MAIN_WIN = AppTitles.APP_WIN + " main";
     }
 
     public struct Messages
@@ -148,14 +158,5 @@
         public const string FONT_WEIGHT = "Regular";
         public const string FOL_DESK_COL = "#9c9268";
         public const string MAIN_DESK_COL = "LightGray";
-    }
-
-    public struct AppTitles
-    {
-        public const string APP_WIN = "GencOS";
-        public const string APP_MAIL = "GenMail";
-        public const string APP_NOTE = "GenNote";
-        public const string APP_MUSIC = "GenMusic";
-        public const string APP_PICMOV = "GenMovie";
     }
 }

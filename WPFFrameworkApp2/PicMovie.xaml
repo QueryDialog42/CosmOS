@@ -13,34 +13,34 @@
         </Grid.RowDefinitions>
 
         <Menu x:Name="picVideoMenu" Grid.Row="0">
-            <MenuItem x:Name="PVItem1" Header="PicVideo File" Height="20">
-                <MenuItem x:Name="PVItem2" Header="Add PicVideo" BorderThickness="0" Click="AddPicVideo_Wanted">
+            <MenuItem x:Name="PVItem1" Header="_PicVideo File" Height="20">
+                <MenuItem x:Name="PVItem2" Header="´_Add PicVideo" BorderThickness="0" Click="AddPicVideo_Wanted">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/DesktopImages/addpicture.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="PVItem3" Header="Move PicVideo" BorderThickness="0" Click="MovePicVideo_Wanted">
+                <MenuItem x:Name="PVItem3" Header="_Move PicVideo" BorderThickness="0" Click="MovePicVideo_Wanted">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/NoteImages/move.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="PVItem4" Header="Copy PicVideo" BorderThickness="0" Click="CopyPicVideo_Wanted">
+                <MenuItem x:Name="PVItem4" Header="_Copy PicVideo" BorderThickness="0" Click="CopyPicVideo_Wanted">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/DesktopImages/copypict.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="PVItem5" Header="Delete PicVideo" BorderThickness="0" Click="DeletePicVideo_Wanted">
+                <MenuItem x:Name="PVItem5" Header="_Delete PicVideo" BorderThickness="0" Click="DeletePicVideo_Wanted">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/DesktopImages/delpicture.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="PVItem6" Header="Reload PicMovie" BorderThickness="0" Click="ReloadWindow_Wanted" >
+                <MenuItem x:Name="PVItem6" Header="_Reload PicMovie" BorderThickness="0" Click="ReloadWindow_Wanted" >
                     <MenuItem.Icon>
                         <Image Source="SystemSources/DesktopImages/refresh.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="PVItem7" Header="About PicMovie" Click="AboutPage_Wanted">
+                <MenuItem x:Name="PVItem7" Click="AboutPage_Wanted">
                     <MenuItem.Icon>
                         <Image Source="SystemSources/DesktopImages/picmovie.png"/>
                     </MenuItem.Icon>

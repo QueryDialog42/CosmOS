@@ -44,6 +44,8 @@ namespace WPFFrameworkApp
         {
             MenuItem[] items = { PVItem1, PVItem2, PVItem3, PVItem4, PVItem5, PVItem6, PVItem7 };
             RoutineLogics.SetWindowStyles(picVideoMenu, items);
+
+            PVItem7.Header = "About " + AppTitles.APP_PICMOV; 
         }
         #endregion
 

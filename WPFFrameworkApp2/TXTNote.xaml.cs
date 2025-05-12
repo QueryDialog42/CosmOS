@@ -34,6 +34,8 @@ namespace WPFFrameworkApp
         {
             MenuItem[] items = { filemenu, openmenu, save, saveasmenu, copy, move, rename, delete, aboutmenu };
             RoutineLogics.SetWindowStyles(fileMenubar, items);
+
+            aboutmenu.Header = "About " + AppTitles.APP_NOTE;
         }
         #endregion
 
@@ -74,7 +76,7 @@ namespace WPFFrameworkApp
         }
         public void AboutPage(object sender, RoutedEventArgs e)
         {
-            RoutineLogics.ShowAboutWindow("GenNote", ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
+            RoutineLogics.ShowAboutWindow("About " + AppTitles.APP_NOTE, ImagePaths.NOTE_IMG, ImagePaths.NOTE_IMG, Versions.NOTE_VRS, Messages.ABT_DFLT_MSG);
         }
         #endregion
 

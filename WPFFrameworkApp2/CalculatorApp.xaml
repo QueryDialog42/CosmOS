@@ -12,6 +12,7 @@
         <Style TargetType="Button">
             <Setter Property="Background" Value="#404040"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="30"/>
         </Style>
     </Window.Resources>
     <Grid Margin="10">

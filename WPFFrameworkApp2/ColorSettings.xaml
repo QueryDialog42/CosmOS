@@ -39,8 +39,8 @@
         </Menu>
         <Button Content="Main Desktop Color" Grid.Row="1" Grid.Column="0" Margin="30, 10, 30, 10" Foreground="White" Background="DimGray" BorderThickness="0" Click="MainDesktopColorChange_Clicked"/>
         <Button Content="Folder Desktop Color" Grid.Row="2" Grid.Column="0" Margin="30, 10, 30, 10" Foreground="White" Background="DimGray" BorderThickness="0" Click="FolderDesktopColorChange_Clicked"/>
-        <Button Content="Safari Color" Grid.Row="3" Grid.Column="0" Margin="30, 10, 30, 10" Foreground="White" Background="DimGray" BorderThickness="0" Click="SafariColorChange_Clicked"/>
-        <Button Content="Menu Color" Grid.Row="4" Grid.Column="0" Margin="30, 10, 30, 10" Foreground="White" Background="DimGray" BorderThickness="0" Click="MenuColorChange_Clicked"/>
+        <Button Content="Taskbar Color" Grid.Row="3" Grid.Column="0" Margin="30, 10, 30, 10" Foreground="White" Background="DimGray" BorderThickness="0" Click="SafariColorChange_Clicked"/>
+        <Button Content="Menubar Color" Grid.Row="4" Grid.Column="0" Margin="30, 10, 30, 10" Foreground="White" Background="DimGray" BorderThickness="0" Click="MenuColorChange_Clicked"/>
         <TextBlock x:Name="mainDesktopColor" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
         <TextBlock x:Name="folderDesktopColor" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
         <TextBlock x:Name="safariColor" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
