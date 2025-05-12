@@ -4,7 +4,6 @@ using System.Windows.Media;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Windows.Documents;
-using System;
 
 namespace WPFFrameworkApp
 {
@@ -44,16 +43,11 @@ namespace WPFFrameworkApp
         #region Toolbar style functions
         private void MakeBold(object sender, RoutedEventArgs e)
         {
-            // Get the current selection
             TextSelection selection = RichNote.Selection;
 
-            // Check if there is any text selected
             if (selection.IsEmpty == false)
             {
-                // Create a TextRange from the selection
                 TextRange textRange = new TextRange(selection.Start, selection.End);
-
-                // Apply bold formatting
                 textRange.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
             }
         }
@@ -89,14 +83,13 @@ namespace WPFFrameworkApp
             if (fontdialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 System.Drawing.Font selectedfont = fontdialog.Font;
-                // Convert to WPF FontFamily
+
                 FontFamily wpfFontFamily = new FontFamily(selectedfont.Name);
                 TextSelection selection = RichNote.Selection;
 
                 if (selection.IsEmpty == false)
                 {
                     TextRange textRange = new TextRange(selection.Start, selection.End);
-                    // Apply the new font family to the selected text
                     textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, wpfFontFamily);
                     textRange.ApplyPropertyValue(TextElement.FontSizeProperty, (double)selectedfont.Size);
                 }
@@ -109,7 +102,6 @@ namespace WPFFrameworkApp
             {
                 System.Drawing.Color selectedcolor = colordialog.Color;
 
-                // Convert to WPF Color
                 Color wpfcolor = Color.FromArgb(selectedcolor.A, selectedcolor.R, selectedcolor.G, selectedcolor.B);
 
                 TextSelection selection = RichNote.Selection;
@@ -117,7 +109,6 @@ namespace WPFFrameworkApp
                 {
                     TextRange textRange = new TextRange(selection.Start, selection.End);
 
-                    // Apply the new foreground color to the selected text
                     textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(wpfcolor));
                 }
             }

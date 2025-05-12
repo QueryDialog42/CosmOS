@@ -33,6 +33,7 @@
             </StackPanel>
         </Grid>
         
+        <!--Api key entered-->
         <Grid x:Name="weatherwindow" Grid.Column="1" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>

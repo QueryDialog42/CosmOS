@@ -113,7 +113,6 @@ namespace WPFFrameworkApp2
 
         private double EvaluateExpression(string expr)
         {
-            // Değişkenleri doğrudan kullanarak uyarıları gideriyoruz
             var tokenPattern = @"(?<=[\+\-\/\*])\-?\d+(\.\d+)?(E-?\d+)?|^-?\d+(\.\d+)?(E-?\d+)?|[\+\-\/\*]";
 
             var tokens = new List<string>();
@@ -123,7 +122,6 @@ namespace WPFFrameworkApp2
             if (tokens.Count == 0)
                 throw new Exception("Token yok");
 
-            // Önce çarpma ve bölmeleri işle
             for (int i = 1; i < tokens.Count; i += 2)
             {
                 string op = tokens[i];
@@ -139,7 +137,6 @@ namespace WPFFrameworkApp2
                 }
             }
 
-            // Sonra toplama ve çıkarmaları işle
             double finalResult = double.Parse(tokens[0], NumberStyles.Float, CultureInfo.InvariantCulture);
             for (int i = 1; i < tokens.Count; i += 2)
             {
