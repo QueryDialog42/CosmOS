@@ -114,7 +114,7 @@ namespace WPFFrameworkApp2
         private double EvaluateExpression(string expr)
         {
             // Değişkenleri doğrudan kullanarak uyarıları gideriyoruz
-            var tokenPattern = @"(?<=[\+\-\/])-?\d+(\.\d+)?(E-?\d+)?|^-?\d+(\.\d+)?(E-?\d+)?|[\+\-\/]";
+            var tokenPattern = @"(?<=[\+\-\/\*])\-?\d+(\.\d+)?(E-?\d+)?|^-?\d+(\.\d+)?(E-?\d+)?|[\+\-\/\*]";
 
             var tokens = new List<string>();
             foreach (Match m in Regex.Matches(expr, tokenPattern))
