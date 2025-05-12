@@ -56,7 +56,7 @@ namespace WPFFrameworkApp
         }
         public void CopyFile(object sender, RoutedEventArgs e)
         {
-            NoteAppLogics.TXTSaveNote_Wanted(this);
+            NoteAppLogics.CopyNote_Wanted(windowForNote, currentDesktopForNote, filter, this);
         }
         public void MoveFile(object sender, RoutedEventArgs e)
         {

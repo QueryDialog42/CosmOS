@@ -1154,7 +1154,7 @@ namespace WPFFrameworkApp
             MainWindow.TempPath = filepath;
             MainWindow newWindow = new MainWindow
             {
-                Title = Path.GetFileName(filepath)
+                Title = filepath
             };
             newWindow.historySplitter.Visibility = Visibility.Collapsed;
         }
@@ -1264,7 +1264,7 @@ namespace WPFFrameworkApp
         public static void ReloadWindow(MainWindow window, string displayMode)
         {
             if (window == null) return; // If window is null, then no reload needed
-            if (window.Title != MainItems.MAIN_WIN) window.IsHistoryEnabled = false;
+            if (Path.GetFileName(window.Title) != MainItems.MAIN_WIN) window.IsHistoryEnabled = false;
 
             switch (displayMode)
             {
