@@ -245,7 +245,7 @@ namespace WPFFrameworkApp
             }
             catch (Exception ex)
             {
-                RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, "GencOS main\n", ex.Message);
+                RoutineLogics.ErrorMessage(Errors.REL_ERR, Errors.REL_ERR_MSG, MainItems.MAIN_WIN, "\n", ex.Message);
             }
         }
         private void CheckConfigurationIsRight()

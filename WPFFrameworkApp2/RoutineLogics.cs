@@ -331,6 +331,7 @@ namespace WPFFrameworkApp
         public static void AddHistoriesFromCHistory(MainWindow window, string CHistory)
         {
             string[] histories = File.ReadAllLines(Path.Combine(configFolder, CHistory));
+            histories = histories.Reverse().ToArray(); // reverse the order of history items
             foreach (string history in histories)
             {
                 string imagepath;
@@ -574,7 +575,7 @@ namespace WPFFrameworkApp
             menu.Background = ConvertHexColor(GetColorSettingsFromCcol()[3]);
             menu.BorderThickness = new Thickness(0);
             menu.FontFamily = new FontFamily(fontsettings[10]);
-            menu.Foreground = ConvertHexColor(fontsettings[11]);
+            _ = menu is ComboBox ? menu.Foreground = Brushes.Gray : menu.Foreground = ConvertHexColor(fontsettings[11]);
             menu.FontWeight = fontsettings[12] == "Bold" ? FontWeights.Bold : FontWeights.Regular;
             menu.FontStyle = fontsettings[13] == "Italic" ? FontStyles.Italic : FontStyles.Normal;
             menu.FontSize = Convert.ToDouble(fontsettings[14]);
@@ -591,6 +592,7 @@ namespace WPFFrameworkApp
                 SetHistorySettings(window);
 
                 window.clockTime.Foreground = ConvertHexColor(fonts[11]);
+                window.searchComboBox.Foreground = Brushes.Gray;
             }
             catch (Exception)
             {
