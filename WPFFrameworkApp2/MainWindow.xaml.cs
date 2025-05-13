@@ -94,10 +94,10 @@ namespace WPFFrameworkApp
             if (Title == MainItems.MAIN_WIN)
             {
                 if (IsHistoryEnabled == false) return;
-                // Convert ListBox items to an array
+                
                 string[] histories = historyList.Items
                     .Cast<ListBoxItem>() 
-                    .Select(item => item.Tag.ToString()) // Extract the content as string
+                    .Select(item => item.Tag.ToString())
                     .ToArray();
 
                 File.WriteAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS, Configs.CHIST), histories);

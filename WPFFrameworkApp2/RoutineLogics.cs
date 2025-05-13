@@ -542,16 +542,8 @@ namespace WPFFrameworkApp
         #endregion
 
         #region GetSettings functions
-        public static string[] GetFontSettingsFromCfont()
-        {
-            string[] fontsettings = File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
-            return fontsettings;
-        }
-        public static string[] GetColorSettingsFromCcol()
-        {
-            string[] colors = File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
-            return colors;
-        }
+        public static string[] GetFontSettingsFromCfont() => File.ReadAllLines(Path.Combine(configFolder, Configs.CFONT));
+        public static string[] GetColorSettingsFromCcol() => File.ReadAllLines(Path.Combine(configFolder, Configs.CCOL));
         private static string GetFontColor(string[] fontcolor, short which)
         {
             try
@@ -1123,7 +1115,6 @@ namespace WPFFrameworkApp
 
             app.Click += (sender, e) => AddFolderListener(filepath);
         }
-
         #endregion
 
         #region App Listener functions
@@ -1723,10 +1714,7 @@ namespace WPFFrameworkApp
 
             return string.Format("{0:00}:{1:00}", minutes, seconds);
         }
-        public static SolidColorBrush ConvertHexColor(string hexcolor)
-        {
-            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(hexcolor));
-        }
+        public static SolidColorBrush ConvertHexColor(string hexcolor) => new SolidColorBrush((Color)ColorConverter.ConvertFromString(hexcolor));
         #endregion
 
         #region Unclassified private functions
