@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,12 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <script src="script.js" defer></script>
 </head>
+
 <body>
   <header class="top-bar">
-    <div class="notifications">
-      <div class="icon-btn" title="Files"><span>📁</span><span class="badge">3</span></div>
-      <div class="icon-btn" title="Messages"><span>✉️</span><span class="badge blue">7</span></div>
-      <div class="icon-btn" title="Alerts"><span>🔔</span><span class="badge pink">5</span></div>
+    <div>
     </div>
     <div class="right-profile">
       <span id="email" class="email">admin@info.com</span>
@@ -21,17 +20,15 @@
         <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Avatar" class="avatar" />
         <div class="dropdown-panel" id="profilePanel">
           <div class="profile-info">
-            <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" class="avatar" />
+            <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" class="avatar" alt="avatar"/>
             <div>
-              <strong>Seyyit Baltacıoğlu</strong><br />
+              <strong id="profileName">Seyyit Baltacıoğlu</strong><br />
               <span class="role">Administrator</span>
             </div>
           </div>
-          <div class="storage">25GB/100GB</div>
+          <div class="storage">256GB / 1TB</div>
           <ul class="menu">
-            <li><a href="#">👤 My Profile</a></li>
-            <li><a href="#">⚙️ Account Settings</a></li>
-            <li><a href="#">📁 My Files</a></li>
+            <li><a href="account_settings.html">⚙️ Account Settings</a></li>
             <li><a href="#" id="signout" class="signout">🚪 Sign Out</a></li>
           </ul>
         </div>
@@ -43,18 +40,8 @@
   <div class="container">
     <aside class="sidebar">
       <div class="logo">
-        <button type="button" id="signoutButton"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828304.png" alt="Logo" /></button> 
+        <img src="SystemSources/logo.png" alt="Logo" />
         <span>CosmOS</span>
-        <button id="refresh">Refresh</button>
-      </div>
-      <div class="user-profile">
-        <img
-          src="https://images.generated.photos/TkcmVfI3Mx0b9a8oNs-0ipZiy-92WvkZXlT-Glcm0N8/rs:fit:512:512/czM6Ly9p/bWFnZXMvYzFjNjQ4/MjgtNWMxNi00ODgy/LWIyMWMtZmE3MWY0/OWFkMmM3LmpwZw.jpg"
-          alt="User" />
-        <div>
-          <p class="user-name">Seyyit Baltacıoğlu</p>
-          <button class="support-btn">Support</button>
-        </div>
       </div>
 
       <nav class="menu">
@@ -68,7 +55,7 @@
           <span class="icon">⬆️</span> Upload
         </button>
         <button class="menu-item" data-section="myfiles" id="myFilesBtn">
-          <span class="icon">📁</span> My Files
+          <span class="icon">📄</span> My Files
         </button>
         <button class="menu-item" data-section="folders" id="myFoldersBtn">
           <span class="icon">📂</span> Folders
@@ -85,16 +72,13 @@
     <main class="main-content">
       <header>
         <div class="top-right">
+          <button id="refresh">Refresh</button>
           <button class="btn" id="chooseFolderBtn">Choose Folder</button>
           <button class="btn" id="createFolder">Create Folder</button>
           <button class="btn" id="uploadFile">Upload File</button>
           <button class="btn filter-btn">Filter ▼</button>
       </header>
 
-
-      
-
-      
       <section class="dashboard" id="dashboard">
         <h2>Dashboard</h2>
         <p id="basetitle">Please choose a folder in order to work on it</p>
@@ -114,7 +98,7 @@
             <div class="progress blue"></div>
           </div>
           <div class="card green">
-            <div class="file-icon">XLS</div>
+            <div class="file-icon">IMG</div>
             <p>PHOTOS</p>
             <h3 id="photofiles">0000</h3>
             <span class="tag">70+</span>
@@ -204,30 +188,51 @@
         <h2>File Stats</h2>
         <div class="stats-cards">
           <div class="card pink">
-            <div class="file-icon">PDF</div>
-            <p>Total PDF Files</p>
-            <h3>1250</h3>
+            <div class="file-icon">TXT</div>
+            <p>Total Text Files</p>
+            <h3 id="totaltextfiles">0000</h3>
             <span class="tag">+30</span>
             <div class="progress pink"></div>
           </div>
           <div class="card blue">
-            <div class="file-icon">DOC</div>
-            <p>Total Word Docs</p>
-            <h3>980</h3>
+            <div class="file-icon">RTF</div>
+            <p>Total RTF Docs</p>
+            <h3 id="totalRTFfiles">0000</h3>
             <span class="tag">+12</span>
             <div class="progress blue"></div>
           </div>
+          <div class="card yellow">
+            <div class="file-icon">WAV</div>
+            <p>Total WAV Files</p>
+            <h3 id="totalwavfiles">0000</h3>
+            <span class="tag">+18</span>
+            <div class="progress green"></div>
+          </div>
           <div class="card green">
-            <div class="file-icon">XLS</div>
-            <p>Total Excel Files</p>
-            <h3>740</h3>
+            <div class="file-icon">MP3</div>
+            <p>Total MP3 Files</p>
+            <h3 id="totalmp3files">0000</h3>
             <span class="tag">+18</span>
             <div class="progress green"></div>
           </div>
           <div class="card orange">
             <div class="file-icon">MP4</div>
             <p>Total Videos</p>
-            <h3>430</h3>
+            <h3 id="totalvideofiles">0000</h3>
+            <span class="tag">+7</span>
+            <div class="progress orange"></div>
+          </div>
+          <div class="card purple">
+            <div class="file-icon">PHOTO</div>
+            <p>Total Image Files</p>
+            <h3 id="totaljpgandpngfiles">0000</h3>
+            <span class="tag">+7</span>
+            <div class="progress orange"></div>
+          </div>
+          <div class="card black">
+            <div class="file-icon">PROGRAM</div>
+            <p>Total EXE Files</p>
+            <h3 id="totalexefiles">0000</h3>
             <span class="tag">+7</span>
             <div class="progress orange"></div>
           </div>
@@ -276,7 +281,7 @@
         <h2>My Files</h2>
         <div class="file-grid" id="fileContainer">
           <!--C_DESKTOP Files-->
-          
+
         </div>
       </section>
 
@@ -284,15 +289,17 @@
         <h2>Folders</h2>
         <div class="file-grid" id="folderContainer">
           <!--C_DESKTOP folders-->
-          
+
         </div>
       </section>
 
       <section id="recentlyadded" class="page-section" style="display:none;">
         <h2>Recently Added</h2>
-        <div class="file-grid" id="recentContainer">
-          <!--recent files and folders-->
-          
+        <div class="recent-section">
+          <h3 class="recent-title">Last 20 Files</h3>
+          <div class="recent-grid" id="recentContainer">
+            <!-- Dinamik olarak JavaScript ile doldurulacak -->
+          </div>
         </div>
       </section>
 
@@ -300,13 +307,7 @@
         <h2>Shared</h2>
       </section>
 
-  </div>
-  </div>
-  <button class="view-all-btn">View All</button>
-  </div>
-  </section>
-  </main>
-  </div>
+    </main>
 </body>
 
 </html>

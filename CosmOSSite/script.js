@@ -11,6 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadFileBtn = document.getElementById("uploadBtn");
     const createFolderBtn = document.getElementById('createFolder');
 
+    let chooseFolderFirstWarn = () => alert("Please choose a base folder first.");
+
+    uploadFileBtn?.addEventListener('click', chooseFolderFirstWarn);
+    uploadFile?.addEventListener('click', chooseFolderFirstWarn);
+    createFolderBtn?.addEventListener('click', chooseFolderFirstWarn);
+
     const user = localStorage.getItem("user");
     if (!user) {
       window.location.href = "login.html";
@@ -64,6 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     folderHandle = await window.showDirectoryPicker();
     if (folderHandle) {
+
+      uploadFileBtn?.removeEventListener('click', chooseFolderFirstWarn);
+      uploadFile?.removeEventListener('click', chooseFolderFirstWarn);
+      createFolderBtn?.removeEventListener('click', chooseFolderFirstWarn);
+
       doFileLogics(folderHandle);
 
       handleUploadFiles = () => uploadFiles(folderHandle);
@@ -163,29 +174,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Upload Bölümü
 async function uploadFiles(targetFolderHandle){
-  // Create an invisible file input element
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true; // Allow multiple file selection
-    // Optional: set accept attribute if you want to restrict file types
-    input.accept = '.txt,.rtf,.wav,.mp3,.exe,.png,.jpg,.mp4';
-    // Listen for file selection
+    input.accept = '.txt,.rtf,.wav,.mp3,.exe,.png,.jpg,.mp4'; // optional
     input.onchange = async (event) => {
-        const files = event.target.files; // Get the FileList directly
-        // Check if any files were selected
+        const files = event.target.files;
         if (files.length === 0) {
             return;
         }
-        // Move files to the target folder
         for (const file of files) {
-            
-            // Create a new file handle in the target folder
             const newFileHandle = await targetFolderHandle.getFileHandle(file.name, { create: true });
             
             // Create a writable stream to write the file data to the new location
             const writableStream = await newFileHandle.createWritable();
-            
-            // Write the file data to the new file
             await writableStream.write(file);
             
             // Close the writable stream
@@ -200,118 +202,16 @@ async function uploadFiles(targetFolderHandle){
 // create folder bölümü
 async function createFolder(dirHandle) {
       try {
-        // Name of the new folder to create
         const newFolderName = prompt("Enter the new folder name:");
-        // Create a new subdirectory handle inside the chosen directory
-        // The 'create:true' option means create if doesn't exist
-        const newFolderHandle = await dirHandle.getDirectoryHandle(newFolderName, { create: true });
 
-        alert('Folder created successfully: ' + newFolderHandle.name);
+        if (newFolderName){
+          const newFolderHandle = await dirHandle.getDirectoryHandle(newFolderName, { create: true }); // The 'create:true' option means create if doesn't exist
+          alert('Folder created successfully: ' + newFolderHandle.name);
+        }
       } catch (error) {
         console.error('Error: ' + error.message);
       }
     }
-
-
-
-  //MyFiles bölümü
-  async function getFilesFromFolder(folderHandle) {
-    let txt = 0, rtf = 0, wav = 0, mp3 = 0, exe = 0, png = 0, jpg = 0, mp4 = 0, unknown = 0;
-
-    const fileContainer = document.getElementById("fileContainer");
-    const totalsize = document.getElementById("totalsize");
-    fileContainer.innerHTML = ""; // Clear previous files
-
-    const files = await getFilesInFolder(folderHandle); // Get file handles
-    let size = 0;
-    for (const filehandle of files){
-      const file = await filehandle.getFile();
-      size += file.size;
-    }
-
-    // Process each file
-    for (const fileHandle of files) {
-        const file = await fileHandle.getFile();
-        const filename = file.name;
-        const extension = getFileExtension(filename);
-
-        switch (extension) {
-          case "txt": txt++; break;
-          case "rtf": rtf++; break;
-          case "wav": wav++; break;
-          case "mp3": mp3++; break;
-          case "exe": exe++; break;
-          case "png": png++; break;
-          case "jpg": jpg++; break;
-          case "mp4": mp4++; break;
-          default: unknown++;
-        }
-
-        const image = createFileIcon(extension);
-        const fileDiv = createFileDiv(filename, file.size, image, folderHandle);
-
-        fileContainer.appendChild(fileDiv);
-    }
-
-    setDashboardFileCounts(txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown);
-    totalsize.textContent = Math.floor(size / Math.pow(1024, 2)) + " MB";
-}
-
-function setDashboardFileCounts(
-  txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown
-){
-    const textfiles = document.getElementById("textfiles");
-    const musicfiles = document.getElementById("musicfiles");
-    const photofiles = document.getElementById("photofiles");
-    const videofiles = document.getElementById("videofiles");
-    const exefiles = document.getElementById("exefiles");
-
-    const smalltextfiles = document.getElementById("smalltextfiles");
-    const smallmusicfiles = document.getElementById("smallmusicfiles");
-    const smallphotofiles = document.getElementById("smallphotofiles");
-    const smallvideofiles = document.getElementById("smallvideofiles");
-
-    const smallothers = document.getElementById("smallothers");
-
-    textfiles.textContent = txt + rtf;
-    smalltextfiles.textContent = txt + rtf + " Files";
-
-    musicfiles.textContent = wav + mp3;
-    smallmusicfiles.textContent = wav + mp3 + " Files";
-
-    photofiles.textContent = png + jpg;
-    smallphotofiles.textContent = png + jpg + " Files";
-
-    videofiles.textContent = mp4;
-    smallvideofiles.textContent = mp4 + " Files";
-
-    exefiles.textContent = exe;
-    smallothers.textContent = exe + unknown + " Files";
-}
-
-//MyFolders bölümü
-  async function getFoldersFromFolder(selectedfolderHandle) {
-    let foldercount = 0;
-    const folderfiles = document.getElementById("folderfiles");
-    const folderContainer = document.getElementById("folderContainer");
-    folderContainer.innerHTML = ""; // Clear previous files
-
-    const folders = await getFoldersInFolder(selectedfolderHandle); // Get file handles
-
-    // Process each file
-    for (const folderHandle of folders) {
-        const folder = await folderHandle;
-        const foldername = folder.name;
-        const extension = getFileExtension(foldername);
-        const image = createFileIcon(extension);
-        const folderDiv = createFolderDiv(foldername, image, selectedfolderHandle);
-
-        folderContainer.appendChild(folderDiv);
-        foldercount++;
-    }
-
-    folderfiles.textContent = foldercount;
-}
 
 // Helper function to get all files in the folder
 async function getFilesInFolder(folderHandle) {
@@ -329,7 +229,7 @@ async function getFoldersInFolder(folderHandle) {
     const folders = [];
     for await (const entry of folderHandle.values()) {
         if (entry.kind === 'directory') {
-            folders.push(entry); // Collect folder handles
+            folders.push(entry);
         }
     }
     return folders;
@@ -405,19 +305,440 @@ function createFolderDiv(foldername, image, folderHandle) {
     return fileDiv;
 }
 
+// Recently Added için yardımcı fonksiyon
+function addToRecent(filename) {
+  const recentContainer = document.getElementById("recentContainer");
+  
+  // Mevcut dosyaları kontrol et (max 20 dosya)
+  if (recentContainer.children.length >= 20) {
+    recentContainer.removeChild(recentContainer.lastChild);
+  }
+  
+  const extension = getFileExtension(filename);
+  const fileType = getFileType(extension);
+  
+  const recentCard = document.createElement("div");
+  recentCard.className = `recent-card ${fileType}`;
+  
+  recentCard.innerHTML = `
+    <div class="recent-icon">${getFileIcon(extension)}</div>
+    <div class="recent-name">${filename}</div>
+    <div class="recent-size">${Math.floor(Math.random() * 500) + 100} KB</div>
+    <div class="recent-date">${new Date().toLocaleDateString()}</div>
+  `;
+  
+  recentContainer.insertBefore(recentCard, recentContainer.firstChild);
+}
 
-function addToRecent(filename){
-  const recentDiv = document.getElementById("recentContainer");
-  const fileDiv = document.createElement("div");
-  const fileBtn = document.createElement("button");
-  const image = createFileIcon(getFileExtension(filename));
+// Dosya türüne göre class belirleme
+function getFileType(extension) {
+  switch(extension) {
+    case 'jpg':
+    case 'png':
+    case 'gif':
+      return 'img';
+    case 'mp4':
+    case 'mov':
+      return 'vid';
+    case 'mp3':
+    case 'wav':
+      return 'mus';
+    case 'zip':
+    case 'rar':
+      return 'zip';
+    default:
+      return 'doc';
+  }
+}
 
-  fileBtn.textContent = filename;
-  fileBtn.setAttribute("class", "fileBtn");
-  image.setAttribute("class", "fileImg");
+// Dosya ikonlarını belirleme
+function getFileIcon(extension) {
+  const icons = {
+    'jpg': '🖼️',
+    'png': '🖼️',
+    'gif': '🖼️',
+    'mp4': '🎬',
+    'mov': '🎬',
+    'mp3': '🎵',
+    'wav': '🎵',
+    'zip': '📦',
+    'rar': '📦',
+    'pdf': '📄',
+    'doc': '📄',
+    'docx': '📄',
+    'xls': '📊',
+    'xlsx': '📊',
+    'txt': '📝',
+    'exe': '⚙️'
+  };
+  return icons[extension] || '📁';
+}
 
-  fileDiv.appendChild(image);
-  fileDiv.appendChild(fileBtn);
-  recentDiv.appendChild(fileDiv);
+// Account Settings
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("personalDetailsForm");
+  const restoreBtn = document.getElementById("restoreBtn");
+
+  if (!form) return;
+
+  // Eğer localStorage'da kayıtlı veri varsa inputlara yaz
+  const saved = localStorage.getItem("accountDetails");
+  if (saved) {
+    const data = JSON.parse(saved);
+    document.getElementById("fullName").value = data.fullName || "";
+    document.getElementById("uniqueId").value = data.uniqueId || "";
+    document.getElementById("email").value = data.email || "";
+    document.getElementById("phone").value = data.phone || "";
+    document.getElementById("designation").value = data.designation || "";
+    document.getElementById("location").value = data.location || "";
+  }
+
+  // Form kaydedildiğinde
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const data = {
+      fullName: document.getElementById("fullName").value,
+      uniqueId: document.getElementById("uniqueId").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      designation: document.getElementById("designation").value,
+      location: document.getElementById("location").value,
+    };
+
+    localStorage.setItem("accountDetails", JSON.stringify(data));
+    alert("Changes saved succesfully!");
+  });
+
+  // Restore Default butonu
+  restoreBtn?.addEventListener("click", function () {
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const fullNameInput = document.getElementById("fullName");
+  const emailInput = document.getElementById("emailInput");
+  // const form = document.getElementById("personalDetailsForm");
+  const resetBtn = document.getElementById("resetBtn");
+
+  // Mevcut kullanıcı bilgilerini doldur
+  const user = JSON.parse(localStorage.getItem("user")) || {
+    name: "",
+    email: "",
+  };
+  fullNameInput.value = user.name || "";
+  emailInput.value = user.email || "";
+
+
+
+  // Restore Default (isteğe bağlı)
+  resetBtn.addEventListener("click", function () {
+    fullNameInput.value = user.name || "";
+    emailInput.value = user.email || "";
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const emailSpan = document.getElementById("email");
+      const nameSpan = document.getElementById("profileName");
+
+      if (emailSpan) emailSpan.textContent = user.email;
+      if (nameSpan) nameSpan.textContent = user.name;
+    }
+  });
+
+
+  // Reset Password Bölümü //
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebarItems = document.querySelectorAll(".sidebar ul li");
+    const sectionPersonal = document.getElementById("sectionPersonal");
+    const sectionPassword = document.getElementById("sectionPassword");
+    const resetForm = document.getElementById("resetPasswordForm");
+    const msg = document.getElementById("passwordMessage");
+
+    sidebarItems.forEach(item => {
+        item.addEventListener("click", () => {
+            sidebarItems.forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
+
+            const section = item.getAttribute("data-section");
+            if (section === "personal") {
+                sectionPersonal.style.display = "block";
+                sectionPassword.style.display = "none";
+            } else {
+                sectionPersonal.style.display = "none";
+                sectionPassword.style.display = "block";
+            }
+        });
+    });
+
+    resetForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const current = document.getElementById("currentPassword").value;
+        const newPass = document.getElementById("newPassword").value;
+        const confirmPass = document.getElementById("confirmPassword").value;
+
+        // Kullanıcı bilgisi localStorage'dan
+        const userJSON = localStorage.getItem("user");
+        if (!userJSON) {
+            msg.textContent = "No logged in user found.";
+            return;
+        }
+        const user = JSON.parse(userJSON);
+
+        if (current !== user.password) {
+            msg.textContent = "Current password is incorrect.";
+            return;
+        }
+
+        if (newPass !== confirmPass) {
+            msg.textContent = "New passwords do not match.";
+            return;
+        }
+
+        if (newPass === current) {
+            msg.textContent = "New password cannot be the same as current password.";
+            return;
+        }
+
+        // Şifre güncelleme
+        user.password = newPass;
+
+        // users dizisinde güncelle
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        const userIndex = users.findIndex(u => u.email === user.email);
+        if (userIndex !== -1) {
+            users[userIndex].password = newPass;
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+
+        localStorage.setItem("user", JSON.stringify(user));
+
+
+        alert("Password updated. Please log in again.");
+
+        localStorage.removeItem("user");
+
+        window.location.href = "login.html";
+      }); 
+});
+
+// file card processes
+async function getFilesFromFolder(folderHandle) {
+  let txt = 0, rtf = 0, wav = 0, mp3 = 0, exe = 0, png = 0, jpg = 0, mp4 = 0, unknown = 0;
+
+  const fileContainer = document.getElementById("fileContainer");
+  const totalsize = document.getElementById("totalsize");
+  fileContainer.innerHTML = ""; // Clear previous files
+
+  const files = await getFilesInFolder(folderHandle); // Get file handles
+  let size = 0;
+  
+  // Process each file
+  for (const fileHandle of files) {
+      const file = await fileHandle.getFile();
+      size += file.size;
+      const filename = file.name;
+      const extension = getFileExtension(filename);
+
+      switch (extension) {
+        case "txt": txt++; break;
+        case "rtf": rtf++; break;
+        case "wav": wav++; break;
+        case "mp3": mp3++; break;
+        case "exe": exe++; break;
+        case "png": png++; break;
+        case "jpg": jpg++; break;
+        case "mp4": mp4++; break;
+        default: unknown++;
+      }
+
+      const fileCard = createFileCard(filename, file.size, extension, folderHandle);
+      fileContainer.appendChild(fileCard);
+  }
+
+  setDashboardFileCounts(txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown);
+  totalsize.textContent = Math.floor(size / Math.pow(1024, 2)) + " MB";
+}
+
+function setDashboardFileCounts(
+  txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown
+){
+    const textfiles = document.getElementById("textfiles");
+    const musicfiles = document.getElementById("musicfiles");
+    const photofiles = document.getElementById("photofiles");
+    const videofiles = document.getElementById("videofiles");
+    const exefiles = document.getElementById("exefiles");
+
+    const smalltextfiles = document.getElementById("smalltextfiles");
+    const smallmusicfiles = document.getElementById("smallmusicfiles");
+    const smallphotofiles = document.getElementById("smallphotofiles");
+    const smallvideofiles = document.getElementById("smallvideofiles");
+
+    const totaltextfiles = document.getElementById("totaltextfiles");
+    const totalRTFfiles = document.getElementById("totalRTFfiles");
+    const totalwavfiles = document.getElementById("totalwavfiles");
+    const totalmp3files = document.getElementById("totalmp3files");
+    const totalexefiles = document.getElementById("totalexefiles");
+    const totaljpgandpngfiles = document.getElementById("totaljpgandpngfiles");
+    const totalvideofiles = document.getElementById("totalvideofiles");
+
+    const smallothers = document.getElementById("smallothers");
+
+    textfiles.textContent = txt + rtf;
+    totaltextfiles.textContent = txt;
+    totalRTFfiles.textContent = rtf;
+    smalltextfiles.textContent = txt + rtf + " Files";
+
+    musicfiles.textContent = wav + mp3;
+    totalmp3files.textContent = mp3;
+    totalwavfiles.textContent = wav;
+    smallmusicfiles.textContent = wav + mp3 + " Files";
+
+    photofiles.textContent = png + jpg;
+    totaljpgandpngfiles.textContent = png + jpg;
+
+    smallphotofiles.textContent = png + jpg + " Files";
+
+    videofiles.textContent = mp4;
+    totalvideofiles.textContent = mp4;
+    smallvideofiles.textContent = mp4 + " Files";
+
+    exefiles.textContent = exe;
+    totalexefiles.textContent = exe;
+    smallothers.textContent = exe + unknown + " Files";
+}
+
+// cards for MyFiles
+function createFileCard(filename, fileSize, extension, folderHandle) {
+  const fileCard = document.createElement("div");
+  fileCard.className = "file-card";
+  
+  const iconContainer = document.createElement("div");
+  iconContainer.className = "file-icon-container";
+  
+  const image = createFileIcon(extension);
+  iconContainer.appendChild(image);
+  
+  const nameEl = document.createElement("div");
+  nameEl.className = "file-name";
+  nameEl.textContent = filename;
+  
+  const sizeEl = document.createElement("div");
+  sizeEl.className = "file-size";
+  sizeEl.textContent = formatFileSize(fileSize);
+  
+  const actionsEl = document.createElement("div");
+  actionsEl.className = "file-actions";
+  
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "file-action-btn delete";
+  deleteBtn.textContent = "Delete";
+  deleteBtn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    if (confirm(`Do you want to delete ${filename}?`)) {
+      await folderHandle.removeEntry(filename);
+      fileCard.remove();
+    }
+  });
+  
+  
+  const menuBtn = document.createElement("button");
+  menuBtn.className = "context-menu-btn";
+  menuBtn.innerHTML = "⋮";
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    // Context menu açılacak
+    alert("More actions will be added here");
+  });
+  
+  actionsEl.appendChild(deleteBtn);
+  fileCard.appendChild(menuBtn);
+  fileCard.appendChild(iconContainer);
+  fileCard.appendChild(nameEl);
+  fileCard.appendChild(sizeEl);
+  fileCard.appendChild(actionsEl);
+  
+  return fileCard;
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+  else if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + " MB";
+  else return (bytes / 1073741824).toFixed(1) + " GB";
+}
+
+
+async function getFoldersFromFolder(selectedfolderHandle) {
+  let foldercount = 0;
+  const folderfiles = document.getElementById("folderfiles");
+  const folderContainer = document.getElementById("folderContainer");
+  folderContainer.innerHTML = ""; // Clear previous files
+
+  const folders = await getFoldersInFolder(selectedfolderHandle); // Get folder handles
+
+  // Process each folder
+  for (const folderHandle of folders) {
+      const foldername = folderHandle.name;
+      const folderCard = createFolderCard(foldername, selectedfolderHandle);
+      folderContainer.appendChild(folderCard);
+      foldercount++;
+  }
+
+  folderfiles.textContent = foldercount;
+}
+
+// cards for Folders
+function createFolderCard(foldername, folderHandle) {
+  const folderCard = document.createElement("div");
+  folderCard.className = "file-card";
+  
+  const iconContainer = document.createElement("div");
+  iconContainer.className = "file-icon-container";
+  
+  const image = document.createElement("img");
+  image.src = "SystemSources/folder2.png";
+  image.className = "fileImg";
+  iconContainer.appendChild(image);
+  
+  const nameEl = document.createElement("div");
+  nameEl.className = "file-name";
+  nameEl.textContent = foldername;
+  
+  const actionsEl = document.createElement("div");
+  actionsEl.className = "file-actions";
+  
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "file-action-btn delete";
+  deleteBtn.textContent = "Delete";
+  deleteBtn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    if (confirm(`Do you want to delete ${foldername}?`)) {
+      await folderHandle.removeEntry(foldername, {recursive: true});
+      folderCard.remove();
+    }
+  });
+  
+  const menuBtn = document.createElement("button");
+  menuBtn.className = "context-menu-btn";
+  menuBtn.innerHTML = "⋮";
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    // Context menu açılacak
+    alert("More actions will be added here");
+  });
+  
+  actionsEl.appendChild(deleteBtn);
+  folderCard.appendChild(menuBtn);
+  folderCard.appendChild(iconContainer);
+  folderCard.appendChild(nameEl);
+  folderCard.appendChild(actionsEl);
+  
+  return folderCard;
 }
 
