@@ -45,6 +45,7 @@
       <div class="logo">
         <button type="button" id="signoutButton"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828304.png" alt="Logo" /></button> 
         <span>CosmOS</span>
+        <button id="refresh">Refresh</button>
       </div>
       <div class="user-profile">
         <img
@@ -84,6 +85,7 @@
     <main class="main-content">
       <header>
         <div class="top-right">
+          <button class="btn" id="chooseFolderBtn">Choose Folder</button>
           <button class="btn" id="createFolder">Create Folder</button>
           <button class="btn" id="uploadFile">Upload File</button>
           <button class="btn filter-btn">Filter ▼</button>
@@ -95,41 +97,56 @@
       
       <section class="dashboard" id="dashboard">
         <h2>Dashboard</h2>
+        <p id="basetitle">Please choose a folder in order to work on it</p>
         <div class="stats-cards">
           <div class="card pink">
-            <div class="file-icon">PDF</div>
-            <p>FILES</p>
-            <h3>3500</h3>
+            <div class="file-icon">TEXT</div>
+            <p>DOCUMENTS</p>
+            <h3 id="textfiles">0000</h3>
             <span class="tag">50+</span>
             <div class="progress pink"></div>
           </div>
           <div class="card blue">
-            <div class="file-icon">MOV</div>
-            <p>DOCUMENTS</p>
-            <h3>2900</h3>
+            <div class="file-icon">SOUNDS</div>
+            <p>MUSICS</p>
+            <h3 id="musicfiles">0000</h3>
             <span class="tag">60+</span>
             <div class="progress blue"></div>
           </div>
           <div class="card green">
             <div class="file-icon">XLS</div>
             <p>PHOTOS</p>
-            <h3>6500</h3>
+            <h3 id="photofiles">0000</h3>
             <span class="tag">70+</span>
             <div class="progress green"></div>
           </div>
           <div class="card orange">
-            <div class="file-icon">FLV</div>
+            <div class="file-icon">MOV</div>
             <p>VIDEOS</p>
-            <h3>7200</h3>
+            <h3 id="videofiles">0000</h3>
             <span class="tag">80+</span>
             <div class="progress orange"></div>
+          </div>
+          <div class="card purple">
+            <div class="file-icon">EXE</div>
+            <p>PROGRAMS</p>
+            <h3 id="exefiles">0000</h3>
+            <span class="tag">80+</span>
+            <div class="progress purple"></div>
+          </div>
+          <div class="card yellow">
+            <div class="file-icon">DIR</div>
+            <p>FOLDERS</p>
+            <h3 id="folderfiles">0000</h3>
+            <span class="tag">80+</span>
+            <div class="progress yellow"></div>
           </div>
         </div>
 
         <div class="info-cards">
           <div class="info-card blue-light">
             <p>Storage Usage</p>
-            <h3>128GB</h3>
+            <h3 id="totalsize">0000GB</h3>
             <span class="sub-text">+33GB this week</span>
           </div>
           <div class="info-card green-light">
@@ -155,32 +172,32 @@
             <div class="quick-item blue-light">
               <span>🖼️</span>
               <p>Images</p>
-              <small>329 files</small>
+              <small id="smallphotofiles">0000 files</small>
             </div>
             <div class="quick-item pink-light">
               <span>📄</span>
               <p>Documents</p>
-              <small>185 files</small>
+              <small id="smalltextfiles">0000 files</small>
             </div>
             <div class="quick-item orange-light">
               <span>▶️</span>
               <p>Videos</p>
-              <small>78 files</small>
+              <small id="smallvideofiles">0000 files</small>
             </div>
             <div class="quick-item green-light">
               <span>🎵</span>
               <p>Audio</p>
-              <small>142 files</small>
+              <small id="smallmusicfiles">0000 files</small>
             </div>
             <div class="quick-item blue-light">
               <span>📦</span>
               <p>Archives</p>
-              <small>67 files</small>
+              <small>0000 files</small>
             </div>
             <div class="quick-item gray-light">
               <span>📚</span>
               <p>Others</p>
-              <small>54 files</small>
+              <small id="smallothers">0000 files</small>
       </section>
 
       <section id="filestats" class="page-section" style="display:none;">

@@ -6,8 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const profilePanel = document.getElementById("profilePanel");
     const signOutBtn = document.getElementById("signout");
     const signOutButton = document.getElementById("signoutButton");
-    const myFilesBtn = document.getElementById("myFilesBtn");
-    const folders = document.getElementById("myFoldersBtn");
+    const refreshBtn = document.getElementById("refresh");
+    const uploadFile = document.getElementById("uploadFile");
+    const uploadFileBtn = document.getElementById("uploadBtn");
+    const createFolderBtn = document.getElementById('createFolder');
 
     const user = localStorage.getItem("user");
     if (!user) {
@@ -46,8 +48,31 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = "login.html";
     });
 
-    myFilesBtn?.addEventListener('click', getFilesFromFolder);
-    folders?.addEventListener('click', getFoldersFromFolder);
+    // choose Folder bölümü
+    const chooseFolderBtn = document.getElementById("chooseFolderBtn");
+    chooseFolderBtn?.addEventListener("click", async () => {
+      const folderHandle = await window.showDirectoryPicker();
+      if (folderHandle) {
+        doFileLogics(folderHandle);
+        uploadFileBtn?.addEventListener('click', () => uploadFiles(folderHandle));
+        uploadFile?.addEventListener('click', () => uploadFiles(folderHandle));
+        createFolderBtn?.addEventListener('click', () => createFolder(folderHandle));
+        refreshBtn?.addEventListener('click', () => doFileLogics(folderHandle));
+        setBaseTitle(folderHandle.name);
+      }
+    });
+
+    function doFileLogics(folderHandle){
+      getFilesFromFolder(folderHandle);
+      getFoldersFromFolder(folderHandle);
+    }
+
+    function setBaseTitle(foldername){
+      const title = document.getElementById("basetitle");
+      title.textContent = foldername;
+      title.style.fontSize = "50px";
+      title.style.fontWeight = "bold";
+    }
   }
 
   if (currentPage === "register.html") {
@@ -119,13 +144,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Upload Bölümü
-async function uploadFiles(){
+async function uploadFiles(targetFolderHandle){
   // Create an invisible file input element
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true; // Allow multiple file selection
     // Optional: set accept attribute if you want to restrict file types
-    input.accept = '.jpg,.png,.txt';
+    input.accept = '.txt,.rtf,.wav,.mp3,.exe,.png,.jpg,.mp4';
     // Listen for file selection
     input.onchange = async (event) => {
         const files = event.target.files; // Get the FileList directly
@@ -133,8 +158,6 @@ async function uploadFiles(){
         if (files.length === 0) {
             return;
         }
-        // Get a handle for the target folder
-        const targetFolderHandle = await window.showDirectoryPicker();
         // Move files to the target folder
         for (const file of files) {
             
@@ -154,20 +177,11 @@ async function uploadFiles(){
       }
       input.click();
 }
-  const uploadFile = document.getElementById("uploadFile");
-  const uploadFileBtn = document.getElementById("uploadBtn");
-
-  uploadFileBtn?.addEventListener("click", uploadFiles);
-  uploadFile?.addEventListener('click', uploadFiles);
-
-
 });
 
 // create folder bölümü
-async function createFolder() {
+async function createFolder(dirHandle) {
       try {
-        // Let user pick a directory
-        const dirHandle = await window.showDirectoryPicker();
         // Name of the new folder to create
         const newFolderName = prompt("Enter the new folder name:");
         // Create a new subdirectory handle inside the chosen directory
@@ -179,33 +193,88 @@ async function createFolder() {
         console.error('Error: ' + error.message);
       }
     }
-    document.getElementById('createFolder').addEventListener('click', createFolder);
 
 
 
   //MyFiles bölümü
-  async function getFilesFromFolder() {
-    const folderHandle = await window.showDirectoryPicker();
+  async function getFilesFromFolder(folderHandle) {
+    let txt = 0, rtf = 0, wav = 0, mp3 = 0, exe = 0, png = 0, jpg = 0, mp4 = 0, unknown = 0;
+
     const fileContainer = document.getElementById("fileContainer");
+    const totalsize = document.getElementById("totalsize");
     fileContainer.innerHTML = ""; // Clear previous files
 
     const files = await getFilesInFolder(folderHandle); // Get file handles
+    let size = 0;
+    for (const filehandle of files){
+      const file = await filehandle.getFile();
+      size += file.size;
+    }
 
     // Process each file
     for (const fileHandle of files) {
         const file = await fileHandle.getFile();
         const filename = file.name;
         const extension = getFileExtension(filename);
+
+        switch (extension) {
+          case "txt": txt++; break;
+          case "rtf": rtf++; break;
+          case "wav": wav++; break;
+          case "mp3": mp3++; break;
+          case "exe": exe++; break;
+          case "png": png++; break;
+          case "jpg": jpg++; break;
+          case "mp4": mp4++; break;
+          default: unknown++;
+        }
+
         const image = createFileIcon(extension);
         const fileDiv = createFileDiv(filename, file.size, image, folderHandle);
 
         fileContainer.appendChild(fileDiv);
     }
+
+    setDashboardFileCounts(txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown);
+    totalsize.textContent = Math.floor(size / Math.pow(1024, 2)) + " MB";
+}
+
+function setDashboardFileCounts(
+  txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown
+){
+    const textfiles = document.getElementById("textfiles");
+    const musicfiles = document.getElementById("musicfiles");
+    const photofiles = document.getElementById("photofiles");
+    const videofiles = document.getElementById("videofiles");
+    const exefiles = document.getElementById("exefiles");
+
+    const smalltextfiles = document.getElementById("smalltextfiles");
+    const smallmusicfiles = document.getElementById("smallmusicfiles");
+    const smallphotofiles = document.getElementById("smallphotofiles");
+    const smallvideofiles = document.getElementById("smallvideofiles");
+
+    const smallothers = document.getElementById("smallothers");
+
+    textfiles.textContent = txt + rtf;
+    smalltextfiles.textContent = txt + rtf + " Files";
+
+    musicfiles.textContent = wav + mp3;
+    smallmusicfiles.textContent = wav + mp3 + " Files";
+
+    photofiles.textContent = png + jpg;
+    smallphotofiles.textContent = png + jpg + " Files";
+
+    videofiles.textContent = mp4;
+    smallvideofiles.textContent = mp4 + " Files";
+
+    exefiles.textContent = exe;
+    smallothers.textContent = exe + unknown + " Files";
 }
 
 //MyFolders bölümü
-  async function getFoldersFromFolder() {
-    const selectedfolderHandle = await window.showDirectoryPicker();
+  async function getFoldersFromFolder(selectedfolderHandle) {
+    let foldercount = 0;
+    const folderfiles = document.getElementById("folderfiles");
     const folderContainer = document.getElementById("folderContainer");
     folderContainer.innerHTML = ""; // Clear previous files
 
@@ -220,9 +289,11 @@ async function createFolder() {
         const folderDiv = createFolderDiv(foldername, image, selectedfolderHandle);
 
         folderContainer.appendChild(folderDiv);
+        foldercount++;
     }
-}
 
+    folderfiles.textContent = foldercount;
+}
 
 // Helper function to get all files in the folder
 async function getFilesInFolder(folderHandle) {
@@ -307,7 +378,7 @@ function createFolderDiv(foldername, image, folderHandle) {
 
     fileBtn.addEventListener("click", async () => {
         if (confirm(`Do you want to delete ${foldername}?`)) {
-            await folderHandle.removeEntry(foldername);
+            await folderHandle.removeEntry(foldername, {recursive: true});
         }
     });
 
