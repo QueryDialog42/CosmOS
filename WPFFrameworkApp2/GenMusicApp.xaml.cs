@@ -83,7 +83,6 @@ namespace WPFFrameworkApp
             totaltime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds - mediaPlayer.Position.TotalSeconds;
             remainedTime.Text = RoutineLogics.TimeFormat(totaltime);
         }
-
         #endregion
 
         #region OnClosing functions
@@ -156,7 +155,6 @@ namespace WPFFrameworkApp
                 RoutineLogics.ErrorMessage(Errors.OPEN_ERR, Errors.OPEN_ERR_MSG, itemname ?? "null MediaPlayer", "\n", ex.Message);
             }
         }
-
         #endregion
 
         #region Panel Sytle functions

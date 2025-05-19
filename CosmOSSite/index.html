@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CosmOS File Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="notifications">
+      <div class="icon-btn" title="Files"><span>📁</span><span class="badge">3</span></div>
+      <div class="icon-btn" title="Messages"><span>✉️</span><span class="badge blue">7</span></div>
+      <div class="icon-btn" title="Alerts"><span>🔔</span><span class="badge pink">5</span></div>
+    </div>
+    <div class="right-profile">
+      <span id="email" class="email">admin@info.com</span>
+      <div class="profile-container" id="profileToggle">
+        <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Avatar" class="avatar" />
+        <div class="dropdown-panel" id="profilePanel">
+          <div class="profile-info">
+            <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" class="avatar" />
+            <div>
+              <strong>Seyyit Baltacıoğlu</strong><br />
+              <span class="role">Administrator</span>
+            </div>
+          </div>
+          <div class="storage">25GB/100GB</div>
+          <ul class="menu">
+            <li><a href="#">👤 My Profile</a></li>
+            <li><a href="#">⚙️ Account Settings</a></li>
+            <li><a href="#">📁 My Files</a></li>
+            <li><a href="#" id="signout" class="signout">🚪 Sign Out</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <button type="button" id="signoutButton"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828304.png" alt="Logo" /></button> 
+        <span>CosmOS</span>
+      </div>
+      <div class="user-profile">
+        <img
+          src="https://images.generated.photos/TkcmVfI3Mx0b9a8oNs-0ipZiy-92WvkZXlT-Glcm0N8/rs:fit:512:512/czM6Ly9p/bWFnZXMvYzFjNjQ4/MjgtNWMxNi00ODgy/LWIyMWMtZmE3MWY0/OWFkMmM3LmpwZw.jpg"
+          alt="User" />
+        <div>
+          <p class="user-name">Seyyit Baltacıoğlu</p>
+          <button class="support-btn">Support</button>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <button class="menu-item active" data-section="dashboard">
+          <span class="icon">🏠</span> Dashboard
+        </button>
+        <button class="menu-item" data-section="filestats">
+          <span class="icon">📊</span> File Stats
+        </button>
+        <button class="menu-item" data-section="upload">
+          <span class="icon">⬆️</span> Upload
+        </button>
+        <button class="menu-item" data-section="myfiles" id="myFilesBtn">
+          <span class="icon">📁</span> My Files
+        </button>
+        <button class="menu-item" data-section="folders" id="myFoldersBtn">
+          <span class="icon">📂</span> Folders
+        </button>
+        <button class="menu-item" data-section="recentlyadded">
+          <span class="icon">🕒</span> Recently Added
+        </button>
+        <button class="menu-item" data-section="shared">
+          <span class="icon">🔗</span> Shared
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header>
+        <div class="top-right">
+          <button class="btn" id="createFolder">Create Folder</button>
+          <button class="btn" id="uploadFile">Upload File</button>
+          <button class="btn filter-btn">Filter ▼</button>
+      </header>
+
+
+      
+
+      
+      <section class="dashboard" id="dashboard">
+        <h2>Dashboard</h2>
+        <div class="stats-cards">
+          <div class="card pink">
+            <div class="file-icon">PDF</div>
+            <p>FILES</p>
+            <h3>3500</h3>
+            <span class="tag">50+</span>
+            <div class="progress pink"></div>
+          </div>
+          <div class="card blue">
+            <div class="file-icon">MOV</div>
+            <p>DOCUMENTS</p>
+            <h3>2900</h3>
+            <span class="tag">60+</span>
+            <div class="progress blue"></div>
+          </div>
+          <div class="card green">
+            <div class="file-icon">XLS</div>
+            <p>PHOTOS</p>
+            <h3>6500</h3>
+            <span class="tag">70+</span>
+            <div class="progress green"></div>
+          </div>
+          <div class="card orange">
+            <div class="file-icon">FLV</div>
+            <p>VIDEOS</p>
+            <h3>7200</h3>
+            <span class="tag">80+</span>
+            <div class="progress orange"></div>
+          </div>
+        </div>
+
+        <div class="info-cards">
+          <div class="info-card blue-light">
+            <p>Storage Usage</p>
+            <h3>128GB</h3>
+            <span class="sub-text">+33GB this week</span>
+          </div>
+          <div class="info-card green-light">
+            <p>Shared Files</p>
+            <h3>284</h3>
+            <span class="sub-text">+24% this week</span>
+          </div>
+          <div class="info-card orange-light">
+            <p>Recent Activities</p>
+            <h3>156</h3>
+            <span class="sub-text">12 new updates</span>
+          </div>
+          <div class="info-card pink-light">
+            <p>Storage Alerts</p>
+            <h3>5</h3>
+            <span class="sub-text critical">2 critical alerts</span>
+          </div>
+        </div>
+
+        <div class="quick-access">
+          <h3>Quick Access</h3>
+          <div class="quick-items">
+            <div class="quick-item blue-light">
+              <span>🖼️</span>
+              <p>Images</p>
+              <small>329 files</small>
+            </div>
+            <div class="quick-item pink-light">
+              <span>📄</span>
+              <p>Documents</p>
+              <small>185 files</small>
+            </div>
+            <div class="quick-item orange-light">
+              <span>▶️</span>
+              <p>Videos</p>
+              <small>78 files</small>
+            </div>
+            <div class="quick-item green-light">
+              <span>🎵</span>
+              <p>Audio</p>
+              <small>142 files</small>
+            </div>
+            <div class="quick-item blue-light">
+              <span>📦</span>
+              <p>Archives</p>
+              <small>67 files</small>
+            </div>
+            <div class="quick-item gray-light">
+              <span>📚</span>
+              <p>Others</p>
+              <small>54 files</small>
+      </section>
+
+      <section id="filestats" class="page-section" style="display:none;">
+        <h2>File Stats</h2>
+        <div class="stats-cards">
+          <div class="card pink">
+            <div class="file-icon">PDF</div>
+            <p>Total PDF Files</p>
+            <h3>1250</h3>
+            <span class="tag">+30</span>
+            <div class="progress pink"></div>
+          </div>
+          <div class="card blue">
+            <div class="file-icon">DOC</div>
+            <p>Total Word Docs</p>
+            <h3>980</h3>
+            <span class="tag">+12</span>
+            <div class="progress blue"></div>
+          </div>
+          <div class="card green">
+            <div class="file-icon">XLS</div>
+            <p>Total Excel Files</p>
+            <h3>740</h3>
+            <span class="tag">+18</span>
+            <div class="progress green"></div>
+          </div>
+          <div class="card orange">
+            <div class="file-icon">MP4</div>
+            <p>Total Videos</p>
+            <h3>430</h3>
+            <span class="tag">+7</span>
+            <div class="progress orange"></div>
+          </div>
+        </div>
+        <div class="info-cards">
+          <div class="info-card blue-light">
+            <p>Downloaded Files</p>
+            <h3>1.2K</h3>
+            <span class="sub-text">+150 this week</span>
+          </div>
+          <div class="info-card green-light">
+            <p>Uploaded Files</p>
+            <h3>3.8K</h3>
+            <span class="sub-text">+45 this week</span>
+          </div>
+          <div class="info-card orange-light">
+            <p>Shared Files</p>
+            <h3>912</h3>
+            <span class="sub-text">+10%</span>
+          </div>
+          <div class="info-card pink-light">
+            <p>Deleted Files</p>
+            <h3>287</h3>
+            <span class="sub-text critical">-5%</span>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="upload" class="page-section" style="display:none;">
+        <h2>Upload Files</h2>
+        <div class="upload-box">
+          <label for="uploadInput" class="upload-area">
+            <span class="upload-icon">📤</span>
+            <p>Click or drag files here to upload</p>
+            <input type="file" id="uploadInput" multiple style="display: none;" />
+          </label>
+          <ul id="fileList" class="file-list">
+          </ul>
+          <button id="uploadBtn" class="btn upload-btn">Upload</button>
+        </div>
+      </section>
+
+
+      <section id="myfiles" class="page-section" style="display:none;">
+        <h2>My Files</h2>
+        <div class="file-grid" id="fileContainer">
+          <!--C_DESKTOP Files-->
+          
+        </div>
+      </section>
+
+      <section id="folders" class="page-section" style="display:none;">
+        <h2>Folders</h2>
+        <div class="file-grid" id="folderContainer">
+          <!--C_DESKTOP folders-->
+          
+        </div>
+      </section>
+
+      <section id="recentlyadded" class="page-section" style="display:none;">
+        <h2>Recently Added</h2>
+        <div class="file-grid" id="recentContainer">
+          <!--recent files and folders-->
+          
+        </div>
+      </section>
+
+      <section id="shared" class="page-section" style="display:none;">
+        <h2>Shared</h2>
+      </section>
+
+  </div>
+  </div>
+  <button class="view-all-btn">View All</button>
+  </div>
+  </section>
+  </main>
+  </div>
+</body>
+
+</html>
