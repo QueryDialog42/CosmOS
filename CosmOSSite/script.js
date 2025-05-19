@@ -48,20 +48,38 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = "login.html";
     });
 
-    // choose Folder bölümü
-    const chooseFolderBtn = document.getElementById("chooseFolderBtn");
-    chooseFolderBtn?.addEventListener("click", async () => {
-      const folderHandle = await window.showDirectoryPicker();
-      if (folderHandle) {
-        doFileLogics(folderHandle);
-        uploadFileBtn?.addEventListener('click', () => uploadFiles(folderHandle));
-        uploadFile?.addEventListener('click', () => uploadFiles(folderHandle));
-        createFolderBtn?.addEventListener('click', () => createFolder(folderHandle));
-        refreshBtn?.addEventListener('click', () => doFileLogics(folderHandle));
-        setBaseTitle(folderHandle.name);
-      }
-    });
+  // Choose Folder bölümü
+  let folderHandle;
+  let handleUploadFiles;
+  let handleCreateFolder;
+  let handleRefresh;
+  const chooseFolderBtn = document.getElementById("chooseFolderBtn");
+  chooseFolderBtn?.addEventListener("click", async () => {
+    if (handleUploadFiles) {
+      uploadFileBtn?.removeEventListener('click', handleUploadFiles);
+      uploadFile?.removeEventListener('click', handleUploadFiles);
+      createFolderBtn?.removeEventListener('click', handleCreateFolder);
+      refreshBtn?.removeEventListener('click', handleRefresh);
+    }
 
+    folderHandle = await window.showDirectoryPicker();
+    if (folderHandle) {
+      doFileLogics(folderHandle);
+
+      handleUploadFiles = () => uploadFiles(folderHandle);
+      handleCreateFolder = () => createFolder(folderHandle);
+      handleRefresh = () => doFileLogics(folderHandle);
+
+
+      uploadFileBtn?.addEventListener('click', handleUploadFiles);
+      uploadFile?.addEventListener('click', handleUploadFiles);
+      createFolderBtn?.addEventListener('click', handleCreateFolder);
+      refreshBtn?.addEventListener('click', handleRefresh);
+      
+      setBaseTitle(folderHandle.name);
+    }
+  });
+  
     function doFileLogics(folderHandle){
       getFilesFromFolder(folderHandle);
       getFoldersFromFolder(folderHandle);
