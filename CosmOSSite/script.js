@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const currentPage = window.location.pathname.split("/").pop();
 
-  if (currentPage === "index.html") {
+  if (currentPage === "main.html") {
     const profileToggle = document.getElementById("profileToggle");
     const profilePanel = document.getElementById("profilePanel");
     const signOutBtn = document.getElementById("signout");
@@ -16,17 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     uploadFileBtn?.addEventListener('click', chooseFolderFirstWarn);
     uploadFile?.addEventListener('click', chooseFolderFirstWarn);
     createFolderBtn?.addEventListener('click', chooseFolderFirstWarn);
-
-    const user = localStorage.getItem("user");
-    if (!user) {
-      window.location.href = "login.html";
-    } else {
-      const parsed = JSON.parse(user);
-      const nameEl = document.getElementById("profileName");
-      const emailEl = document.querySelector(".email");
-      if (nameEl) nameEl.textContent = parsed.name;
-      if (emailEl) emailEl.textContent = parsed.email;
-    }
 
     profileToggle?.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -45,13 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
     signOutBtn?.addEventListener("click", function (e) {
       e.preventDefault();
       localStorage.removeItem("user");
-      window.location.href = "login.html";
+      window.location.href = "index.php";
     });
 
     signOutButton?.addEventListener("click", function (e) {
       e.preventDefault();
       localStorage.removeItem("user");
-      window.location.href = "login.html";
+      window.location.href = "index.php";
     });
 
   // Choose Folder bölümü
@@ -102,53 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
       title.style.fontSize = "50px";
       title.style.fontWeight = "bold";
     }
-  }
-
-  if (currentPage === "register.html") {
-    const registerForm = document.getElementById("registerForm");
-    registerForm?.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-
-      const nameExists = users.some(user => user.name === name);
-      const emailExists = users.some(user => user.email === email);
-
-      if (nameExists) {
-        alert("This username is already taken.");
-        return;
-      }
-
-      if (emailExists) {
-        alert("This email is already registered.");
-        return;
-      }
-
-      users.push({ name, email, password });
-      localStorage.setItem("users", JSON.stringify(users));
-      window.location.href = "login.html";
-    });
-  }
-
-  if (currentPage === "login.html") {
-    const loginForm = document.getElementById("loginForm");
-    loginForm?.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-      const user = users.find(user => user.email === email && user.password === password);
-      if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = "index.html";
-      } else {
-        alert("Invalid credentials");
-      }
-    });
   }
 
   document.querySelectorAll('.menu-item').forEach(button => {
@@ -456,8 +398,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebarItems = document.querySelectorAll(".sidebar ul li");
     const sectionPersonal = document.getElementById("sectionPersonal");
     const sectionPassword = document.getElementById("sectionPassword");
-    const resetForm = document.getElementById("resetPasswordForm");
-    const msg = document.getElementById("passwordMessage");
 
     sidebarItems.forEach(item => {
         item.addEventListener("click", () => {
@@ -474,57 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-
-    resetForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const current = document.getElementById("currentPassword").value;
-        const newPass = document.getElementById("newPassword").value;
-        const confirmPass = document.getElementById("confirmPassword").value;
-
-        // Kullanıcı bilgisi localStorage'dan
-        const userJSON = localStorage.getItem("user");
-        if (!userJSON) {
-            msg.textContent = "No logged in user found.";
-            return;
-        }
-        const user = JSON.parse(userJSON);
-
-        if (current !== user.password) {
-            msg.textContent = "Current password is incorrect.";
-            return;
-        }
-
-        if (newPass !== confirmPass) {
-            msg.textContent = "New passwords do not match.";
-            return;
-        }
-
-        if (newPass === current) {
-            msg.textContent = "New password cannot be the same as current password.";
-            return;
-        }
-
-        // Şifre güncelleme
-        user.password = newPass;
-
-        // users dizisinde güncelle
-        let users = JSON.parse(localStorage.getItem("users")) || [];
-        const userIndex = users.findIndex(u => u.email === user.email);
-        if (userIndex !== -1) {
-            users[userIndex].password = newPass;
-            localStorage.setItem("users", JSON.stringify(users));
-        }
-
-        localStorage.setItem("user", JSON.stringify(user));
-
-
-        alert("Password updated. Please log in again.");
-
-        localStorage.removeItem("user");
-
-        window.location.href = "login.html";
-      }); 
 });
 
 // file card processes
@@ -533,6 +422,7 @@ async function getFilesFromFolder(folderHandle) {
 
   const fileContainer = document.getElementById("fileContainer");
   const totalsize = document.getElementById("totalsize");
+  const totalsizeinfo = document.getElementById("storageinfo");
   fileContainer.innerHTML = ""; // Clear previous files
 
   const files = await getFilesInFolder(folderHandle); // Get file handles
@@ -562,7 +452,9 @@ async function getFilesFromFolder(folderHandle) {
   }
 
   setDashboardFileCounts(txt, rtf, wav, mp3, exe, png, jpg, mp4, unknown);
-  totalsize.textContent = Math.floor(size / Math.pow(1024, 2)) + " MB";
+  size = formatFileSize(size);
+  totalsize.textContent = size;
+  totalsizeinfo.textContent = size + " / 1TB";
 }
 
 function setDashboardFileCounts(
