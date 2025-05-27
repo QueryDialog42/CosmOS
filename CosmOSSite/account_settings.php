@@ -4,35 +4,41 @@ include 'database.php';
 
 $message = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $oldpassword = $_POST['oldpassword'];
     $newpassword = $_POST['newpassword'];
     $confirmpassword = $_POST['confirmpassword'];
 
-    $stmt = $conn->prepare('SELECT userpass FROM cosmosusers WHERE usermail = ?');
-    $stmt->bind_param('s', $_SESSION['usermail']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    while($row = $result->fetch_assoc()){
-        $oldpassworddb = $row['userpass'];
-    }
-
-    if (!password_verify($oldpassword, $oldpassworddb)){
-        $message = 'Current password is entered wrong';
-    }
-    elseif ($newpassword != $confirmpassword){
-        $message = 'New password and confirm password is not the same';
-    }
-    else {
-        $confirmpassword = password_hash($confirmpassword, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare('UPDATE cosmosusers SET userpass = ? WHERE usermail = ?');
-        $stmt->bind_param('ss', $confirmpassword, $_SESSION['usermail']);
+    try {
+        $stmt = $conn->prepare('SELECT userpass FROM cosmosusers WHERE usermail = :usermail');
+        $stmt->bindParam(':usermail', $_SESSION['usermail']);
         $stmt->execute();
-        setcookie('allowed', true, time() + 1000);
-        session_destroy();
-        header('Location: index.php');
-        exit();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            $oldpassworddb = $result['userpass'];
+
+            if (hash('sha256', $oldpassword) == $oldpassworddb) {
+                $message = 'Current password is entered wrong';
+            } elseif ($newpassword != $confirmpassword) {
+                $message = 'New password and confirm password is not the same';
+            } else {
+                $hashedNewPassword = hash('sha256', $newpassword);
+                $stmt = $conn->prepare('UPDATE cosmosusers SET userpass = :newpassword WHERE usermail = :usermail');
+                $stmt->bindParam(':newpassword', $hashedNewPassword);
+                $stmt->bindParam(':usermail', $_SESSION['usermail']);
+                $stmt->execute();
+
+                setcookie('allowed', true, time() + 1000);
+                session_destroy();
+                header('Location: index.php');
+                exit();
+            }
+        } else {
+            $message = 'User  not found';
+        }
+    } catch (Exception $ex) {
+        $message = 'Error: ' . $ex->getMessage();
     }
 }
 ?>

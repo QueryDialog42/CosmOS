@@ -20,39 +20,39 @@ namespace WPFFrameworkApp2.Database
                 using (var connection = new SQLiteConnection(connectionString))
                 {
                     connection.Open();
-                    string sql = "CREATE TABLE IF NOT EXISTS Users (Username TEXT NOT NULL UNIQUE, Password TEXT NOT NULL)";
+                    string sql = "CREATE TABLE IF NOT EXISTS cosmosusers(username TEXT UNIQUE, usermail TEXT UNIQUE, userpass TEXT NOT NULL);";
                     SQLiteCommand command = new SQLiteCommand(sql, connection);
                     command.ExecuteNonQuery();
                 }
             }
         }
 
-        public static bool ValidateUser(string username, string password)
+        public static bool ValidateUser(string usermail, string userpass)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT COUNT(*) FROM Users WHERE Username=@username AND Password=@password";
+                string query = "SELECT COUNT(*) FROM cosmosusers WHERE usermail=@usermail AND userpass=@userpass";
                 using (var command = new SQLiteCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", HashPassword(password));
+                    command.Parameters.AddWithValue("@usermail", usermail);
+                    command.Parameters.AddWithValue("@userpass", HashPassword(userpass));
                     int count = Convert.ToInt32(command.ExecuteScalar());
                     return count > 0;
                 }
             }
         }
 
-        public static bool RegisterUser(string username, string password)
+        public static bool RegisterUser(string usermail, string userpass)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
 
-                string checkQuery = "SELECT COUNT(*) FROM Users WHERE Username = @username";
+                string checkQuery = "SELECT COUNT(*) FROM cosmosusers WHERE usermail = @usermail";
                 using (var checkCommand = new SQLiteCommand(checkQuery, connection))
                 {
-                    checkCommand.Parameters.AddWithValue("@username", username);
+                    checkCommand.Parameters.AddWithValue("@usermail", usermail);
                     int userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
 
                     if (userCount > 0)
@@ -61,11 +61,11 @@ namespace WPFFrameworkApp2.Database
                     }
                 }
 
-                string insertQuery = "INSERT INTO Users (Username, Password) VALUES (@username, @password)";
+                string insertQuery = "INSERT INTO cosmosusers (usermail, userpass) VALUES (@usermail, @userpass)";
                 using (var insertCommand = new SQLiteCommand(insertQuery, connection))
                 {
-                    insertCommand.Parameters.AddWithValue("@username", username);
-                    insertCommand.Parameters.AddWithValue("@password", HashPassword(password));
+                    insertCommand.Parameters.AddWithValue("@usermail", usermail);
+                    insertCommand.Parameters.AddWithValue("@userpass", HashPassword(userpass));
                     insertCommand.ExecuteNonQuery();
                     return true;
                 }

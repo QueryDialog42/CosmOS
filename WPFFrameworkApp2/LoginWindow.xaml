@@ -43,7 +43,7 @@
                                      HorizontalAlignment="Center"
                                      Width="300"
                                      Height="50"
-                                     PlaceHolder=" Username here"/>
+                                     PlaceHolder=" Usermail here"/>
 
         <Rectangle Grid.Row="4"
                    Width="300"
