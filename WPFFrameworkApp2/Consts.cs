@@ -130,7 +130,7 @@
 
     public struct Versions
     {
-        public const string GOS_VRS = AppTitles.APP_WIN + " v2.8.1";
+        public const string GOS_VRS = AppTitles.APP_WIN + " v2.8.2";
         public const string MAIL_VRS = AppTitles.APP_MAIL + " v1.0.0";
         public const string NOTE_VRS = AppTitles.APP_NOTE + " v1.5.0";
         public const string MUSIC_VRS = AppTitles.APP_MUSIC + " v1.7.1";

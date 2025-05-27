@@ -16,7 +16,7 @@ namespace WPFFrameworkApp
             InitializeComponent();
         }
 
-        public static string ShowInputDialog(string message, string title, string ImagePath = ImagePaths.QST_IMG, string WindowIconPath = ImagePaths.LOGO_IMG, string OKOption = "OK", string CancelOption = "Cancel")
+        public static string ShowInputDialog(string message, string title, string ImagePath = ImagePaths.QST_IMG, string WindowIconPath = ImagePaths.LOGO_IMG, string OKOption = "OK", string CancelOption = "Cancel", string inputPlaceHolder = "")
         {
             InputDialog inputdialog = CreateInputDialog(title, WindowIconPath);
 
@@ -25,6 +25,7 @@ namespace WPFFrameworkApp
             inputdialog.OKButton.Content = OKOption;
             inputdialog.CancelButton.Content = CancelOption;
             inputdialog.Input.Width = double.NaN; // Auto width
+            inputdialog.Input.Text = inputPlaceHolder; // Optional input placeholder
             inputdialog.ShowDialog();
             return inputdialog.UserInput;
         }

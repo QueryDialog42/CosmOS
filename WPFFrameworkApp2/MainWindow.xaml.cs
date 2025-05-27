@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using System.Windows;
+using Microsoft.Win32;
 using WPFFrameworkApp2;
 using System.Windows.Media;
 using System.Windows.Input;
@@ -188,27 +189,36 @@ namespace WPFFrameworkApp
             StringBuilder stringbuilder = new StringBuilder();
             stringbuilder.Append("  Please enter ").Append(Configs.CDESK).Append(" path.\n\n")
                 .Append("  What is ").Append(Configs.CDESK).Append("?\n\n  ").Append(Configs.CDESK)
-                .Append(" is a folder that contains\n  your folders, musics, videos etc. and the base of ").Append(AppTitles.APP_WIN).Append(".\n  You have to create one folder named ")
-                .Append(Configs.CDESK).Append(" regardless of where it is\n  and paste the path of this folder to the given blank in order to continue.\n  Other configurations (such as creating ")
+                .Append(" is a folder that contains your folders, musics, videos etc. and the base of ").Append(AppTitles.APP_WIN).Append(".\n  If ")
+                .Append(Configs.CDESK).Append(" folder does not exist in the path below, it will be created .\n  If you want to change the location of the ").Append(Configs.CDESK)
+                .Append(" path, you can change the folder path by pressing\n  'Choose Another Path' button or you can write the path manually.\n  ")
+                .Append("After you enter the ").Append(Configs.CDESK).Append(" path, other configuration procceses (like creating ")
                 .Append(Configs.C_CONFIGS).Append(" folder)\n  will be automatically completed.");
 
-            string input = InputDialog.ShowInputDialog(stringbuilder.ToString(), "Path Needed");
+            string input = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             //Resumes until valid path is entered
             while (true)
             {
+                input = InputDialog.ShowInputDialog(stringbuilder.ToString(),
+                "Path Needed",
+                OKOption: "OK",
+                CancelOption: "Choose Another Path",
+                inputPlaceHolder: input);
+
                 if (InputDialog.Result == true)
                 {
-                    if (input.EndsWith(Configs.CDESK) == false) input = InputDialog.ShowInputDialog($"Path must end with {Configs.CDESK}.\nCheck if the folder is named correctly.\n(Folder should be named as {Configs.CDESK})", "Invalid path", ImagePaths.WRNG_IMG);
-                    else if (Directory.Exists(input) == false) input = InputDialog.ShowInputDialog($"Path to {Configs.CDESK} does not exists.\nPlease check if the path is correct.", "Incorrect path", ImagePaths.WRNG_IMG);
+                    if (Directory.Exists(input) == false) MessageBox.Show($"{input} does not exists.\nPlease check if the path is correct.", "Incorrect path", MessageBoxButton.OK, MessageBoxImage.Error);
                     else
                     {
                         try
                         {
+                            string desktopPath = Path.Combine(input, Configs.CDESK);
                             string C_CONFIGS = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), Configs.C_CONFIGS);
                             Directory.CreateDirectory(C_CONFIGS); // create the folder that contains all the configuration datas
-                            CreateConfigFiles(CDesktopFile, input, C_CONFIGS);
-                            CreateHiddenDirectories(input); // create the hidden folders
-                            return input;
+                            if (Directory.Exists(desktopPath) == false) Directory.CreateDirectory(desktopPath); // create the desktop folder if it does not exists
+                            CreateConfigFiles(CDesktopFile, desktopPath, C_CONFIGS);
+                            CreateHiddenDirectories(desktopPath); // create the hidden folders
+                            return desktopPath;
                         }
                         catch (Exception ex)
                         {
@@ -217,7 +227,17 @@ namespace WPFFrameworkApp
                         }
                     }
                 }
-                else Environment.Exit(0);
+                else
+                {
+                    OpenFolderDialog openFolderDialog = new OpenFolderDialog
+                    {
+                        Title = "Choose Desktop Folder",
+                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+                    };
+                    openFolderDialog.ShowDialog();
+                    input = openFolderDialog.FolderName;
+                    if (string.IsNullOrWhiteSpace(input)) Environment.Exit(0); // if user cancels the dialog, application will be closed
+                }
             }
         }
         private bool CheckConfigDirectory(string C_CONFIGS, string CDesktopFile)
@@ -321,9 +341,10 @@ namespace WPFFrameworkApp
         {
             string trashpath = Path.Combine(desktopPath, HiddenFolders.HTRSH_FOL);
             string musicpath = Path.Combine(desktopPath, HiddenFolders.HAUD_FOL);
+            string picsvidspath = Path.Combine(desktopPath, HiddenFolders.HPV_FOL);
             CreateHiddenFolderOf(trashpath);
             CreateHiddenFolderOf(musicpath);
-
+            CreateHiddenFolderOf(picsvidspath);
         }
         private void CheckCDesktopPathFile(string CDesktopFile)
         {
