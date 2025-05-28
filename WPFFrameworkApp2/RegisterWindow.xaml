@@ -12,22 +12,27 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
+            <RowDefinition Height="*" />
             <RowDefinition Height="*"/>
             <RowDefinition Height="70"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
         <Image Source="SystemSources/DesktopImages/useradd.png"
                VerticalAlignment="Bottom"
                HorizontalAlignment="Center" Height="160" Width="156"
         />
-
         <UserControl:TextBoxControls x:Name="txtUsername" Grid.Row="1"
+                         HorizontalAlignment="Center"
+                         Width="300"
+                         Height="50"
+                         PlaceHolder="  Create An Username"/>
+        <UserControl:TextBoxControls x:Name="txtUsermail" Grid.Row="2"
                                  HorizontalAlignment="Center"
                                  Width="300"
                                  Height="50"
-                                 PlaceHolder="  Create An Username"/>
-        <UserControl:TextBoxControls x:Name="txtPassword" Grid.Row="2"
+                                 PlaceHolder="  Create An Usermail"/>
+        <UserControl:TextBoxControls x:Name="txtPassword" Grid.Row="3"
                                  HorizontalAlignment="Center"
                                      VerticalAlignment="Top"
                                  Width="300"
@@ -35,7 +40,7 @@
                                  PlaceHolder="  Create A Password"
     />
 
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -61,7 +66,7 @@
                 Click="RegisterButton_Click"/>
         </Grid>
         <TextBlock x:Name="txtErrorMessage"
-           Grid.Row="4"
+           Grid.Row="5"
            Foreground="DarkRed"
            FontSize="16"
            Visibility="Collapsed"

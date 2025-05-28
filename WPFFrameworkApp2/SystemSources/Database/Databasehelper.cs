@@ -43,7 +43,7 @@ namespace WPFFrameworkApp2.Database
             }
         }
 
-        public static bool RegisterUser(string usermail, string userpass)
+        public static bool RegisterUser(string username, string usermail, string userpass)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
@@ -61,9 +61,10 @@ namespace WPFFrameworkApp2.Database
                     }
                 }
 
-                string insertQuery = "INSERT INTO cosmosusers (usermail, userpass) VALUES (@usermail, @userpass)";
+                string insertQuery = "INSERT INTO cosmosusers (username, usermail, userpass) VALUES (@username, @usermail, @userpass)";
                 using (var insertCommand = new SQLiteCommand(insertQuery, connection))
                 {
+                    insertCommand.Parameters.AddWithValue("@username", username);
                     insertCommand.Parameters.AddWithValue("@usermail", usermail);
                     insertCommand.Parameters.AddWithValue("@userpass", HashPassword(userpass));
                     insertCommand.ExecuteNonQuery();

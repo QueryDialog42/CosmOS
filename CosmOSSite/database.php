@@ -1,6 +1,6 @@
 <?php
 
-    $db_file = '..\WPFFrameworkApp2\bin\Debug\net8.0-windows\SystemSources\Database\users.db';
+    $db_file = ''; // the path of users.db
     try {
         $conn = new PDO("sqlite:$db_file");
         
